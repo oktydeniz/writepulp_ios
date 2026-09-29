@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppEnvironment</key>
+	<dict>
+		<key>Name</key>
+		<string>$(APP_ENV_NAME)</string>
+		<key>APIBaseURL</key>
+		<string>$(API_BASE_URL)</string>
+		<key>CDNBaseURL</key>
+		<string>$(CDN_BASE_URL)</string>
+		<key>WebSocketURL</key>
+		<string>$(WS_URL)</string>
+		<key>DevMode</key>
+		<string>$(DEV_MODE)</string>
+	</dict>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+		<key>UIImageName</key>
+		<string>WritePulpLogo</string>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<false/>
+	</dict>
+</dict>
+</plist>

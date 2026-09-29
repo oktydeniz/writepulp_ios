@@ -1,0 +1,7 @@
+// Staging: stg API, release-optimized build with logging on (TestFlight).
+
+APP_ENV_NAME = staging
+API_BASE_URL = https:/$()/stg-api.writepulp.com/api/v1/
+CDN_BASE_URL = https:/$()/cdn-stg.writepulp.com/
+WS_URL = wss:/$()/stg-api.writepulp.com/ws-chat
+DEV_MODE = YES

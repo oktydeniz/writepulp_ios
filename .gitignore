@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Xcode build output
+build/
+DerivedData/
+
+# Per-user Xcode state (shared schemes live in xcshareddata/)
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout

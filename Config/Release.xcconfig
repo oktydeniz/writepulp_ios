@@ -1,0 +1,7 @@
+// Production.
+
+APP_ENV_NAME = prod
+API_BASE_URL = https:/$()/api.writepulp.com/api/v1/
+CDN_BASE_URL = https:/$()/cdn.writepulp.com/
+WS_URL = wss:/$()/api.writepulp.com/ws-chat
+DEV_MODE = NO
