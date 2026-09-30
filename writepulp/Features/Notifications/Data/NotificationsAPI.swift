@@ -39,6 +39,19 @@ enum NotificationsAPI {
         )
     }
 
+    struct DeviceToken: Encodable {
+        let token: String
+        var platform: String? = "IOS"
+    }
+
+    static func registerDevice(token: String) -> Endpoint<EmptyResponse> {
+        Endpoint(path: "devices/tokens", method: .post, body: DeviceToken(token: token))
+    }
+
+    static func unregisterDevice(token: String) -> Endpoint<EmptyResponse> {
+        Endpoint(path: "devices/tokens", method: .delete, body: DeviceToken(token: token, platform: nil))
+    }
+
     static func respondToCollaborationInvite(publicationId: String, inviteId: String, accept: Bool) -> Endpoint<EmptyResponse> {
         Endpoint(
             path: "publications/\(publicationId)/collaborators/invites/\(inviteId)/\(accept ? "accept" : "reject")",

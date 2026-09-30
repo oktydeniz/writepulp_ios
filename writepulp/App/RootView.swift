@@ -53,6 +53,9 @@ struct RootView: View {
                 withAnimation { route = .auth(.login) }
             }
         }
+        .task {
+            PushNotifications.shared.configure(api: dependencies.apiClient, session: dependencies.storage.session)
+        }
         .alert("session_expired_title", isPresented: .constant(session.didSessionExpire)) {
             Button("ok") {
                 session.acknowledgeSessionExpired()

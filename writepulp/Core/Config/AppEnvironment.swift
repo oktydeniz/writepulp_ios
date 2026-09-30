@@ -12,6 +12,8 @@ enum AppEnvironment {
     static let cdnBaseURL = url("CDNBaseURL")
     static let webSocketURL = url("WebSocketURL")
     static let isDevMode = string("DevMode") == "YES"
+    /// Crashlytics collection; Info.plist keeps it off until this turns it on at launch.
+    static let isCrashReportingEnabled = string("CrashReporting") == "YES"
 
     /// Backend image paths are relative to the CDN; absolute URLs are used as-is.
     static func imageURL(_ path: String?) -> URL? {

@@ -29,6 +29,7 @@ final class AuthService {
     private let api: APIClient
     private let session: SessionStore
     private let preferences: AppPreferences
+    private var push: PushNotifications { .shared }
 
     /// Tokens from a fresh registration, saved only once the email is confirmed, so quitting
     /// on the verify screen doesn't leave an unverified account signed in.
@@ -49,6 +50,7 @@ final class AuthService {
         do {
             let data = try await api.send(AuthAPI.login(.init(identifier: identifier, password: password)))
             session.saveAuthData(data)
+            Task { await push.registerToken() }
             if rememberMe {
                 preferences.saveRememberedEmail(identifier)
             } else {
@@ -105,6 +107,7 @@ final class AuthService {
         if purpose == .registration, let pending = pendingRegistration, pending.email == email {
             session.saveAuthData(pending.data)
             pendingRegistration = nil
+            Task { await push.registerToken() }
         }
     }
 
@@ -133,12 +136,18 @@ final class AuthService {
 
     // MARK: - Logout
 
-    /// Revokes the tokens on the backend (best effort, capped) and always clears the local session.
+    /// Unregisters this device's push token and revokes the tokens on the backend (best effort,
+    /// capped), then always clears the local session. Both calls need the access token, so they
+    /// run before the session is cleared.
     func logout() async {
         let request = AuthAPI.LogoutRequest(refreshToken: session.refreshToken)
         let api = api
+        let push = push
         await withTaskGroup(of: Void.self) { group in
-            group.addTask { _ = try? await api.send(AuthAPI.logout(request)) }
+            group.addTask {
+                await push.unregisterToken()
+                _ = try? await api.send(AuthAPI.logout(request))
+            }
             group.addTask { try? await Task.sleep(for: .seconds(4)) }
             await group.next()
             group.cancelAll()

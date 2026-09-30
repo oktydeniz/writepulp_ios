@@ -53,6 +53,21 @@ struct MainView: View {
         .onChange(of: session.isLoggedIn) {
             if !tabs.contains(selectedTab) { selectedTab = .home }
         }
+        .task(id: session.isLoggedIn) {
+            guard session.isLoggedIn else { return }
+            await PushNotifications.shared.requestAuthorization()
+            await PushNotifications.shared.registerToken()
+        }
+        // A tapped push (possibly from a cold start) opens once the shell is on screen.
+        .task(id: PushNotifications.shared.pendingPayload) {
+            if let payload = PushNotifications.shared.consumePending() {
+                open(payload.route)
+                if let id = payload.notificationId {
+                    try? await dependencies.notificationsService.markRead(id: id)
+                    await badge.refresh()
+                }
+            }
+        }
         // Restarts when sign-in or foreground state changes; stops when the shell goes away.
         .task(id: "\(session.isLoggedIn)-\(scenePhase == .active)") {
             await badge.poll(isSignedIn: session.isLoggedIn && scenePhase == .active)

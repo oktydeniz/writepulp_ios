@@ -14,7 +14,11 @@
 		<string>$(WS_URL)</string>
 		<key>DevMode</key>
 		<string>$(DEV_MODE)</string>
+		<key>CrashReporting</key>
+		<string>$(CRASHLYTICS_ENABLED)</string>
 	</dict>
+	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<false/>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

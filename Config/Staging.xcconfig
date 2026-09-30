@@ -5,3 +5,6 @@ API_BASE_URL = https:/$()/stg-api.writepulp.com/api/v1/
 CDN_BASE_URL = https:/$()/cdn-stg.writepulp.com/
 WS_URL = wss:/$()/stg-api.writepulp.com/ws-chat
 DEV_MODE = YES
+
+// Crash reports go to Firebase Crashlytics (off while developing).
+CRASHLYTICS_ENABLED = YES
