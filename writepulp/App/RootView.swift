@@ -42,7 +42,7 @@ struct RootView: View {
                 }
                 .transition(.opacity)
             case .main:
-                MainView(authService: dependencies.authService)
+                MainView(dependencies: dependencies)
                     .transition(.opacity)
             }
         }

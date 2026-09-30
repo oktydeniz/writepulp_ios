@@ -10,7 +10,6 @@ private struct WritePulpThemeModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .tint(AppColors.primary)
-            .foregroundStyle(AppColors.onBackground)
             .preferredColorScheme(preferences.colorScheme)
     }
 }

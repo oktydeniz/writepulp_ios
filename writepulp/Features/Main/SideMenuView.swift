@@ -8,6 +8,7 @@ import SwiftUI
 @MainActor
 struct SideMenuView: View {
     let authService: AuthService
+    let onOpen: (MainRoute) -> Void
     let onClose: () -> Void
 
     @Environment(SessionStore.self) private var session
@@ -16,7 +17,7 @@ struct SideMenuView: View {
 
     private struct Item: Identifiable {
         enum Target {
-            case screen
+            case screen(MainRoute)
             case link(URL)
             case signIn
         }
@@ -29,12 +30,12 @@ struct SideMenuView: View {
     }
 
     private let allItems: [Item] = [
-        Item(title: "edit_profile", systemImage: "pencil", target: .screen, requiresAccount: true),
-        Item(title: "collections", systemImage: "folder", target: .screen, requiresAccount: true),
-        Item(title: "groups", systemImage: "person.3", target: .screen, requiresAccount: true),
-        Item(title: "downloads_title", systemImage: "arrow.down.circle", target: .screen, requiresAccount: true),
-        Item(title: "wallet", systemImage: "wallet.pass", target: .screen, requiresAccount: true),
-        Item(title: "settings", systemImage: "gearshape", target: .screen, requiresAccount: true),
+        Item(title: "edit_profile", systemImage: "pencil", target: .screen(.editProfile), requiresAccount: true),
+        Item(title: "collections", systemImage: "folder", target: .screen(.collections), requiresAccount: true),
+        Item(title: "groups", systemImage: "person.3", target: .screen(.groups), requiresAccount: true),
+        Item(title: "downloads_title", systemImage: "arrow.down.circle", target: .screen(.downloads), requiresAccount: true),
+        Item(title: "wallet", systemImage: "wallet.pass", target: .screen(.wallet), requiresAccount: true),
+        Item(title: "settings", systemImage: "gearshape", target: .screen(.settings), requiresAccount: true),
         Item(title: "privacy_policy", systemImage: "hand.raised", target: .link(AppLinks.privacyPolicy), requiresAccount: false),
         Item(title: "terms_of_service", systemImage: "doc.text", target: .link(AppLinks.termsOfService), requiresAccount: false),
         Item(title: "about_us", systemImage: "info.circle", target: .link(AppLinks.aboutUs), requiresAccount: false),
@@ -141,11 +142,15 @@ struct SideMenuView: View {
 
     private func open(_ item: Item) {
         switch item.target {
-        case .link(let url): openURL(url)
-        case .signIn: authService.exitGuestMode()
-        case .screen: break // screens come with their features
+        case .link(let url):
+            openURL(url)
+            onClose()
+        case .signIn:
+            authService.exitGuestMode()
+            onClose()
+        case .screen(let route):
+            onOpen(route)
         }
-        onClose()
     }
 
     private var safeAreaTop: CGFloat {

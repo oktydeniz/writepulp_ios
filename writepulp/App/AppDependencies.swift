@@ -10,6 +10,10 @@ final class AppDependencies {
     let storage: LocalStorage
     let apiClient: APIClient
     let authService: AuthService
+    let homeService: HomeService
+    let notificationsService: NotificationsService
+    let settingsService: SettingsService
+    let walletService: WalletService
 
     init(storage: LocalStorage = LocalStorage()) {
         self.storage = storage
@@ -20,5 +24,9 @@ final class AppDependencies {
             logger: AppEnvironment.isDevMode ? NetworkLogger() : nil
         )
         authService = AuthService(api: apiClient, session: storage.session, preferences: storage.app)
+        homeService = HomeService(api: apiClient)
+        notificationsService = NotificationsService(api: apiClient)
+        settingsService = SettingsService(api: apiClient, session: storage.session)
+        walletService = WalletService(api: apiClient)
     }
 }
