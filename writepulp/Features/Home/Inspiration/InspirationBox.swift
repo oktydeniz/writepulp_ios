@@ -28,7 +28,6 @@ struct InspirationItem: Decodable {
     }
 }
 
-/// Warm amber card, deliberately off the blue theme (same palette as web/Android).
 struct InspirationBoxCard: View {
     let index: Int
     let onDismiss: () -> Void

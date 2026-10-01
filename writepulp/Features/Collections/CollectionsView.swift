@@ -77,7 +77,7 @@ struct CollectionsView: View {
     @ViewBuilder
     private var content: some View {
         if model.isLoading {
-            ProgressView().frame(maxHeight: .infinity)
+            ListSkeleton(count: 5, leadingSize: 90, isCircle: false)
         } else if let error = model.errorMessage, model.current.isEmpty {
             ErrorStateView(message: error) { Task { await model.load() } }
                 .frame(maxHeight: .infinity)

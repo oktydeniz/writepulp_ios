@@ -85,7 +85,7 @@ struct NotificationsView: View {
     @ViewBuilder
     private var content: some View {
         if model.isLoading && model.items.isEmpty {
-            ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
+            ListSkeleton(count: 8, leadingSize: 44)
         } else if let error = model.errorMessage, model.items.isEmpty {
             VStack(spacing: 12) {
                 Text(error)

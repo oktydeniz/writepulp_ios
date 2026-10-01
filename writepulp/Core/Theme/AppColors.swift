@@ -38,6 +38,8 @@ enum AppColors {
     static let surfaceContainer = dynamic(light: 0xFFFFFF, dark: 0x1F2937)
     static let error = dynamic(light: 0xEF4444, dark: 0xEF4444)
     static let outline = dynamic(light: 0xE5E7EB, dark: 0x938F99)
+    static let skeleton = dynamic(light: 0xE5E9EF, dark: 0x2B3544)
+    static let skeletonHighlight = dynamic(light: 0xF6F8FA, dark: 0x3B4657)
 
     static let backgroundGradient = LinearGradient(
         colors: [Color(hex: 0xF5F8FB), Color(hex: 0xF2F6FA)],

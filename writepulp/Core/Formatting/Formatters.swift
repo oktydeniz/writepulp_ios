@@ -26,7 +26,6 @@ enum Formatters {
         return formatter
     }()
 
-    /// "just now", "5 min ago", "3 d ago"… as on Android.
     static func timeAgo(_ value: String?, now: Date = Date()) -> String {
         guard let date = date(fromISO: value) else { return "" }
         let seconds = Int(now.timeIntervalSince(date))

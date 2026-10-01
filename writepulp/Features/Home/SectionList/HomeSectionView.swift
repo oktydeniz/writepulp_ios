@@ -31,7 +31,7 @@ struct HomeSectionView: View {
                 filterRow
             }
             if model.isLoading && model.isEmpty {
-                ProgressView().padding(.top, 60)
+                PublicationGridSkeleton()
             } else if let error = model.errorMessage, model.isEmpty {
                 errorState(error)
             } else {

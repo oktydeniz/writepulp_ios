@@ -39,13 +39,17 @@ struct FollowListView: View {
     @ViewBuilder
     private var content: some View {
         if !model.hasLoaded && model.isLoading {
-            ProgressView().frame(maxHeight: .infinity)
+            ListSkeleton()
         } else if let error = model.errorMessage, !model.hasLoaded {
             ErrorStateView(message: error) { Task { await model.refresh() } }
                 .frame(maxHeight: .infinity)
         } else if model.users.isEmpty {
-            EmptyStateView(systemImage: "person.2", title: "no_user_found")
-                .frame(maxHeight: .infinity)
+            // Scrollable so pull to refresh works on an empty list too.
+            ScrollView {
+                EmptyStateView(systemImage: "person.2", title: "no_user_found")
+                    .padding(.top, 60)
+            }
+            .refreshable { await model.refresh() }
         } else {
             list
         }

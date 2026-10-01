@@ -27,7 +27,7 @@ struct PocketView: View {
             } else if let error = model.errorMessage, !model.isLoading {
                 ErrorStateView(message: error) { Task { await model.load() } }
             } else {
-                ProgressView()
+                PocketSkeleton()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -139,5 +139,28 @@ struct PocketView: View {
                 .padding(6)
         }
         .accessibilityLabel(Text("more"))
+    }
+}
+
+/// Header, continue-reading card, tab chips and the card grid.
+private struct PocketSkeleton: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                SkeletonBlock(width: 160, height: 24)
+                SkeletonBlock(width: 220, height: 12)
+                SkeletonBlock(height: 120, cornerRadius: 16)
+                HStack(spacing: 8) {
+                    ForEach(0..<3, id: \.self) { _ in SkeletonBlock(width: 96, height: 32, cornerRadius: 16) }
+                }
+                SkeletonBlock(height: 48, cornerRadius: 12)
+                LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 16) {
+                    ForEach(0..<4, id: \.self) { _ in PublicationCardSkeleton() }
+                }
+            }
+            .padding(16)
+            .shimmering()
+        }
+        .scrollDisabled(true)
     }
 }

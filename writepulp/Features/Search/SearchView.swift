@@ -45,7 +45,7 @@ struct SearchView: View {
     @ViewBuilder
     private var categories: some View {
         if model.isLoadingCategories && model.categories.isEmpty {
-            ProgressView().frame(maxHeight: .infinity)
+            ListSkeleton(count: 6, leadingSize: 24, isCircle: false)
         } else if let error = model.categoriesError, model.categories.isEmpty {
             ErrorStateView(message: error) { Task { await model.loadCategories() } }
                 .frame(maxHeight: .infinity)

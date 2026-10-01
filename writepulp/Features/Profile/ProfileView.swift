@@ -43,7 +43,7 @@ struct ProfileView: View {
             } else if let error = model.error, !model.isLoading {
                 errorState(error)
             } else {
-                ProgressView()
+                ProfileSkeleton()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -132,7 +132,7 @@ struct ProfileView: View {
     @ViewBuilder
     private func works(isMe: Bool) -> some View {
         if !model.works.hasLoaded {
-            ProgressView().padding(.top, 40)
+            PublicationGridSkeleton(count: 4)
         } else if model.works.isEmpty {
             EmptyStateView(systemImage: "pencil.line", title: isMe ? "works_empty_title_me" : "works_empty_title_other")
         } else {
@@ -194,5 +194,29 @@ struct ProfileView: View {
                 ErrorStateView(message: error.localizedDescription) { Task { await model.load() } }
             }
         }
+    }
+}
+
+/// Cover, avatar, name, stats and the action button.
+private struct ProfileSkeleton: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            ZStack(alignment: .bottom) {
+                SkeletonBlock(height: 210, cornerRadius: 24)
+                    .frame(maxHeight: .infinity, alignment: .top)
+                Circle()
+                    .fill(AppColors.skeleton)
+                    .frame(width: 110, height: 110)
+                    .overlay { Circle().stroke(AppColors.background, lineWidth: 4) }
+            }
+            .frame(height: 260)
+            SkeletonBlock(width: 180, height: 22)
+            SkeletonBlock(width: 110, height: 14)
+            SkeletonBlock(height: 70, cornerRadius: 16).padding(.horizontal, 18)
+            SkeletonBlock(height: 48, cornerRadius: 12).padding(.horizontal, 18)
+            Spacer(minLength: 0)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .shimmering()
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		138B36B731E84885A9AAC3A2 /* Skeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9086D8525A554DEEA492E821 /* Skeleton.swift */; };
 		1263D17107A4435FA51E6426 /* ReviewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3B910E7A53402594CE5C13 /* ReviewsViewModel.swift */; };
 		6A66409599F648099223B3CD /* ReviewsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89267CDB93E2424CB3621C4D /* ReviewsSection.swift */; };
 		F6AB1E9DB8F84789BEE9A5AE /* PublicationDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5220039429434AABAE176527 /* PublicationDetailViewModel.swift */; };
@@ -153,6 +154,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9086D8525A554DEEA492E821 /* Skeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Skeleton.swift; sourceTree = "<group>"; };
 		DE3B910E7A53402594CE5C13 /* ReviewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsViewModel.swift; sourceTree = "<group>"; };
 		89267CDB93E2424CB3621C4D /* ReviewsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsSection.swift; sourceTree = "<group>"; };
 		5220039429434AABAE176527 /* PublicationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicationDetailViewModel.swift; sourceTree = "<group>"; };
@@ -521,6 +523,7 @@
 				91D3D38DBD1A4553BF5460CC /* EmptyStateView.swift */,
 				C5A8AF5F1EE0402E8CBD38D0 /* FollowButton.swift */,
 				C757B25FBFC044D38CEE7883 /* ImageViewer.swift */,
+				9086D8525A554DEEA492E821 /* Skeleton.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -1030,6 +1033,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				138B36B731E84885A9AAC3A2 /* Skeleton.swift in Sources */,
 				1263D17107A4435FA51E6426 /* ReviewsViewModel.swift in Sources */,
 				6A66409599F648099223B3CD /* ReviewsSection.swift in Sources */,
 				F6AB1E9DB8F84789BEE9A5AE /* PublicationDetailViewModel.swift in Sources */,

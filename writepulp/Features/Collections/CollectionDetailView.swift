@@ -45,7 +45,7 @@ struct CollectionDetailView: View {
     @ViewBuilder
     private var content: some View {
         if model.isLoading {
-            ProgressView()
+            ListSkeleton(count: 6, leadingSize: 64, isCircle: false)
         } else if let error = model.errorMessage, model.detail == nil {
             ErrorStateView(message: error) { Task { await model.load() } }
         } else if model.items.isEmpty {

@@ -15,8 +15,9 @@ final class FollowListViewModel {
     var kind: FollowListKind
     var query = ""
     private(set) var lists: [FollowListKind: PagedList<FollowUser>] = [:]
-    private(set) var isLoading = false
-    private(set) var errorMessage: String?
+    /// Tracked per list so switching tabs mid-load still loads the other one.
+    private var loadingKinds: Set<FollowListKind> = []
+    private var errors: [FollowListKind: String] = [:]
     var toastMessage: String?
 
     private let service: ProfileService
@@ -30,6 +31,8 @@ final class FollowListViewModel {
     private var current: PagedList<FollowUser> { lists[kind] ?? PagedList() }
 
     var hasLoaded: Bool { current.hasLoaded }
+    var isLoading: Bool { loadingKinds.contains(kind) }
+    var errorMessage: String? { errors[kind] }
 
     /// Search filters what is already loaded.
     var users: [FollowUser] {
@@ -40,6 +43,7 @@ final class FollowListViewModel {
         }
     }
 
+    /// Each list is fetched once; revisiting the tab or the screen reuses it until refreshed.
     func loadIfNeeded() async {
         if !current.hasLoaded { await load(replacing: true) }
     }
@@ -54,21 +58,21 @@ final class FollowListViewModel {
     }
 
     private func load(replacing: Bool) async {
-        guard !isLoading else { return }
         let kind = kind
-        isLoading = true
-        defer { isLoading = false }
+        guard !loadingKinds.contains(kind) else { return }
+        loadingKinds.insert(kind)
+        defer { loadingKinds.remove(kind) }
         do {
             let page = try await service.follows(
                 userId: userId,
                 kind: kind,
-                page: replacing ? 0 : current.nextPage
+                page: replacing ? 0 : lists[kind]?.nextPage ?? 0
             )
             lists[kind, default: PagedList()].apply(page, replacing: replacing)
-            errorMessage = nil
+            errors[kind] = nil
         } catch APIError.cancelled {
         } catch {
-            errorMessage = error.localizedDescription
+            errors[kind] = error.localizedDescription
         }
     }
 

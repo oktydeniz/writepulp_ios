@@ -132,18 +132,22 @@ private struct HomeSkeleton: View {
             VStack(alignment: .leading, spacing: 24) {
                 ForEach(0..<3, id: \.self) { _ in
                     VStack(alignment: .leading, spacing: 12) {
-                        RoundedRectangle(cornerRadius: 4).frame(width: 140, height: 18).padding(.horizontal, 16)
-                        HStack(spacing: 12) {
-                            ForEach(0..<3, id: \.self) { _ in
-                                RoundedRectangle(cornerRadius: 12).frame(width: 180, height: 250)
+                        SkeletonBlock(width: 140, height: 18).padding(.horizontal, 16)
+                        // Wider than the screen, like the real carousels; kept leading instead of centered.
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(0..<3, id: \.self) { _ in
+                                    PublicationCardSkeleton().frame(width: 180)
+                                }
                             }
+                            .padding(.horizontal, 16)
                         }
-                        .padding(.horizontal, 16)
+                        .scrollDisabled(true)
                     }
                 }
             }
             .padding(.vertical, 20)
-            .foregroundStyle(AppColors.onSurfaceVariant.opacity(0.15))
+            .shimmering()
         }
         .scrollDisabled(true)
         .accessibilityHidden(true)

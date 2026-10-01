@@ -37,7 +37,7 @@ struct PublicationDetailView: View {
             } else if let error = model.errorMessage, !model.isLoading {
                 ErrorStateView(message: error) { Task { await model.load() } }
             } else {
-                ProgressView()
+                DetailSkeleton()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -239,5 +239,29 @@ struct PublicationDetailView: View {
         case .chapters: Text("content_detail_tab_chapters")
         case .reviews: Text("content_detail_tab_reviews".localized(publication.reviewCount))
         }
+    }
+}
+
+/// Cover, title, author, stats and the action button.
+private struct DetailSkeleton: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            SkeletonBlock(width: 136, height: 204, cornerRadius: 8)
+                .padding(.top, 24)
+            SkeletonBlock(width: 80, height: 18, cornerRadius: 9)
+            SkeletonBlock(width: 240, height: 24)
+            SkeletonBlock(width: 140, height: 30, cornerRadius: 15)
+            SkeletonBlock(height: 64, cornerRadius: 16)
+            SkeletonBlock(height: 54, cornerRadius: 16)
+            VStack(alignment: .leading, spacing: 8) {
+                SkeletonBlock(height: 12)
+                SkeletonBlock(height: 12)
+                SkeletonBlock(width: 200, height: 12)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .shimmering()
     }
 }
