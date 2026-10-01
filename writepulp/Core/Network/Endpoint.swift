@@ -20,6 +20,8 @@ struct Endpoint<Response: Decodable> {
     var method: HTTPMethod = .get
     var query: [URLQueryItem] = []
     var body: (any Encodable)?
+    /// Sent instead of `body` for file uploads.
+    var multipart: MultipartForm?
     /// Sends the access token when there is one; guests call these without it.
     var requiresAuth = true
 }

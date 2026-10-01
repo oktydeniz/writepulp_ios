@@ -46,6 +46,11 @@ enum FormValidator {
         (3...20).contains(value.count) ? nil : String(localized: "error_invalid_handle")
     }
 
+    /// Names such as a collection's: at least 4 characters.
+    static func name(_ value: String) -> String? {
+        value.trimmingCharacters(in: .whitespaces).count < 4 ? String(localized: "error_empty_fields_min_4") : nil
+    }
+
     static func passwordsMatch(_ password: String, _ confirmation: String) -> String? {
         password == confirmation ? nil : String(localized: "err_passwords_not_match")
     }

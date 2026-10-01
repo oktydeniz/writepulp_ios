@@ -56,6 +56,9 @@ struct RootView: View {
         .task {
             PushNotifications.shared.configure(api: dependencies.apiClient, session: dependencies.storage.session)
         }
+        .onChange(of: session.didSessionExpire) { _, didExpire in
+            if didExpire { Task { await PushNotifications.shared.forgetToken() } }
+        }
         .alert("session_expired_title", isPresented: .constant(session.didSessionExpire)) {
             Button("ok") {
                 session.acknowledgeSessionExpired()

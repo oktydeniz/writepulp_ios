@@ -23,6 +23,8 @@ struct PublicationCardContent: Identifiable, Hashable {
 struct PublicationCard: View {
     let content: PublicationCardContent
     var coverHeight: CGFloat = 160
+    /// Reading progress in percent; shown when above zero.
+    var progress: Double?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -38,6 +40,16 @@ struct PublicationCard: View {
                     .lineLimit(2, reservesSpace: true)
                     .multilineTextAlignment(.leading)
                 meta
+                if let progress, progress > 0 {
+                    HStack(spacing: 8) {
+                        ProgressView(value: min(progress, 100), total: 100)
+                            .tint(AppColors.primary)
+                        Text(verbatim: String(format: "%.1f%%", progress))
+                            .font(.system(size: 11))
+                            .foregroundStyle(AppColors.onSurfaceVariant)
+                    }
+                    .padding(.top, 2)
+                }
             }
             .padding(12)
         }
@@ -84,11 +96,19 @@ struct PublicationCard: View {
             }
     }
 
+    /// Drops the chapter count when the card is too narrow for every item.
     private var meta: some View {
-        HStack(spacing: 12) {
+        ViewThatFits(in: .horizontal) {
+            metaRow(showsSections: true)
+            metaRow(showsSections: false)
+        }
+    }
+
+    private func metaRow(showsSections: Bool) -> some View {
+        HStack(spacing: 10) {
             MetaLabel(systemImage: "star.fill", text: String(format: "%.1f", content.rating), tint: Color(hex: 0xFFB800))
             MetaLabel(systemImage: "eye", text: Formatters.compactCount(content.views))
-            if content.type == .book, let sections = content.sectionCount {
+            if showsSections, content.type == .book, let sections = content.sectionCount {
                 MetaLabel(systemImage: "book", text: "\(sections)")
             }
             if let readTime = Formatters.readTime(minutes: content.readTimeMinutes) {
@@ -111,6 +131,8 @@ private struct MetaLabel: View {
             Text(text)
                 .font(.system(size: 12))
                 .foregroundStyle(AppColors.onSurfaceVariant)
+                .lineLimit(1)
         }
+        .fixedSize()
     }
 }

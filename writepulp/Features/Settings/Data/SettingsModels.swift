@@ -125,17 +125,3 @@ struct UserSettingsUpdate: Encodable {
         try c.encode(settings.shareDemographicData, forKey: .shareDemographicData)
     }
 }
-
-struct CategoryGroup: Decodable, Identifiable {
-    struct Category: Decodable, Identifiable {
-        let id: String?
-        let name: String
-
-        var identity: String { id ?? name }
-    }
-
-    let parent: Category
-    let subCategories: [Category]
-
-    var id: String { parent.identity }
-}

@@ -53,6 +53,6 @@ final class SettingsService {
     }
 
     func categoryGroups() async throws -> [CategoryGroup] {
-        try await api.send(SettingsAPI.categoryGroups())
+        try await api.send(CategoryAPI.grouped())
     }
 }

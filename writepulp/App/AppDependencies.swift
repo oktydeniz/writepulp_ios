@@ -14,6 +14,11 @@ final class AppDependencies {
     let notificationsService: NotificationsService
     let settingsService: SettingsService
     let walletService: WalletService
+    let profileService: ProfileService
+    let collectionsService: CollectionsService
+    let searchService: SearchService
+    let pocketService: PocketService
+    let publicationService: PublicationService
 
     init(storage: LocalStorage = LocalStorage()) {
         self.storage = storage
@@ -28,5 +33,10 @@ final class AppDependencies {
         notificationsService = NotificationsService(api: apiClient)
         settingsService = SettingsService(api: apiClient, session: storage.session)
         walletService = WalletService(api: apiClient)
+        profileService = ProfileService(api: apiClient, session: storage.session)
+        collectionsService = CollectionsService(api: apiClient)
+        searchService = SearchService(api: apiClient, session: storage.session)
+        pocketService = PocketService(api: apiClient)
+        publicationService = PublicationService(api: apiClient, session: storage.session)
     }
 }

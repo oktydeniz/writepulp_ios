@@ -20,7 +20,10 @@ struct NetworkLogger {
             .map { "\($0.key): \(Self.sensitiveKeys.contains($0.key) ? "****" : $0.value)" }
             .sorted()
             .joined(separator: "\n")
-        let body = request.httpBody.map { Self.mask(String(decoding: $0, as: UTF8.self)) } ?? ""
+        let isMultipart = request.value(forHTTPHeaderField: "Content-Type")?.hasPrefix("multipart/") == true
+        let body = isMultipart
+            ? "<multipart \(request.httpBody?.count ?? 0) bytes>"
+            : request.httpBody.map { Self.mask(String(decoding: $0, as: UTF8.self)) } ?? ""
         logger.debug("--> \(request.httpMethod ?? "") \(request.url?.absoluteString ?? "")\n\(headers)\n\(body)")
     }
 

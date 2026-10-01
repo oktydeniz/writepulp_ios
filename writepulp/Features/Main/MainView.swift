@@ -18,6 +18,8 @@ struct MainView: View {
     @State private var isMenuOpen = false
     @State private var paths: [MainTab: [MainRoute]] = [:]
     @State private var badge: NotificationBadge
+    /// Bumped after the user edits their profile or collections, so open profiles reload.
+    @State private var profileRevision = 0
 
     init(dependencies: AppDependencies) {
         self.dependencies = dependencies
@@ -86,9 +88,28 @@ struct MainView: View {
                 onOpen: { open($0) },
                 onSignIn: { dependencies.authService.exitGuestMode() }
             )
-        default:
-            PlaceholderView(title: tab.title)
+        case .pocket:
+            PocketView(
+                service: dependencies.pocketService,
+                onOpen: { open($0) },
+                onExplore: { selectedTab = .search }
+            )
+        case .search:
+            SearchView(service: dependencies.searchService, onOpen: { open($0) })
+        case .profile:
+            profileView(userId: nil)
         }
+    }
+
+    private func profileView(userId: String?) -> some View {
+        ProfileView(
+            userId: userId,
+            revision: profileRevision,
+            profileService: dependencies.profileService,
+            collectionsService: dependencies.collectionsService,
+            onOpen: { open($0) },
+            onSignIn: { dependencies.authService.exitGuestMode() }
+        )
     }
 
     // MARK: - Navigation
@@ -126,16 +147,34 @@ struct MainView: View {
             )
         case .notifications:
             NotificationsView(service: dependencies.notificationsService, badge: badge, onOpen: { open($0) })
-        case .publication:
-            PlaceholderView(title: "content_detail")
-        case .profile:
-            PlaceholderView(title: "profile")
+        case .publication(let id):
+            PublicationDetailView(
+                publicationId: id,
+                service: dependencies.publicationService,
+                collectionsService: dependencies.collectionsService,
+                onOpen: { open($0) },
+                onSignIn: { dependencies.authService.exitGuestMode() }
+            )
+        case .reader:
+            PlaceholderView(title: "content_detail_read_now")
+        case .profile(let userId):
+            profileView(userId: userId == session.userId ? nil : userId)
+        case .follows(let userId, let kind):
+            FollowListView(userId: userId, kind: kind, service: dependencies.profileService, onOpen: { open($0) })
         case .community, .groups:
             PlaceholderView(title: "groups")
-        case .collection, .collections:
-            PlaceholderView(title: "collections")
+        case .collections:
+            CollectionsView(
+                service: dependencies.collectionsService,
+                onOpen: { open($0) },
+                onChange: { profileRevision += 1 }
+            )
+        case .categoryExplore(let slug, let title):
+            CategoryExploreView(slug: slug, title: title, service: dependencies.searchService, onOpen: { open($0) })
+        case .collection(let id, let name):
+            CollectionDetailView(collectionId: id, title: name, service: dependencies.collectionsService, onOpen: { open($0) })
         case .editProfile:
-            PlaceholderView(title: "edit_profile")
+            EditProfileView(service: dependencies.profileService, onSaved: { profileRevision += 1 })
         case .downloads:
             PlaceholderView(title: "downloads_title")
         case .wallet:

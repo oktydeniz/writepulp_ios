@@ -95,7 +95,10 @@ actor APIClient {
         if let token, !token.isEmpty {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
-        if let body = endpoint.body {
+        if let form = endpoint.multipart {
+            request.setValue(form.contentType, forHTTPHeaderField: "Content-Type")
+            request.httpBody = form.encoded()
+        } else if let body = endpoint.body {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = try JSONCoding.encoder.encode(body)
         }

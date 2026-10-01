@@ -78,6 +78,13 @@ final class PushNotifications {
         _ = try? await api.send(NotificationsAPI.unregisterDevice(token: token))
     }
 
+    /// Session expired: the backend row can't be removed without a valid session, so the FCM token
+    /// is dropped instead. The next push to it fails as unregistered and the backend prunes it.
+    func forgetToken() async {
+        fcmToken = nil
+        try? await Messaging.messaging().deleteToken()
+    }
+
     // MARK: - Taps
 
     func didTap(userInfo: [AnyHashable: Any]) {

@@ -38,8 +38,4 @@ enum SettingsAPI {
     static func deleteAccount(password: String) -> Endpoint<EmptyResponse> {
         Endpoint(path: "profile", method: .delete, body: SingleValue(value: password))
     }
-
-    static func categoryGroups() -> Endpoint<[CategoryGroup]> {
-        Endpoint(path: "categories/grouped")
-    }
 }
