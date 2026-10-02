@@ -17,6 +17,8 @@ struct PublicationDetailView: View {
     @State private var isShowingCover = false
     @State private var signInMessage: LocalizedStringKey?
     @State private var isShowingAgeGate = false
+    /// Set when the reader is opened, so progress and "continue" are fresh when coming back.
+    @State private var needsRefresh = false
 
     init(
         publicationId: String,
@@ -50,6 +52,11 @@ struct PublicationDetailView: View {
         .task {
             model.reviews.onChange = { await model.load() }
             if model.publication == nil { await model.load() }
+        }
+        .onAppear {
+            guard needsRefresh else { return }
+            needsRefresh = false
+            Task { await model.load() }
         }
         .sheet(isPresented: $isPickingCollections) {
             if let publication = model.publication {
@@ -222,6 +229,7 @@ struct PublicationDetailView: View {
             isShowingAgeGate = true
             return
         }
+        needsRefresh = true
         onOpen(.reader(publicationId: model.publicationId, type: publication.type, chapterId: chapterId))
     }
 
