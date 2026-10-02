@@ -19,6 +19,15 @@
 	</dict>
 	<key>FirebaseCrashlyticsCollectionEnabled</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>lora_variable.ttf</string>
+		<string>noto_serif_variable.ttf</string>
+		<string>open_sans_variable.ttf</string>
+		<string>pt_serif_bold.ttf</string>
+		<string>pt_serif_regular.ttf</string>
+		<string>rubik_variable.ttf</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

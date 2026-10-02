@@ -6,11 +6,34 @@
 import Foundation
 import Observation
 
-/// A publication's reviews plus the viewer's write/edit form.
+/// Where reviews are read from and written to: a publication, or a single section.
+protocol ReviewsSource {
+    func reviews(page: Int) async throws -> Page<Review>
+    func save(editing reviewId: String?, _ request: ReviewRequest) async throws
+    func delete(reviewId: String) async throws
+}
+
+struct PublicationReviewsSource: ReviewsSource {
+    let publicationId: String
+    let service: PublicationService
+
+    func reviews(page: Int) async throws -> Page<Review> {
+        try await service.reviews(publicationId: publicationId, page: page)
+    }
+
+    func save(editing reviewId: String?, _ request: ReviewRequest) async throws {
+        _ = try await service.saveReview(publicationId: publicationId, editing: reviewId, request)
+    }
+
+    func delete(reviewId: String) async throws {
+        try await service.deleteReview(publicationId: publicationId, reviewId: reviewId)
+    }
+}
+
+/// Reviews plus the viewer's write/edit form.
 @MainActor
 @Observable
 final class ReviewsViewModel {
-    let publicationId: String
     private(set) var reviews = PagedList<Review>()
     private(set) var isLoading = false
     private(set) var isLoadingMore = false
@@ -22,15 +45,20 @@ final class ReviewsViewModel {
     /// Called after a change so the screen can refetch the average and count.
     var onChange: () async -> Void = {}
 
-    private let service: PublicationService
+    private let source: any ReviewsSource
+    private let session: () -> (isSignedIn: Bool, userId: String?)
 
-    init(publicationId: String, service: PublicationService) {
-        self.publicationId = publicationId
-        self.service = service
+    init(source: any ReviewsSource, session: @escaping () -> (isSignedIn: Bool, userId: String?)) {
+        self.source = source
+        self.session = session
     }
 
-    var currentUserId: String? { service.currentUserId }
-    var isSignedIn: Bool { service.isSignedIn }
+    var currentUserId: String? { session().userId }
+    var isSignedIn: Bool { session().isSignedIn }
+    var averageRating: Double {
+        guard !reviews.isEmpty else { return 0 }
+        return Double(reviews.items.map(\.rating).reduce(0, +)) / Double(reviews.items.count)
+    }
     var isEditing: Bool { editingId != nil }
     var myReview: Review? { reviews.items.first { $0.user.uuid == currentUserId } }
 
@@ -43,7 +71,7 @@ final class ReviewsViewModel {
         isLoading = true
         defer { isLoading = false }
         do {
-            reviews.apply(try await service.reviews(publicationId: publicationId, page: 0), replacing: true)
+            reviews.apply(try await source.reviews(page: 0), replacing: true)
         } catch APIError.cancelled {
         } catch {
             toastMessage = error.localizedDescription
@@ -55,7 +83,7 @@ final class ReviewsViewModel {
         isLoadingMore = true
         defer { isLoadingMore = false }
         do {
-            reviews.apply(try await service.reviews(publicationId: publicationId, page: reviews.nextPage), replacing: false)
+            reviews.apply(try await source.reviews(page: reviews.nextPage), replacing: false)
         } catch {
             toastMessage = error.localizedDescription
         }
@@ -83,8 +111,7 @@ final class ReviewsViewModel {
         let trimmed = comment.trimmingCharacters(in: .whitespacesAndNewlines)
         let wasEditing = isEditing
         do {
-            _ = try await service.saveReview(
-                publicationId: publicationId,
+            try await source.save(
                 editing: editingId,
                 ReviewRequest(rating: rating, comment: trimmed.isEmpty ? nil : trimmed)
             )
@@ -100,7 +127,7 @@ final class ReviewsViewModel {
         isSubmitting = true
         defer { isSubmitting = false }
         do {
-            try await service.deleteReview(publicationId: publicationId, reviewId: review.id)
+            try await source.delete(reviewId: review.id)
             if editingId == review.id { cancelEditing() }
             toastMessage = String(localized: "review_deleted")
             await reload()
@@ -110,7 +137,7 @@ final class ReviewsViewModel {
     }
 
     private func reload() async {
-        if let page = try? await service.reviews(publicationId: publicationId, page: 0) {
+        if let page = try? await source.reviews(page: 0) {
             reviews.apply(page, replacing: true)
         }
         await onChange()

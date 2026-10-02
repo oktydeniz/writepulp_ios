@@ -16,6 +16,7 @@ struct PublicationDetailView: View {
     @State private var isConfirmingPurchase = false
     @State private var isShowingCover = false
     @State private var signInMessage: LocalizedStringKey?
+    @State private var isShowingAgeGate = false
 
     init(
         publicationId: String,
@@ -78,6 +79,12 @@ struct PublicationDetailView: View {
             Button("sign_in", action: onSignIn)
         } message: {
             if let signInMessage { Text(signInMessage) }
+        }
+        .alert("age_restricted_title", isPresented: $isShowingAgeGate) {
+            Button("cancel", role: .cancel) {}
+            Button("age_restricted_update_profile") { onOpen(.editProfile) }
+        } message: {
+            Text("age_restricted_message")
         }
     }
 
@@ -209,7 +216,13 @@ struct PublicationDetailView: View {
     }
 
     private func openReader(chapterId: String?) {
-        onOpen(.reader(publicationId: model.publicationId, chapterId: chapterId))
+        guard let publication = model.publication else { return }
+        // Age-restricted content isn't opened; the viewer is asked to complete their birthday.
+        if publication.isAgeRestricted {
+            isShowingAgeGate = true
+            return
+        }
+        onOpen(.reader(publicationId: model.publicationId, type: publication.type, chapterId: chapterId))
     }
 
     private func requireSignIn(_ message: LocalizedStringKey, _ action: () -> Void) {

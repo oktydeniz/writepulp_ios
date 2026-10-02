@@ -30,7 +30,10 @@ final class PublicationDetailViewModel {
     init(publicationId: String, service: PublicationService) {
         self.publicationId = publicationId
         self.service = service
-        reviews = ReviewsViewModel(publicationId: publicationId, service: service)
+        reviews = ReviewsViewModel(
+            source: PublicationReviewsSource(publicationId: publicationId, service: service),
+            session: { (service.isSignedIn, service.currentUserId) }
+        )
     }
 
     var isSignedIn: Bool { service.isSignedIn }

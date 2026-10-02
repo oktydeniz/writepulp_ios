@@ -7,6 +7,7 @@ import SwiftUI
 
 @MainActor
 struct ReviewsSection: View {
+    @Environment(\.reviewsPalette) private var palette
     let model: ReviewsViewModel
     let reviewAverage: Double
     let reviewCount: Int
@@ -25,7 +26,7 @@ struct ReviewsSection: View {
             } else if !model.isSignedIn {
                 VStack(spacing: 8) {
                     hint("review_login_hint")
-                    TextLinkButton(title: "sign_in", color: AppColors.primary, action: onSignIn)
+                    TextLinkButton(title: "sign_in", color: palette.accent, action: onSignIn)
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -52,11 +53,11 @@ struct ReviewsSection: View {
         VStack(spacing: 4) {
             Text(verbatim: String(format: "%.1f", reviewAverage))
                 .font(.system(size: 44, weight: .heavy))
-                .foregroundStyle(AppColors.onBackground)
+                .foregroundStyle(palette.title)
             StarRow(rating: Int(reviewAverage.rounded()), size: 18)
             Text("review_rating_count".localized(reviewCount))
                 .font(.system(size: 12))
-                .foregroundStyle(AppColors.onSurfaceVariant)
+                .foregroundStyle(palette.secondaryText)
         }
         .frame(maxWidth: .infinity)
     }
@@ -87,7 +88,7 @@ struct ReviewsSection: View {
                         } else {
                             Text("notification_load_more")
                                 .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(AppColors.primary)
+                                .foregroundStyle(palette.accent)
                         }
                     }
                     .padding(.vertical, 8)
@@ -99,7 +100,7 @@ struct ReviewsSection: View {
     private func hint(_ key: LocalizedStringKey) -> some View {
         Text(key)
             .font(.system(size: 14))
-            .foregroundStyle(AppColors.onSurfaceVariant)
+            .foregroundStyle(palette.secondaryText)
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
     }
@@ -107,13 +108,14 @@ struct ReviewsSection: View {
 
 @MainActor
 private struct ReviewForm: View {
+    @Environment(\.reviewsPalette) private var palette
     @Bindable var model: ReviewsViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(model.isEditing ? "review_edit_title" : "review_write")
                 .font(.system(size: 15, weight: .bold))
-                .foregroundStyle(AppColors.onSurface)
+                .foregroundStyle(palette.text)
 
             HStack(spacing: 6) {
                 ForEach(1...5, id: \.self) { star in
@@ -134,14 +136,14 @@ private struct ReviewForm: View {
                 axis: .vertical
             )
             .lineLimit(3...6)
-            .foregroundStyle(AppColors.onSurface)
+            .foregroundStyle(palette.text)
             .padding(12)
-            .background(AppColors.background, in: RoundedRectangle(cornerRadius: 12))
-            .overlay { RoundedRectangle(cornerRadius: 12).stroke(AppColors.outline) }
+            .background(palette.fieldBackground, in: RoundedRectangle(cornerRadius: 12))
+            .overlay { RoundedRectangle(cornerRadius: 12).stroke(palette.outline) }
 
             HStack {
                 if model.isEditing {
-                    TextLinkButton(title: "cancel", color: AppColors.onSurfaceVariant) { model.cancelEditing() }
+                    TextLinkButton(title: "cancel", color: palette.secondaryText) { model.cancelEditing() }
                 }
                 Spacer()
                 Button { Task { await model.submit() } } label: {
@@ -156,19 +158,20 @@ private struct ReviewForm: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 18)
                     .padding(.vertical, 10)
-                    .background(AppColors.primary.opacity(model.rating > 0 ? 1 : 0.5), in: Capsule())
+                    .background(palette.accent.opacity(model.rating > 0 ? 1 : 0.5), in: Capsule())
                 }
                 .buttonStyle(PressableButtonStyle())
                 .disabled(model.isSubmitting || model.rating == 0)
             }
         }
         .padding(16)
-        .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 16))
-        .overlay { RoundedRectangle(cornerRadius: 16).stroke(AppColors.outline) }
+        .background(palette.card, in: RoundedRectangle(cornerRadius: 16))
+        .overlay { RoundedRectangle(cornerRadius: 16).stroke(palette.outline) }
     }
 }
 
 private struct ReviewRow: View {
+    @Environment(\.reviewsPalette) private var palette
     let review: Review
     let isMine: Bool
     let onAuthor: () -> Void
@@ -187,10 +190,10 @@ private struct ReviewRow: View {
                     VStack(alignment: .leading, spacing: 1) {
                         Text(review.user.fullName)
                             .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(AppColors.onSurface)
+                            .foregroundStyle(palette.text)
                         Text(Formatters.timeAgo(review.createdAt))
                             .font(.system(size: 11))
-                            .foregroundStyle(AppColors.onSurfaceVariant)
+                            .foregroundStyle(palette.secondaryText)
                     }
                     Spacer()
                     if isMine {
@@ -199,7 +202,7 @@ private struct ReviewRow: View {
                             Button(role: .destructive, action: onDelete) { Label("delete", systemImage: "trash") }
                         } label: {
                             Image(systemName: "ellipsis")
-                                .foregroundStyle(AppColors.onSurfaceVariant)
+                                .foregroundStyle(palette.secondaryText)
                                 .frame(width: 30, height: 24)
                         }
                     }
@@ -208,13 +211,13 @@ private struct ReviewRow: View {
                 if let comment = review.comment, !comment.isEmpty {
                     Text(comment)
                         .font(.system(size: 14))
-                        .foregroundStyle(AppColors.onSurface.opacity(0.85))
+                        .foregroundStyle(palette.text.opacity(0.85))
                         .padding(.top, 2)
                 }
             }
         }
         .padding(14)
-        .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 14))
+        .background(palette.card, in: RoundedRectangle(cornerRadius: 14))
     }
 }
 
@@ -232,5 +235,27 @@ struct StarRow: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(verbatim: "\(rating)/5"))
+    }
+}
+
+/// Colors of the reviews UI; the reader swaps them for its reading theme.
+struct ReviewsPalette {
+    var title = AppColors.onBackground
+    var text = AppColors.onSurface
+    var secondaryText = AppColors.onSurfaceVariant
+    var card = AppColors.surface
+    var fieldBackground = AppColors.background
+    var outline = AppColors.outline
+    var accent = AppColors.primary
+}
+
+private struct ReviewsPaletteKey: EnvironmentKey {
+    static let defaultValue = ReviewsPalette()
+}
+
+extension EnvironmentValues {
+    var reviewsPalette: ReviewsPalette {
+        get { self[ReviewsPaletteKey.self] }
+        set { self[ReviewsPaletteKey.self] = newValue }
     }
 }

@@ -19,6 +19,7 @@ final class AppDependencies {
     let searchService: SearchService
     let pocketService: PocketService
     let publicationService: PublicationService
+    let readerService: ReaderService
 
     init(storage: LocalStorage = LocalStorage()) {
         self.storage = storage
@@ -38,5 +39,6 @@ final class AppDependencies {
         searchService = SearchService(api: apiClient, session: storage.session)
         pocketService = PocketService(api: apiClient)
         publicationService = PublicationService(api: apiClient, session: storage.session)
+        readerService = ReaderService(api: apiClient, session: storage.session)
     }
 }

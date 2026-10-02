@@ -125,6 +125,86 @@
         }
       }
     },
+    "age_restricted_badge" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Age restricted"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yaş sınırlı"
+          }
+        }
+      }
+    },
+    "age_restricted_message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This content is age-restricted. If you haven't added your birthday yet, add it to your profile to read it."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu içerik yaş sınırlıdır. Doğum tarihini henüz eklemediysen okumak için profiline ekle."
+          }
+        }
+      }
+    },
+    "age_restricted_summary" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This content is age-restricted. If you haven't added your birthday yet, please update your profile. If you believe this is an error, please contact our support team."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu içerik yaş sınırlıdır. Doğum tarihini henüz eklemediysen lütfen profilini güncelle. Bir hata olduğunu düşünüyorsan destek ekibimizle iletişime geç."
+          }
+        }
+      }
+    },
+    "age_restricted_title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Age Restricted Content"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yaşa Kısıtlı İçerik"
+          }
+        }
+      }
+    },
+    "age_restricted_update_profile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update profile"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profili güncelle"
+          }
+        }
+      }
+    },
     "all_groups" : {
       "extractionState" : "manual",
       "localizations" : {

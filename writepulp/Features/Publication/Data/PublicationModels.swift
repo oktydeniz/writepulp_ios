@@ -57,12 +57,24 @@ struct PublicationDetail: Decodable {
     let collections: [CollectionRef]
     let isSupportedWithAI: Bool
     let similarPublications: [SimilarPublication]
+    /// The viewer's age (or unknown birthday) doesn't allow this content; the server also blanks the summary.
+    let needRestriction: Bool?
+    let ageCategory: String?
 
     struct LibraryItemRef: Decodable {
         let uuid: String
     }
 
     var hasAccess: Bool { isOwner || libraryItem != nil }
+    var isAgeRestricted: Bool { needRestriction == true }
+
+    var ageLabel: Text {
+        switch ageCategory {
+        case "ADULT": Text(verbatim: "18+")
+        case "TEENAGER": Text(verbatim: "13+")
+        default: Text("age_restricted_badge")
+        }
+    }
     /// Articles and scripts are a single page: no chapter list, reviews live in the reader.
     var isSinglePage: Bool { type == .article || type == .script }
     var hasChapterList: Bool { sectionCount > 0 && !isSinglePage }

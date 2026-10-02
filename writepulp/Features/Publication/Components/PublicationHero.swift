@@ -145,6 +145,9 @@ private struct HeroTypeRow: View {
     var body: some View {
         HStack(spacing: 6) {
             pill(Text(publication.type.label), background: AppColors.primary, foreground: .white)
+            if publication.isAgeRestricted {
+                pill(publication.ageLabel, background: Color(hex: 0xD95050), foreground: .white)
+            }
             if publication.isSupportedWithAI {
                 pill(Text("badge_ai"), background: Color(hex: 0x7C5CBF), foreground: .white)
             }

@@ -101,7 +101,13 @@ struct PublicationOverview: View {
 
     private var summary: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(publication.summary)
+            Group {
+                if publication.isAgeRestricted {
+                    Text("age_restricted_summary")
+                } else {
+                    Text(publication.summary)
+                }
+            }
                 .appTextStyle(.bodyLarge)
                 .foregroundStyle(AppColors.onSurface)
                 .lineLimit(isSummaryExpanded ? nil : 5)

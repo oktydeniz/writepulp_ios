@@ -155,8 +155,20 @@ struct MainView: View {
                 onOpen: { open($0) },
                 onSignIn: { dependencies.authService.exitGuestMode() }
             )
-        case .reader:
-            PlaceholderView(title: "content_detail_read_now")
+        case .reader(let publicationId, let type, let chapterId):
+            switch type {
+            case .article:
+                ArticleReaderView(
+                    publicationId: publicationId,
+                    service: dependencies.readerService,
+                    onOpen: { open($0) },
+                    onSignIn: { dependencies.authService.exitGuestMode() }
+                )
+            case .magazine:
+                MagazineReaderView(publicationId: publicationId, chapterId: chapterId, service: dependencies.readerService)
+            case .book, .openBook, .script:
+                BookReaderView(publicationId: publicationId, chapterId: chapterId, service: dependencies.readerService)
+            }
         case .profile(let userId):
             profileView(userId: userId == session.userId ? nil : userId)
         case .follows(let userId, let kind):
