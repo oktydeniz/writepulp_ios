@@ -130,6 +130,18 @@ struct MainView: View {
         paths[selectedTab, default: []].append(route)
     }
 
+    private func pop() {
+        _ = paths[selectedTab]?.popLast()
+    }
+
+    /// Swaps the visible screen for another, e.g. a finished form for what it created.
+    private func replaceTop(with route: MainRoute) {
+        var path = paths[selectedTab] ?? []
+        _ = path.popLast()
+        path.append(route)
+        paths[selectedTab] = path
+    }
+
     @ViewBuilder
     private func destination(_ route: MainRoute) -> some View {
         switch route {
@@ -173,8 +185,20 @@ struct MainView: View {
             profileView(userId: userId == session.userId ? nil : userId)
         case .follows(let userId, let kind):
             FollowListView(userId: userId, kind: kind, service: dependencies.profileService, onOpen: { open($0) })
-        case .community, .groups:
-            PlaceholderView(title: "groups")
+        case .groups:
+            GroupsView(service: dependencies.groupsService, onOpen: { open($0) })
+        case .community(let id, let name):
+            CommunityView(groupId: id, name: name, service: dependencies.groupsService, onOpen: { open($0) })
+        case .groupMembers(let id, let role):
+            GroupMembersView(groupId: id, viewerRole: role, service: dependencies.groupsService, onOpen: { open($0) })
+        case .groupRequests(let id):
+            GroupRequestsView(groupId: id, service: dependencies.groupsService, onOpen: { open($0) })
+        case .editGroup(let id):
+            GroupEditorView(groupId: id, service: dependencies.groupsService) { _, _ in pop() }
+        case .createGroup:
+            GroupEditorView(groupId: nil, service: dependencies.groupsService) { id, name in
+                replaceTop(with: .community(id: id, name: name))
+            }
         case .collections:
             CollectionsView(
                 service: dependencies.collectionsService,

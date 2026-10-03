@@ -22,6 +22,7 @@ final class AppDependencies {
     let readerService: ReaderService
     let networkMonitor: NetworkMonitor
     let downloadManager: DownloadManager
+    let groupsService: GroupsService
 
     init(storage: LocalStorage = LocalStorage()) {
         self.storage = storage
@@ -51,5 +52,10 @@ final class AppDependencies {
             preferences: storage.app,
             network: networkMonitor
         )
+        let session = storage.session
+        let socket = StompClient(url: AppEnvironment.webSocketURL) {
+            await MainActor.run { session.accessToken }
+        }
+        groupsService = GroupsService(api: apiClient, session: storage.session, socket: socket)
     }
 }

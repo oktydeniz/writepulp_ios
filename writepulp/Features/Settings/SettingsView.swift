@@ -37,7 +37,13 @@ struct SettingsView: View {
         .animation(.easeInOut(duration: 0.2), value: model.isDirty)
         .toast($model.toastMessage)
         .sheet(isPresented: $model.isPickingCategories) {
-            CategoryPickerSheet(model: model)
+            CategoryPickerSheet(
+                groups: model.categoryGroups,
+                isLoading: model.isLoadingCategories,
+                selectedIds: model.draft?.categoryPreferences ?? [],
+                limit: UserSettings.maxCategories,
+                onToggle: { model.toggleCategory($0) }
+            )
         }
         .alert("settings_delete_modal_title", isPresented: $model.isConfirmingDelete) {
             SecureField("settings_delete_modal_password_placeholder", text: $model.deletePassword)
@@ -323,64 +329,5 @@ private struct SettingsToggle: View {
                 }
             }
         }
-    }
-}
-
-@MainActor
-private struct CategoryPickerSheet: View {
-    let model: SettingsViewModel
-
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                if model.isLoadingCategories {
-                    ProgressView().padding(.top, 60)
-                } else {
-                    VStack(alignment: .leading, spacing: 16) {
-                        ForEach(model.categoryGroups) { group in
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(group.parent.name)
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(AppColors.primary)
-                                FlowLayout(spacing: 8) {
-                                    ForEach(group.subCategories, id: \.identity) { category in
-                                        chip(category)
-                                    }
-                                }
-                            }
-                            Divider()
-                        }
-                    }
-                    .padding(16)
-                }
-            }
-            .background(AppColors.surface.ignoresSafeArea())
-            .navigationTitle("select_category")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Text("\(model.draft?.categoryPreferences.count ?? 0)/\(UserSettings.maxCategories)")
-                        .font(.system(size: 14))
-                        .foregroundStyle(AppColors.onSurfaceVariant)
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("ok") { dismiss() }
-                }
-            }
-        }
-        .presentationDetents([.large])
-    }
-
-    private func chip(_ category: CategoryGroup.Category) -> some View {
-        let id = category.id ?? ""
-        let selected = model.draft?.categoryPreferences.contains(id) == true
-        let limitReached = (model.draft?.categoryPreferences.count ?? 0) >= UserSettings.maxCategories
-        return FilterChip(title: Text(category.name), isSelected: selected) {
-            model.toggleCategory(id)
-        }
-        .disabled(id.isEmpty || (!selected && limitReached))
-        .opacity(!selected && limitReached ? 0.4 : 1)
     }
 }

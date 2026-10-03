@@ -13,6 +13,10 @@ enum MainRoute: Hashable {
     case profile(userId: String)
     case follows(userId: String?, kind: FollowListKind)
     case community(id: String, name: String)
+    case groupMembers(id: String, role: GroupRole)
+    case groupRequests(id: String)
+    case editGroup(id: String)
+    case createGroup
     case collection(id: String, name: String)
     case categoryExplore(slug: String, title: String)
     case homeSection(key: String, title: String, type: PublicationType?)

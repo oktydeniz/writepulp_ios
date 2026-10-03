@@ -187,6 +187,22 @@
 		1616FE1F0366416FA8064D7A /* DownloadSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BFEB8171E34933B83692F4 /* DownloadSettingsSheet.swift */; };
 		911613FEF44E4E4D966C6D4B /* DownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D79723A75C4607838BB049 /* DownloadButton.swift */; };
 		9559189A0C9545F1B1334A83 /* DownloadRefreshTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60AE0026DD841FA81773B06 /* DownloadRefreshTask.swift */; };
+		2C22AA8054D84DBEBA3328D9 /* StompClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B597A553E645B4A35CE8C6 /* StompClient.swift */; };
+		A9025E956D5E41D6B76785BB /* GroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE4BF5613B648D4AF2AE268 /* GroupsView.swift */; };
+		CE53CD08973A482FA8B2AF08 /* GroupsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7512136FFB44619E500EBF /* GroupsViewModel.swift */; };
+		8D01A9FA7F054DBF8215CC0C /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AE074D94FF4DC9BF19D0FA /* CommunityView.swift */; };
+		7E80F6A258E24FFFB1450071 /* GroupModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96764352EB6D4995BFF621ED /* GroupModels.swift */; };
+		4E99DC95EEF0441FAE7317F7 /* GroupsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167B77162BE4A7AB718FDA8 /* GroupsService.swift */; };
+		978A839891374C51BE9A6DF7 /* GroupComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D0A671C85E4CAD943C4493 /* GroupComponents.swift */; };
+		A751857C07FB4544900BBC86 /* GroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714F72F077074E5196BCC0CF /* GroupChatView.swift */; };
+		0C4E0F101AFA4BB3874BEBE4 /* GroupChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC97F7CF2A841798893B207 /* GroupChatViewModel.swift */; };
+		64CE451855AD4518822DEFA2 /* GroupChatComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FED7BF14874BDB868037E5 /* GroupChatComponents.swift */; };
+		F9AD254027C143A2A940D8EA /* CategoryPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C69CB61CA65D4905BCC9828E /* CategoryPickerSheet.swift */; };
+		98EE72C7278842ED96858F6B /* GroupMembersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D009EF80844CB192F3C1CA /* GroupMembersViewModel.swift */; };
+		3188B7147071478BBC97F84E /* GroupMembersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA00302F25F487EAE9A00B0 /* GroupMembersView.swift */; };
+		A9DFAA41A2C24A4FAB9E34AC /* GroupRequestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F09318AFAE4A4FACA7F205 /* GroupRequestsView.swift */; };
+		891C879FA88345AF8CC169A4 /* GroupEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17564B2881F546B29B6F9496 /* GroupEditorViewModel.swift */; };
+		E80E81839AE94A6DB10098F8 /* GroupEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC06EDB7DAA478C864399B9 /* GroupEditorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -372,6 +388,22 @@
 		42BFEB8171E34933B83692F4 /* DownloadSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadSettingsSheet.swift; sourceTree = "<group>"; };
 		C2D79723A75C4607838BB049 /* DownloadButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadButton.swift; sourceTree = "<group>"; };
 		E60AE0026DD841FA81773B06 /* DownloadRefreshTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadRefreshTask.swift; sourceTree = "<group>"; };
+		E3B597A553E645B4A35CE8C6 /* StompClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StompClient.swift; sourceTree = "<group>"; };
+		2DE4BF5613B648D4AF2AE268 /* GroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsView.swift; sourceTree = "<group>"; };
+		8D7512136FFB44619E500EBF /* GroupsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsViewModel.swift; sourceTree = "<group>"; };
+		71AE074D94FF4DC9BF19D0FA /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
+		96764352EB6D4995BFF621ED /* GroupModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupModels.swift; sourceTree = "<group>"; };
+		5167B77162BE4A7AB718FDA8 /* GroupsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsService.swift; sourceTree = "<group>"; };
+		C0D0A671C85E4CAD943C4493 /* GroupComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupComponents.swift; sourceTree = "<group>"; };
+		714F72F077074E5196BCC0CF /* GroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatView.swift; sourceTree = "<group>"; };
+		CCC97F7CF2A841798893B207 /* GroupChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatViewModel.swift; sourceTree = "<group>"; };
+		62FED7BF14874BDB868037E5 /* GroupChatComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatComponents.swift; sourceTree = "<group>"; };
+		C69CB61CA65D4905BCC9828E /* CategoryPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerSheet.swift; sourceTree = "<group>"; };
+		E1D009EF80844CB192F3C1CA /* GroupMembersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMembersViewModel.swift; sourceTree = "<group>"; };
+		9AA00302F25F487EAE9A00B0 /* GroupMembersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMembersView.swift; sourceTree = "<group>"; };
+		11F09318AFAE4A4FACA7F205 /* GroupRequestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupRequestsView.swift; sourceTree = "<group>"; };
+		17564B2881F546B29B6F9496 /* GroupEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEditorViewModel.swift; sourceTree = "<group>"; };
+		BEC06EDB7DAA478C864399B9 /* GroupEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEditorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -674,6 +706,7 @@
 				C5A8AF5F1EE0402E8CBD38D0 /* FollowButton.swift */,
 				C757B25FBFC044D38CEE7883 /* ImageViewer.swift */,
 				9086D8525A554DEEA492E821 /* Skeleton.swift */,
+				C69CB61CA65D4905BCC9828E /* CategoryPickerSheet.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -974,6 +1007,7 @@
 				1DC50104FF7C47F891A4F920 /* Publication */,
 				C11D657CDA5D4BF298823B46 /* Reader */,
 				2B40DCEBBBCD41B6B36375AB /* Downloads */,
+				32A16F6343184B1CB3923017 /* Groups */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -1036,6 +1070,7 @@
 				5A5C7A5E9352D86F3FC4FFD0 /* APIClient.swift */,
 				D74D8E350D094C9CBDEB4E5A /* MultipartForm.swift */,
 				0A61B0CB958D4022BF58BA3C /* NetworkMonitor.swift */,
+				E3B597A553E645B4A35CE8C6 /* StompClient.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -1109,6 +1144,67 @@
 				C2D79723A75C4607838BB049 /* DownloadButton.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		32A16F6343184B1CB3923017 /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				2DE4BF5613B648D4AF2AE268 /* GroupsView.swift */,
+				8D7512136FFB44619E500EBF /* GroupsViewModel.swift */,
+				71AE074D94FF4DC9BF19D0FA /* CommunityView.swift */,
+				64B5CBF4750A44D3884F5BC0 /* Data */,
+				E9DB6C32C3EA48BA818111DD /* Components */,
+				5116445D993E492DBE8C2C6C /* Chat */,
+				4BE9E2D402D349FC9F7131D9 /* Members */,
+				12FD65758A914535A8694046 /* Editor */,
+			);
+			path = Groups;
+			sourceTree = "<group>";
+		};
+		64B5CBF4750A44D3884F5BC0 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				96764352EB6D4995BFF621ED /* GroupModels.swift */,
+				5167B77162BE4A7AB718FDA8 /* GroupsService.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		E9DB6C32C3EA48BA818111DD /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C0D0A671C85E4CAD943C4493 /* GroupComponents.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		5116445D993E492DBE8C2C6C /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				714F72F077074E5196BCC0CF /* GroupChatView.swift */,
+				CCC97F7CF2A841798893B207 /* GroupChatViewModel.swift */,
+				62FED7BF14874BDB868037E5 /* GroupChatComponents.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		4BE9E2D402D349FC9F7131D9 /* Members */ = {
+			isa = PBXGroup;
+			children = (
+				E1D009EF80844CB192F3C1CA /* GroupMembersViewModel.swift */,
+				9AA00302F25F487EAE9A00B0 /* GroupMembersView.swift */,
+				11F09318AFAE4A4FACA7F205 /* GroupRequestsView.swift */,
+			);
+			path = Members;
+			sourceTree = "<group>";
+		};
+		12FD65758A914535A8694046 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				17564B2881F546B29B6F9496 /* GroupEditorViewModel.swift */,
+				BEC06EDB7DAA478C864399B9 /* GroupEditorView.swift */,
+			);
+			path = Editor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1227,6 +1323,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E80E81839AE94A6DB10098F8 /* GroupEditorView.swift in Sources */,
+				891C879FA88345AF8CC169A4 /* GroupEditorViewModel.swift in Sources */,
+				A9DFAA41A2C24A4FAB9E34AC /* GroupRequestsView.swift in Sources */,
+				3188B7147071478BBC97F84E /* GroupMembersView.swift in Sources */,
+				98EE72C7278842ED96858F6B /* GroupMembersViewModel.swift in Sources */,
+				F9AD254027C143A2A940D8EA /* CategoryPickerSheet.swift in Sources */,
+				64CE451855AD4518822DEFA2 /* GroupChatComponents.swift in Sources */,
+				0C4E0F101AFA4BB3874BEBE4 /* GroupChatViewModel.swift in Sources */,
+				A751857C07FB4544900BBC86 /* GroupChatView.swift in Sources */,
+				978A839891374C51BE9A6DF7 /* GroupComponents.swift in Sources */,
+				4E99DC95EEF0441FAE7317F7 /* GroupsService.swift in Sources */,
+				7E80F6A258E24FFFB1450071 /* GroupModels.swift in Sources */,
+				8D01A9FA7F054DBF8215CC0C /* CommunityView.swift in Sources */,
+				CE53CD08973A482FA8B2AF08 /* GroupsViewModel.swift in Sources */,
+				A9025E956D5E41D6B76785BB /* GroupsView.swift in Sources */,
+				2C22AA8054D84DBEBA3328D9 /* StompClient.swift in Sources */,
 				9559189A0C9545F1B1334A83 /* DownloadRefreshTask.swift in Sources */,
 				911613FEF44E4E4D966C6D4B /* DownloadButton.swift in Sources */,
 				1616FE1F0366416FA8064D7A /* DownloadSettingsSheet.swift in Sources */,

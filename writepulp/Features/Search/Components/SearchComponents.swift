@@ -9,12 +9,13 @@ struct SearchField: View {
     @Binding var text: String
     let isFocused: FocusState<Bool>.Binding
     let onClear: () -> Void
+    var placeholder: LocalizedStringKey = "search_placeholder"
 
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(isFocused.wrappedValue ? AppColors.primary : AppPalette.appLightGray)
-            TextField("", text: $text, prompt: Text("search_placeholder").foregroundStyle(AppPalette.appLightGray))
+            TextField("", text: $text, prompt: Text(placeholder).foregroundStyle(AppPalette.appLightGray))
                 .focused(isFocused)
                 .submitLabel(.search)
                 .autocorrectionDisabled()
