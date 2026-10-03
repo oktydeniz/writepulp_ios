@@ -8,6 +8,7 @@ import SwiftUI
 @MainActor
 struct PublicationDetailView: View {
     let collectionsService: CollectionsService
+    let downloads: DownloadManager
     let onOpen: (MainRoute) -> Void
     let onSignIn: () -> Void
 
@@ -17,6 +18,7 @@ struct PublicationDetailView: View {
     @State private var isShowingCover = false
     @State private var signInMessage: LocalizedStringKey?
     @State private var isShowingAgeGate = false
+    @State private var isConfirmingDownloadRemoval = false
     /// Set when the reader is opened, so progress and "continue" are fresh when coming back.
     @State private var needsRefresh = false
 
@@ -24,10 +26,12 @@ struct PublicationDetailView: View {
         publicationId: String,
         service: PublicationService,
         collectionsService: CollectionsService,
+        downloads: DownloadManager,
         onOpen: @escaping (MainRoute) -> Void,
         onSignIn: @escaping () -> Void
     ) {
         self.collectionsService = collectionsService
+        self.downloads = downloads
         self.onOpen = onOpen
         self.onSignIn = onSignIn
         _model = State(initialValue: PublicationDetailViewModel(publicationId: publicationId, service: service))
@@ -86,6 +90,12 @@ struct PublicationDetailView: View {
             Button("sign_in", action: onSignIn)
         } message: {
             if let signInMessage { Text(signInMessage) }
+        }
+        .alert("content_detail_delete_download_title", isPresented: $isConfirmingDownloadRemoval) {
+            Button("cancel", role: .cancel) {}
+            Button("delete", role: .destructive) { Task { await downloads.delete(model.publicationId) } }
+        } message: {
+            Text("content_detail_delete_download_message")
         }
         .alert("age_restricted_title", isPresented: $isShowingAgeGate) {
             Button("cancel", role: .cancel) {}
@@ -180,6 +190,14 @@ struct PublicationDetailView: View {
     private var toolbar: some ToolbarContent {
         if let publication = model.publication {
             ToolbarItemGroup(placement: .topBarTrailing) {
+                if downloads.canDownload(publication) {
+                    DownloadButton(
+                        download: downloads.download(for: publication.uuid),
+                        progress: downloads.progress[publication.uuid],
+                        onDownload: { startDownload(publication) },
+                        onDelete: { isConfirmingDownloadRemoval = true }
+                    )
+                }
                 ShareLink(item: AppLinks.publication(publication.uuid), subject: Text(publication.title)) {
                     toolbarIcon("square.and.arrow.up")
                 }
@@ -231,6 +249,21 @@ struct PublicationDetailView: View {
         }
         needsRefresh = true
         onOpen(.reader(publicationId: model.publicationId, type: publication.type, chapterId: chapterId))
+    }
+
+    private func startDownload(_ publication: PublicationDetail) {
+        if publication.isAgeRestricted {
+            isShowingAgeGate = true
+            return
+        }
+        Task {
+            switch await downloads.download(publication) {
+            case .completed: model.toastMessage = String(localized: "content_detail_downloaded")
+            case .partial: model.toastMessage = String(localized: "content_detail_download_incomplete")
+            case .offline: model.toastMessage = String(localized: "error_no_internet")
+            case .failed: model.toastMessage = String(localized: "download_failed")
+            }
+        }
     }
 
     private func requireSignIn(_ message: LocalizedStringKey, _ action: () -> Void) {

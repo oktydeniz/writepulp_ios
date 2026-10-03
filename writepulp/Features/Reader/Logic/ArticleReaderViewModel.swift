@@ -79,7 +79,7 @@ final class ArticleReaderViewModel {
     func recordProgress(_ percent: Double) {
         guard let article, !article.isOwner, throttle.shouldSend(percent) else { return }
         let service = service
-        Task { await service.recordProgress(sectionId: article.id, percent: percent) }
+        Task { await service.recordProgress(publicationId: publicationId, sectionId: article.id, percent: percent) }
     }
 
     func pauseSession() { session.pause() }

@@ -99,30 +99,73 @@ final class ReaderService {
     private let api: APIClient
     private let session: SessionStore
     private let pendingProgress: PendingProgressStore
+    private let offline: OfflineReaderSource?
 
-    nonisolated init(api: APIClient, session: SessionStore, defaults: UserDefaults = .standard) {
+    nonisolated init(
+        api: APIClient,
+        session: SessionStore,
+        offline: OfflineReaderSource? = nil,
+        defaults: UserDefaults = .standard
+    ) {
         self.api = api
         self.session = session
+        self.offline = offline
         pendingProgress = PendingProgressStore(defaults: defaults)
     }
 
     var isSignedIn: Bool { session.isLoggedIn }
     var currentUserId: String? { session.userId }
 
+    // Content falls back to the downloaded copy when the server can't be reached.
+
     func chaptersList(publicationId: String) async throws -> ReaderChaptersList {
-        try await api.send(ReaderAPI.chaptersList(publicationId: publicationId))
+        try await withOfflineFallback {
+            try await api.send(ReaderAPI.chaptersList(publicationId: publicationId))
+        } offline: { source in
+            await source.chaptersList(publicationId: publicationId)
+        }
     }
 
     /// nil chapter: where the user left off.
     func chapter(publicationId: String, chapterId: String?) async throws -> ReaderChapter {
-        if let chapterId {
-            return try await api.send(ReaderAPI.chapter(publicationId: publicationId, chapterId: chapterId))
+        try await withOfflineFallback {
+            if let chapterId {
+                return try await api.send(ReaderAPI.chapter(publicationId: publicationId, chapterId: chapterId))
+            }
+            return try await api.send(ReaderAPI.currentChapter(publicationId: publicationId))
+        } offline: { source in
+            guard let local = await source.chapter(publicationId: publicationId, chapterId: chapterId) else { return nil }
+            await markOpenedOffline(publicationId: publicationId, sectionId: local.id)
+            return local
         }
-        return try await api.send(ReaderAPI.currentChapter(publicationId: publicationId))
     }
 
     func article(publicationId: String) async throws -> ReaderArticle {
-        try await api.send(ReaderAPI.article(publicationId: publicationId))
+        try await withOfflineFallback {
+            try await api.send(ReaderAPI.article(publicationId: publicationId))
+        } offline: { source in
+            guard let local = await source.article(publicationId: publicationId) else { return nil }
+            await markOpenedOffline(publicationId: publicationId, sectionId: local.id)
+            return local
+        }
+    }
+
+    private func withOfflineFallback<T>(
+        _ online: () async throws -> T,
+        offline: (OfflineReaderSource) async -> T?
+    ) async throws -> T {
+        do {
+            return try await online()
+        } catch let error as APIError where error.isRetryable {
+            if let source = self.offline, let local = await offline(source) { return local }
+            throw error
+        }
+    }
+
+    /// Offline, the server never learns which section was opened; a 0% entry only stamps the
+    /// read time (progress is kept at its max) so "continue reading" follows it once synced.
+    private func markOpenedOffline(publicationId: String, sectionId: String) async {
+        await recordProgress(publicationId: publicationId, sectionId: sectionId, percent: 0)
     }
 
     func incrementView(sectionId: String) async {
@@ -136,9 +179,10 @@ final class ReaderService {
     // MARK: Progress
 
     /// Sends progress; when the server can't be reached it's kept and replayed later with its original time.
-    func recordProgress(sectionId: String, percent: Double) async {
+    func recordProgress(publicationId: String, sectionId: String, percent: Double) async {
         guard isSignedIn, let userId = currentUserId else { return }
         let percent = min(max(percent, 0), 100)
+        await offline?.recordProgress(publicationId: publicationId, sectionId: sectionId, percent: percent)
         do {
             _ = try await api.send(ReaderAPI.progress(sectionId: sectionId, percent: percent, readAt: nil))
             pendingProgress.remove(sectionId: sectionId, ifAtMost: percent)

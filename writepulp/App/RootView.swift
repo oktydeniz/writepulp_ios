@@ -9,6 +9,8 @@ enum AppRoute: Equatable {
     case onboarding
     case auth(AuthStart)
     case main
+    /// Started without a connection: downloads only.
+    case offline
 }
 
 @MainActor
@@ -44,6 +46,11 @@ struct RootView: View {
             case .main:
                 MainView(dependencies: dependencies)
                     .transition(.opacity)
+            case .offline:
+                OfflineRootView(dependencies: dependencies) {
+                    withAnimation(.easeInOut(duration: 0.28)) { route = .main }
+                }
+                .transition(.opacity)
             }
         }
         // Signed out from inside the app (logout, guest → login): back to login.
@@ -74,9 +81,10 @@ struct RootView: View {
         withAnimation(.easeInOut(duration: 0.28)) { route = next }
     }
 
-    // TODO: offline launch → downloads, once that screen exists.
     private var startRoute: AppRoute {
         if preferences.isFirstTime { return .onboarding }
+        // Nothing but downloads works without a connection; checked only at launch.
+        if session.isLoggedIn, !dependencies.networkMonitor.isOnline { return .offline }
         if session.isLoggedIn || session.isLoggedInAsGuest { return .main }
         return .auth(.login)
     }
@@ -87,4 +95,5 @@ struct RootView: View {
     return RootView(dependencies: dependencies)
         .writePulpTheme(dependencies.storage.app)
         .localStorage(dependencies.storage)
+        .environment(dependencies.networkMonitor)
 }

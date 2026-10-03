@@ -17,7 +17,11 @@ struct PagedList<Item: Decodable> {
     var isEmpty: Bool { items.isEmpty }
 
     mutating func apply(_ page: Page<Item>, replacing: Bool) {
-        items = replacing ? page.content : items + page.content
+        applyFiltered(page, content: page.content, replacing: replacing)
+    }
+
+    fileprivate mutating func applyFiltered(_ page: Page<Item>, content: [Item], replacing: Bool) {
+        items = replacing ? content : items + content
         nextPage = replacing ? 1 : nextPage + 1
         hasMore = !page.last
         hasLoaded = true
@@ -32,5 +36,14 @@ struct PagedList<Item: Decodable> {
 
     mutating func removeAll(where predicate: (Item) -> Bool) {
         items.removeAll(where: predicate)
+    }
+}
+
+extension PagedList where Item: Identifiable {
+    /// The server can repeat an item across pages (unstable sort); a repeated id confuses `ForEach`.
+    mutating func apply(_ page: Page<Item>, replacing: Bool) {
+        var seen = replacing ? Set<Item.ID>() : Set(items.map(\.id))
+        let fresh = page.content.filter { seen.insert($0.id).inserted }
+        applyFiltered(page, content: fresh, replacing: replacing)
     }
 }

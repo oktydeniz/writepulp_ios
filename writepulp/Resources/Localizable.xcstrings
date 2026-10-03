@@ -2670,6 +2670,23 @@
         }
       }
     },
+    "download_failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download failed. Please try again."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İndirme başarısız oldu. Lütfen tekrar deneyin."
+          }
+        }
+      }
+    },
     "download_settings_auto_update" : {
       "extractionState" : "manual",
       "localizations" : {

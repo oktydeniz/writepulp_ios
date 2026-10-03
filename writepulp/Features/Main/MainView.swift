@@ -55,6 +55,10 @@ struct MainView: View {
         .onChange(of: session.isLoggedIn) {
             if !tabs.contains(selectedTab) { selectedTab = .home }
         }
+        .task(id: "\(session.userId ?? "")-\(dependencies.networkMonitor.isOnUnmeteredNetwork)") {
+            await dependencies.downloadManager.prepare()
+            await dependencies.downloadManager.refreshStaleIfNeeded()
+        }
         .task(id: session.isLoggedIn) {
             guard session.isLoggedIn else { return }
             await PushNotifications.shared.requestAuthorization()
@@ -152,23 +156,19 @@ struct MainView: View {
                 publicationId: id,
                 service: dependencies.publicationService,
                 collectionsService: dependencies.collectionsService,
+                downloads: dependencies.downloadManager,
                 onOpen: { open($0) },
                 onSignIn: { dependencies.authService.exitGuestMode() }
             )
         case .reader(let publicationId, let type, let chapterId):
-            switch type {
-            case .article:
-                ArticleReaderView(
-                    publicationId: publicationId,
-                    service: dependencies.readerService,
-                    onOpen: { open($0) },
-                    onSignIn: { dependencies.authService.exitGuestMode() }
-                )
-            case .magazine:
-                MagazineReaderView(publicationId: publicationId, chapterId: chapterId, service: dependencies.readerService)
-            case .book, .openBook, .script:
-                BookReaderView(publicationId: publicationId, chapterId: chapterId, service: dependencies.readerService)
-            }
+            ReaderScreen(
+                publicationId: publicationId,
+                type: type,
+                chapterId: chapterId,
+                service: dependencies.readerService,
+                onOpen: { open($0) },
+                onSignIn: { dependencies.authService.exitGuestMode() }
+            )
         case .profile(let userId):
             profileView(userId: userId == session.userId ? nil : userId)
         case .follows(let userId, let kind):
@@ -188,7 +188,12 @@ struct MainView: View {
         case .editProfile:
             EditProfileView(service: dependencies.profileService, onSaved: { profileRevision += 1 })
         case .downloads:
-            PlaceholderView(title: "downloads_title")
+            DownloadsView(
+                manager: dependencies.downloadManager,
+                network: dependencies.networkMonitor,
+                preferences: preferences,
+                onOpen: { open($0) }
+            )
         case .wallet:
             WalletView(service: dependencies.walletService)
         case .settings:

@@ -75,7 +75,7 @@ final class BookReaderViewModel {
     func recordProgress(_ percent: Double) {
         guard let chapter, !chapter.isOwner, chapter.isAccessible, throttle.shouldSend(percent) else { return }
         let service = service
-        Task { await service.recordProgress(sectionId: chapter.id, percent: percent) }
+        Task { await service.recordProgress(publicationId: publicationId, sectionId: chapter.id, percent: percent) }
     }
 
     func pauseSession() { session.pause() }

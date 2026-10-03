@@ -20,6 +20,8 @@ final class AppDependencies {
     let pocketService: PocketService
     let publicationService: PublicationService
     let readerService: ReaderService
+    let networkMonitor: NetworkMonitor
+    let downloadManager: DownloadManager
 
     init(storage: LocalStorage = LocalStorage()) {
         self.storage = storage
@@ -39,6 +41,15 @@ final class AppDependencies {
         searchService = SearchService(api: apiClient, session: storage.session)
         pocketService = PocketService(api: apiClient)
         publicationService = PublicationService(api: apiClient, session: storage.session)
-        readerService = ReaderService(api: apiClient, session: storage.session)
+        let downloadStore = DownloadStore()
+        networkMonitor = NetworkMonitor()
+        readerService = ReaderService(api: apiClient, session: storage.session, offline: downloadStore)
+        downloadManager = DownloadManager(
+            store: downloadStore,
+            api: apiClient,
+            session: storage.session,
+            preferences: storage.app,
+            network: networkMonitor
+        )
     }
 }

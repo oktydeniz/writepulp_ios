@@ -106,7 +106,7 @@ final class MagazineReaderViewModel {
         guard pageId == currentSummary?.id, let page = pages[pageId]?.content,
               !page.isOwner, page.isAccessible, throttle.shouldSend(percent) else { return }
         let service = service
-        Task { await service.recordProgress(sectionId: pageId, percent: percent) }
+        Task { await service.recordProgress(publicationId: publicationId, sectionId: pageId, percent: percent) }
     }
 
     func pauseSession() { session.pause() }

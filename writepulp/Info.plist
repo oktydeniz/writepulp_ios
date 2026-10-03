@@ -17,8 +17,16 @@
 		<key>CrashReporting</key>
 		<string>$(CRASHLYTICS_ENABLED)</string>
 	</dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).downloads-refresh</string>
+	</array>
 	<key>FirebaseCrashlyticsCollectionEnabled</key>
 	<false/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>processing</string>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>lora_variable.ttf</string>

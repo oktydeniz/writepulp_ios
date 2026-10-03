@@ -187,6 +187,8 @@ private struct ArticleHeader: View {
     let isSignedIn: Bool
     let onOpen: (MainRoute) -> Void
 
+    @Environment(NetworkMonitor.self) private var network
+
     private var publication: ReaderPublicationSummary { article.publication }
 
     var body: some View {
@@ -246,7 +248,8 @@ private struct ArticleHeader: View {
                 }
             }
             Spacer(minLength: 8)
-            if isSignedIn, article.earnsCoins {
+            // Nothing is earned offline, including downloaded copies.
+            if isSignedIn, article.earnsCoins, network.isOnline {
                 Label("article_coins_while_reading", systemImage: "bitcoinsign.circle.fill")
                     .font(.system(size: 11))
                     .foregroundStyle(theme.secondaryText)
