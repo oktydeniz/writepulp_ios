@@ -121,7 +121,10 @@ struct ListSkeleton: View {
             Spacer(minLength: 0)
         }
         .padding(.vertical, 8)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        // Takes only the space it's given (e.g. above the keyboard) and cuts rows off at the bottom;
+        // otherwise the overflow is centered and pushes the screen's header up off-screen.
+        .frame(maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
+        .clipped()
         .shimmering()
     }
 }
