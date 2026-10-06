@@ -1,0 +1,7 @@
+{
+  "blocks": [
+    { "id": "l1", "type": "header", "content": "Old chapter", "styles": { "fontSize": 28 }, "properties": { "level": "2" } },
+    { "id": "l2", "type": "paragraph", "content": "Saved before schemaVersion existed; styles and properties may be missing." },
+    { "id": "l3", "type": "list", "content": "a\nb" }
+  ]
+}

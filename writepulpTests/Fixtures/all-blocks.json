@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "id": "6f3c2a1e-0b8d-4d6e-9a51-2c7f1e9b4a10",
+  "publicationId": "48bd3aee-998d-43b7-ad5e-baa01aacf62f",
+  "sectionTitle": "Chapter One",
+  "section": "Chapter 1",
+  "reader": { "themeId": "light", "fontId": "default", "fontSize": 16 },
+  "blocks": [
+    {
+      "id": "b-header",
+      "type": "header",
+      "content": "Chapter One",
+      "styles": { "fontSize": "32px", "fontWeight": "700", "contentPadding": "0px", "textAlign": "center" },
+      "properties": { "level": 1, "alignment": "center" }
+    },
+    {
+      "id": "b-paragraph",
+      "type": "paragraph",
+      "content": "It was **late**, *quiet* and [the city](https://example.com) slept. <c:#DC2626>Red words</c> stayed awake.",
+      "styles": { "fontSize": "16px", "textIndent": "24px", "contentPadding": "4px", "fontStyle": "normal", "color": "#111827" },
+      "properties": { "alignment": "justify", "dropCap": true }
+    },
+    {
+      "id": "b-image",
+      "type": "image",
+      "content": "",
+      "styles": {},
+      "properties": { "url": "sections/2026/10/cover-a.jpg", "width": "80%", "alignment": "center", "caption": "Harbour at dawn", "isTempUpload": false }
+    },
+    {
+      "id": "b-media-text",
+      "type": "media-text",
+      "content": "Text that flows next to the picture.",
+      "styles": { "fontSize": "15px" },
+      "properties": { "url": "sections/2026/10/side.png", "width": "36%", "imagePosition": "right" }
+    },
+    {
+      "id": "b-code",
+      "type": "code",
+      "content": "fun main() {\n    println(\"hello\")\n}",
+      "styles": {},
+      "properties": { "language": "kotlin" }
+    },
+    {
+      "id": "b-divider",
+      "type": "divider",
+      "content": "",
+      "styles": {},
+      "properties": { "dividerStyle": "star" }
+    },
+    {
+      "id": "b-quote",
+      "type": "quote",
+      "content": "A quote with **bold** inside.",
+      "styles": { "backgroundColor": "#FFFFFF", "fontStyle": "italic" },
+      "properties": { "author": "Unknown" }
+    },
+    {
+      "id": "b-info-box",
+      "type": "info-box",
+      "content": "Note for the reader.",
+      "styles": { "backgroundColor": "#EFF6FF" },
+      "properties": {}
+    },
+    {
+      "id": "b-space",
+      "type": "space",
+      "content": "",
+      "styles": {},
+      "properties": { "spacing": "40px" }
+    },
+    {
+      "id": "b-list",
+      "type": "list",
+      "content": "First item\nSecond item\nThird item",
+      "styles": {},
+      "properties": { "listStyle": "numeric" }
+    },
+    {
+      "id": "b-reference",
+      "type": "reference",
+      "content": "[{\"author\":\"D, J.\",\"year\":\"2024\",\"title\":\"Book Name\",\"url\":\"https://example.com/book\"}]",
+      "styles": {},
+      "properties": {}
+    },
+    {
+      "id": "b-poem",
+      "type": "poem",
+      "content": "First line\nSecond line\n\nNew stanza line",
+      "styles": { "textAlign": "center" },
+      "properties": {}
+    },
+    {
+      "id": "b-scene-heading",
+      "type": "scene-heading",
+      "content": "INT. KITCHEN - NIGHT",
+      "styles": { "fontWeight": "700" },
+      "properties": {}
+    },
+    {
+      "id": "b-dialogue",
+      "type": "dialogue",
+      "content": "We have to leave. Now.",
+      "styles": {},
+      "properties": { "alignment": "center", "character": "MARA" }
+    },
+    {
+      "id": "b-future-fields",
+      "type": "paragraph",
+      "content": "Carries fields no client knows yet; they must survive a save untouched.",
+      "styles": { "letterSpacing": "0.5px" },
+      "properties": { "alignment": "left", "x-annotation": { "author": "editor", "pinned": true } },
+      "x-meta": { "createdOn": "web" }
+    }
+  ]
+}
