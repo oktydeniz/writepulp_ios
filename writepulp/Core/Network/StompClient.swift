@@ -7,7 +7,9 @@ import Foundation
 
 /// Minimal STOMP 1.2 client over a plain WebSocket, for the chat topics.
 /// Connects on the first subscription, disconnects after the last one ends, and reconnects with
-/// backoff in between, subscribing again to everything that's still open.
+/// backoff in between, subscribing again to everything that's still open. WebSocket pings keep a
+/// quiet connection from being closed by Cloudflare's 100s idle timeout (the server sends no
+/// STOMP heartbeats).
 actor StompClient {
     enum Event {
         case message(Data)
@@ -30,10 +32,12 @@ actor StompClient {
     private var subscriptions: [String: Subscription] = [:]
     private var nextSubscriptionId = 0
     private var reconnectTask: Task<Void, Never>?
+    private var keepAliveTask: Task<Void, Never>?
     private var failedAttempts = 0
 
     private static let connectTimeout: Duration = .seconds(10)
     private static let maxBackoffSeconds = 30.0
+    private static let pingInterval: Duration = .seconds(25)
 
     init(url: URL, urlSession: URLSession = .shared, token: @escaping @Sendable () async -> String?) {
         self.url = url
@@ -134,6 +138,7 @@ actor StompClient {
             case "CONNECTED":
                 isConnected = true
                 failedAttempts = 0
+                startKeepAlive(task)
                 for (id, subscription) in subscriptions {
                     transmit(Self.frame("SUBSCRIBE", ["id": id, "destination": subscription.destination]))
                     if hasConnectedBefore { subscription.continuation.yield(.reconnected) }
@@ -157,10 +162,30 @@ actor StompClient {
         connectionLost(task)
     }
 
+    private func startKeepAlive(_ task: URLSessionWebSocketTask) {
+        keepAliveTask?.cancel()
+        keepAliveTask = Task {
+            while !Task.isCancelled {
+                try? await Task.sleep(for: Self.pingInterval)
+                guard !Task.isCancelled else { return }
+                let isAlive = await withCheckedContinuation { continuation in
+                    task.sendPing { error in continuation.resume(returning: error == nil) }
+                }
+                if !isAlive {
+                    // No pong: the connection is gone even if no error has surfaced yet.
+                    task.cancel(with: .goingAway, reason: nil)
+                    return
+                }
+            }
+        }
+    }
+
     private func connectionLost(_ task: URLSessionWebSocketTask) {
         guard task === socket else { return }
         socket = nil
         isConnected = false
+        keepAliveTask?.cancel()
+        keepAliveTask = nil
         guard !subscriptions.isEmpty else { return }
         let delay = min(Self.maxBackoffSeconds, pow(2, Double(failedAttempts)))
         failedAttempts += 1
@@ -185,6 +210,8 @@ actor StompClient {
     private func disconnect() {
         reconnectTask?.cancel()
         reconnectTask = nil
+        keepAliveTask?.cancel()
+        keepAliveTask = nil
         socket?.cancel(with: .normalClosure, reason: nil)
         socket = nil
         isConnected = false
