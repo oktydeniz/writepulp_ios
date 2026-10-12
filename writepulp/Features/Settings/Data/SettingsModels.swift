@@ -30,6 +30,8 @@ struct UserSettings: Codable, Equatable {
     var showInspirationQuote: Bool
     var gender: Gender?
     var shareDemographicData: Bool
+    /// false for Apple/Google accounts without a password; nil from older backends. Read-only.
+    var hasPassword: Bool?
 
     static let maxCategories = 8
 

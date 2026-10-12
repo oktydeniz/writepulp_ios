@@ -37,6 +37,8 @@ final class SettingsViewModel {
     var newPassword = ""
     var newPasswordConfirmation = ""
     private(set) var isSavingPassword = false
+    /// Apple/Google sign-ups have no password yet: the same form, without "current password", sets one.
+    private(set) var hasPassword: Bool
 
     // Role
     private(set) var role: String?
@@ -45,7 +47,7 @@ final class SettingsViewModel {
     // Account deletion
     var isConfirmingDelete = false
     var deletePassword = ""
-    var requiresDeletePassword: Bool { service.hasPassword }
+    var requiresDeletePassword: Bool { hasPassword }
     private(set) var isDeleting = false
 
     // Categories
@@ -60,6 +62,7 @@ final class SettingsViewModel {
         self.service = service
         self.preferences = preferences
         role = service.currentRole
+        hasPassword = service.hasPassword
     }
 
     var isDirty: Bool {
@@ -88,6 +91,10 @@ final class SettingsViewModel {
         defer { isLoading = false }
         do {
             let settings = try await service.settings()
+            if let hasPassword = settings.hasPassword {
+                self.hasPassword = hasPassword
+                service.syncHasPassword(hasPassword)
+            }
             original = settings
             draft = settings
             errorMessage = nil
@@ -184,7 +191,7 @@ final class SettingsViewModel {
 
     func changePassword() async {
         if let error = FormValidator.firstError(
-            oldPassword.isEmpty || newPassword.isEmpty ? String(localized: "error_empty_fields") : nil,
+            (hasPassword && oldPassword.isEmpty) || newPassword.isEmpty ? String(localized: "error_empty_fields") : nil,
             FormValidator.password(newPassword),
             FormValidator.passwordsMatch(newPassword, newPasswordConfirmation)
         ) {
@@ -194,12 +201,20 @@ final class SettingsViewModel {
         isSavingPassword = true
         defer { isSavingPassword = false }
         do {
-            try await service.changePassword(old: oldPassword, new: newPassword, confirmation: newPasswordConfirmation)
+            let wasSet = !hasPassword
+            try await service.changePassword(
+                old: hasPassword ? oldPassword : nil,
+                new: newPassword,
+                confirmation: newPasswordConfirmation
+            )
             oldPassword = ""
             newPassword = ""
             newPasswordConfirmation = ""
             isChangingPassword = false
-            toastMessage = String(localized: "settings_password_changed")
+            hasPassword = true
+            toastMessage = wasSet
+                ? String(localized: "settings_password_set")
+                : String(localized: "settings_password_changed")
         } catch {
             show(error)
         }

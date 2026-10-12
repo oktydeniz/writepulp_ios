@@ -126,6 +126,10 @@ final class SessionStore {
         set(avatar ?? "", Key.avatar, \.avatar)
     }
 
+    func setHasPassword(_ value: Bool) {
+        set(value, Key.hasPassword, \.hasPassword)
+    }
+
     func updateUserRole(_ role: String) {
         set(role, Key.role, \.role)
     }

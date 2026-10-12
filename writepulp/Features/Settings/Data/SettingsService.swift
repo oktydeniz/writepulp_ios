@@ -39,8 +39,15 @@ final class SettingsService {
         _ = try await api.send(AuthAPI.confirmEmail(.init(email: email, code: code, type: .emailConfirm)))
     }
 
-    func changePassword(old: String, new: String, confirmation: String) async throws {
+    /// `old` is nil when setting the first password of an Apple/Google account.
+    func changePassword(old: String?, new: String, confirmation: String) async throws {
         _ = try await api.send(SettingsAPI.changePassword(.init(oldPassword: old, newPassword: new, newPasswordVerify: confirmation)))
+        session.setHasPassword(true)
+    }
+
+    /// Keeps the cached flag in line with what the backend reports in settings.
+    func syncHasPassword(_ hasPassword: Bool) {
+        session.setHasPassword(hasPassword)
     }
 
     func switchRoleToAuthor() async throws {

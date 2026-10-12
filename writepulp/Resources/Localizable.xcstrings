@@ -9952,6 +9952,23 @@
         }
       }
     },
+    "settings_password_set" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password set. You can now also sign in with your email."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifren belirlendi. Artık e-postanla da giriş yapabilirsin."
+          }
+        }
+      }
+    },
     "settings_preferences" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10220,6 +10237,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ayarlar kaydedildi"
+          }
+        }
+      }
+    },
+    "settings_set_password" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set Password"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifre Belirle"
+          }
+        }
+      }
+    },
+    "settings_set_password_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You signed in with Apple or Google. Set a password to also sign in with your email."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple veya Google ile giriş yaptın. E-postanla da giriş yapabilmek için bir şifre belirle."
           }
         }
       }

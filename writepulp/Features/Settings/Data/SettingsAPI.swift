@@ -9,7 +9,8 @@ enum SettingsAPI {
     struct SingleValue: Encodable { let value: String }
 
     struct ChangePasswordRequest: Encodable {
-        let oldPassword: String
+        /// nil when the account has no password yet - the backend then sets the first one.
+        let oldPassword: String?
         let newPassword: String
         let newPasswordVerify: String
     }

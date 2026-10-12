@@ -151,9 +151,18 @@ struct SettingsView: View {
         }
 
         Section {
-            DisclosureGroup("settings_change_password", isExpanded: $model.isChangingPassword) {
-                SecureField("settings_current_password", text: $model.oldPassword)
-                    .textContentType(.password)
+            DisclosureGroup(
+                model.hasPassword ? LocalizedStringKey("settings_change_password") : LocalizedStringKey("settings_set_password"),
+                isExpanded: $model.isChangingPassword
+            ) {
+                if model.hasPassword {
+                    SecureField("settings_current_password", text: $model.oldPassword)
+                        .textContentType(.password)
+                } else {
+                    Text("settings_set_password_hint")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
                 SecureField("settings_new_password", text: $model.newPassword)
                     .textContentType(.newPassword)
                 SecureField("settings_confirm_new_password", text: $model.newPasswordConfirmation)
