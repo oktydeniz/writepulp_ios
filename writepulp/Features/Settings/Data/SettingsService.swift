@@ -16,6 +16,8 @@ final class SettingsService {
     }
 
     var currentRole: String? { session.role }
+    /// Apple/Google-only accounts confirm deletion without a password.
+    var hasPassword: Bool { session.hasPassword }
 
     func settings() async throws -> UserSettings {
         try await api.send(SettingsAPI.settings())

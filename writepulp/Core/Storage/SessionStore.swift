@@ -24,6 +24,7 @@ final class SessionStore {
         static let fullName = "user_full_name"
         static let role = "user_role"
         static let avatar = "user_avatar"
+        static let hasPassword = "user_has_password"
         static let isLoggedIn = "is_logged_in"
         static let isLoggedInAsGuest = "is_logged_in_guest"
         static let deviceToken = "device_token"
@@ -42,6 +43,8 @@ final class SessionStore {
     private(set) var fullName: String?
     private(set) var role: String?
     private(set) var avatar: String?
+    /// false for Apple/Google accounts without a password (sessions saved before this: true).
+    private(set) var hasPassword = true
     private(set) var isLoggedIn = false
     private(set) var isLoggedInAsGuest = false
     private(set) var deviceToken: String?
@@ -67,6 +70,7 @@ final class SessionStore {
         fullName = defaults.string(forKey: Key.fullName)
         role = defaults.string(forKey: Key.role)
         avatar = defaults.string(forKey: Key.avatar)
+        hasPassword = defaults.object(forKey: Key.hasPassword) as? Bool ?? true
         isLoggedIn = defaults.bool(forKey: Key.isLoggedIn)
         isLoggedInAsGuest = defaults.bool(forKey: Key.isLoggedInAsGuest)
         deviceToken = defaults.string(forKey: Key.deviceToken)
@@ -85,7 +89,8 @@ final class SessionStore {
                 handle: handle ?? "",
                 fullName: fullName ?? "",
                 avatarImg: avatar,
-                role: role ?? ""
+                role: role ?? "",
+                hasPassword: hasPassword
             )
         )
     }
@@ -109,6 +114,7 @@ final class SessionStore {
         set(data.user.email, Key.email, \.email)
         set(data.user.avatarImg ?? "", Key.avatar, \.avatar)
         set(data.user.role, Key.role, \.role)
+        set(data.user.hasPassword ?? true, Key.hasPassword, \.hasPassword)
         set(true, Key.isLoggedIn, \.isLoggedIn)
         set(false, Key.isLoggedInAsGuest, \.isLoggedInAsGuest)
     }
@@ -152,6 +158,7 @@ final class SessionStore {
         set(nil, Key.handle, \.handle)
         set(nil, Key.fullName, \.fullName)
         set(nil, Key.avatar, \.avatar)
+        set(true, Key.hasPassword, \.hasPassword)
         set(nil, Key.deviceToken, \.deviceToken)
         set(false, Key.isLoggedIn, \.isLoggedIn)
         set(false, Key.isLoggedInAsGuest, \.isLoggedInAsGuest)

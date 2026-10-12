@@ -43,6 +43,16 @@ enum AuthAPI {
         let lang: String
     }
 
+    struct SocialLoginRequest: Encodable {
+        let provider: String
+        let idToken: String
+        /// Raw nonce; Apple puts its SHA-256 into the token.
+        let nonce: String
+        /// Apple sends the name only on the first authorization, never in the token.
+        let fullName: String?
+        let lang: String
+    }
+
     struct ForgotPasswordRequest: Encodable {
         let email: String
     }
@@ -61,6 +71,10 @@ enum AuthAPI {
 
     static func login(_ request: LoginRequest) -> Endpoint<LoginData> {
         Endpoint(path: "auth/login", method: .post, body: request, requiresAuth: false)
+    }
+
+    static func socialLogin(_ request: SocialLoginRequest) -> Endpoint<LoginData> {
+        Endpoint(path: "auth/social", method: .post, body: request, requiresAuth: false)
     }
 
     static func resendCode(_ request: ResendCodeRequest) -> Endpoint<EmptyResponse> {

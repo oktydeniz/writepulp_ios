@@ -3,6 +3,7 @@
 //  writepulp
 //
 
+import AuthenticationServices
 import SwiftUI
 
 @MainActor
@@ -17,6 +18,7 @@ struct LoginView: View {
 
     @State private var model: LoginViewModel
     @FocusState private var focusedField: Field?
+    @Environment(\.colorScheme) private var colorScheme
 
     init(
         authService: AuthService,
@@ -78,6 +80,27 @@ struct LoginView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 10)
             }
+
+            // Signs in, or creates the account on first use - no separate sign-up step.
+            SignInWithAppleButton(.continue) { request in
+                model.prepareAppleRequest(request)
+            } onCompletion: { result in
+                Task {
+                    if await model.completeAppleSignIn(result) { onSignedIn() }
+                }
+            }
+            .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
+            .frame(height: 50)
+            .clipShape(RoundedRectangle(cornerRadius: 24))
+
+            HStack(spacing: 12) {
+                Rectangle().frame(height: 1).foregroundStyle(AppColors.onSurface.opacity(0.2))
+                Text("or")
+                    .font(.system(size: 14))
+                    .foregroundStyle(AppColors.onSurface.opacity(0.7))
+                Rectangle().frame(height: 1).foregroundStyle(AppColors.onSurface.opacity(0.2))
+            }
+            .padding(.vertical, 16)
 
             AuthTextField(
                 label: "email_or_handle",

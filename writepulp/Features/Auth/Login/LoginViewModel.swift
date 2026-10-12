@@ -3,6 +3,7 @@
 //  writepulp
 //
 
+import AuthenticationServices
 import Foundation
 import Observation
 
@@ -49,6 +50,34 @@ final class LoginViewModel {
         } catch {
             errorMessage = error.localizedDescription
             return nil
+        }
+    }
+
+    func prepareAppleRequest(_ request: ASAuthorizationAppleIDRequest) {
+        errorMessage = nil
+        authService.prepareAppleRequest(request)
+    }
+
+    /// true once signed in; a cancelled sheet or a failure (shown on screen) returns false.
+    func completeAppleSignIn(_ result: Result<ASAuthorization, Error>) async -> Bool {
+        switch result {
+        case .failure(let error):
+            if (error as? ASAuthorizationError)?.code != .canceled {
+                errorMessage = String(localized: "err_apple_sign_in")
+            }
+            return false
+        case .success(let authorization):
+            isLoading = true
+            defer { isLoading = false }
+            do {
+                try await authService.signInWithApple(authorization)
+                return true
+            } catch APIError.cancelled {
+                return false
+            } catch {
+                errorMessage = error.localizedDescription
+                return false
+            }
         }
     }
 

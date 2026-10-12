@@ -46,7 +46,9 @@ struct SettingsView: View {
             )
         }
         .alert("settings_delete_modal_title", isPresented: $model.isConfirmingDelete) {
-            SecureField("settings_delete_modal_password_placeholder", text: $model.deletePassword)
+            if model.requiresDeletePassword {
+                SecureField("settings_delete_modal_password_placeholder", text: $model.deletePassword)
+            }
             Button("settings_delete_modal_cancel", role: .cancel) { model.deletePassword = "" }
             Button("settings_delete_modal_confirm", role: .destructive) {
                 Task { await model.deleteAccount() }

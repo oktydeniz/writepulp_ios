@@ -45,6 +45,7 @@ final class SettingsViewModel {
     // Account deletion
     var isConfirmingDelete = false
     var deletePassword = ""
+    var requiresDeletePassword: Bool { service.hasPassword }
     private(set) var isDeleting = false
 
     // Categories
@@ -222,7 +223,7 @@ final class SettingsViewModel {
     // MARK: - Delete account
 
     func deleteAccount() async {
-        guard !deletePassword.isEmpty else { return }
+        guard !requiresDeletePassword || !deletePassword.isEmpty else { return }
         isDeleting = true
         defer { isDeleting = false }
         do {
