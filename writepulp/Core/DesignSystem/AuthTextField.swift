@@ -89,8 +89,13 @@ struct AuthTextField<Field: Hashable>: View {
 
 extension View {
     /// Taps on empty space (not on fields or buttons) clear the focus, closing the keyboard.
+    /// The gesture is only live while a field is focused: an always-on parent tap gesture
+    /// swallows taps on UIKit-backed controls such as SignInWithAppleButton.
     func dismissesKeyboardOnTap<Field: Hashable>(_ focus: FocusState<Field?>.Binding) -> some View {
         contentShape(Rectangle())
-            .onTapGesture { focus.wrappedValue = nil }
+            .gesture(
+                TapGesture().onEnded { focus.wrappedValue = nil },
+                including: focus.wrappedValue == nil ? .subviews : .all
+            )
     }
 }

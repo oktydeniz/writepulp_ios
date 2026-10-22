@@ -6,6 +6,7 @@
 import AuthenticationServices
 import Foundation
 import Observation
+import OSLog
 
 @MainActor
 @Observable
@@ -17,6 +18,7 @@ final class LoginViewModel {
     private(set) var errorMessage: String?
 
     private let authService: AuthService
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "writepulp", category: "auth")
 
     init(authService: AuthService) {
         let remembered = authService.rememberedIdentifier ?? ""
@@ -62,6 +64,7 @@ final class LoginViewModel {
     func completeAppleSignIn(_ result: Result<ASAuthorization, Error>) async -> Bool {
         switch result {
         case .failure(let error):
+            logger.error("Apple sign-in failed: \(String(describing: error))")
             if (error as? ASAuthorizationError)?.code != .canceled {
                 errorMessage = String(localized: "err_apple_sign_in")
             }
@@ -75,6 +78,7 @@ final class LoginViewModel {
             } catch APIError.cancelled {
                 return false
             } catch {
+                logger.error("Apple sign-in rejected by backend: \(String(describing: error))")
                 errorMessage = error.localizedDescription
                 return false
             }

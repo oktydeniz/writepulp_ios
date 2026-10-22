@@ -4,18 +4,18 @@
 <dict>
 	<key>AppEnvironment</key>
 	<dict>
-		<key>Name</key>
-		<string>$(APP_ENV_NAME)</string>
 		<key>APIBaseURL</key>
 		<string>$(API_BASE_URL)</string>
 		<key>CDNBaseURL</key>
 		<string>$(CDN_BASE_URL)</string>
-		<key>WebSocketURL</key>
-		<string>$(WS_URL)</string>
-		<key>DevMode</key>
-		<string>$(DEV_MODE)</string>
 		<key>CrashReporting</key>
 		<string>$(CRASHLYTICS_ENABLED)</string>
+		<key>DevMode</key>
+		<string>$(DEV_MODE)</string>
+		<key>Name</key>
+		<string>$(APP_ENV_NAME)</string>
+		<key>WebSocketURL</key>
+		<string>$(WS_URL)</string>
 	</dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
@@ -23,10 +23,6 @@
 	</array>
 	<key>FirebaseCrashlyticsCollectionEnabled</key>
 	<false/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>processing</string>
-	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>lora_variable.ttf</string>
@@ -35,6 +31,10 @@
 		<string>pt_serif_bold.ttf</string>
 		<string>pt_serif_regular.ttf</string>
 		<string>rubik_variable.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>processing</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict>
