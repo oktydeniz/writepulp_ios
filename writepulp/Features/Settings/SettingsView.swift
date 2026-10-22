@@ -249,6 +249,15 @@ struct SettingsView: View {
     @ViewBuilder
     private var privacyTab: some View {
         Section {
+            NavigationLink {
+                BlockedUsersView()
+            } label: {
+                Label("blocked_users_title", systemImage: "hand.raised")
+            }
+        } footer: {
+            Text("blocked_users_settings_hint")
+        }
+        Section {
             SettingsToggle("settings_save_reading", hint: "settings_save_reading_desc", isOn: draft.saveReadingHistory)
         }
         Section {

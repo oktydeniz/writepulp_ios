@@ -156,3 +156,26 @@ struct PrivateAccountPlaceholder: View {
         .frame(maxWidth: .infinity)
     }
 }
+
+struct BlockedProfilePlaceholder: View {
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: "hand.raised.fill")
+                .font(.system(size: 34))
+                .foregroundStyle(AppColors.primary.opacity(0.6))
+                .frame(width: 80, height: 80)
+                .background(AppColors.primary.opacity(0.1), in: Circle())
+                .padding(.bottom, 4)
+            Text("blocked_profile_title")
+                .font(.system(size: 17, weight: .bold))
+                .foregroundStyle(AppColors.onSurface)
+            Text("blocked_profile_message")
+                .font(.system(size: 14))
+                .foregroundStyle(AppColors.onSurfaceVariant)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+        }
+        .padding(.vertical, 48)
+        .frame(maxWidth: .infinity)
+    }
+}

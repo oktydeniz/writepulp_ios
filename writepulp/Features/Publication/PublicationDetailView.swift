@@ -19,6 +19,7 @@ struct PublicationDetailView: View {
     @State private var signInMessage: LocalizedStringKey?
     @State private var isShowingAgeGate = false
     @State private var isConfirmingDownloadRemoval = false
+    @State private var reportTarget: ReportTarget?
     /// Set when the reader is opened, so progress and "continue" are fresh when coming back.
     @State private var needsRefresh = false
 
@@ -53,6 +54,7 @@ struct PublicationDetailView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar { toolbar }
         .toast($model.toastMessage)
+        .reportSheet($reportTarget)
         .task {
             model.reviews.onChange = { await model.load() }
             if model.publication == nil { await model.load() }
@@ -209,6 +211,16 @@ struct PublicationDetailView: View {
                         toolbarIcon(publication.isBookmarked ? "bookmark.fill" : "bookmark")
                     }
                     .accessibilityLabel(Text("content_detail_add_to_collection"))
+                }
+                if !publication.isOwner && model.isSignedIn {
+                    Menu {
+                        Button { reportTarget = ReportTarget(type: .publication, id: publication.uuid) } label: {
+                            Label("report_content", systemImage: "flag")
+                        }
+                    } label: {
+                        toolbarIcon("ellipsis")
+                    }
+                    .accessibilityLabel(Text("downloads_more_actions"))
                 }
             }
         }

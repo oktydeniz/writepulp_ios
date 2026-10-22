@@ -143,6 +143,8 @@ struct UserProfile: Decodable {
     let worksCount: Int
     let badge: String?
     let approvedAccount: Bool
+    /// Sent for other users' profiles only.
+    let isBlockedByMe: Bool?
 
     var followState: FollowState { FollowState(isFollowing: isFollowing, status: followStatus) }
 

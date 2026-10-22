@@ -21,6 +21,8 @@ struct CommunityView: View {
     @State private var toastMessage: String?
     @State private var notice: GroupsViewModel.Notice?
     @State private var chat: GroupChatViewModel
+    @State private var reportTarget: ReportTarget?
+    @Environment(\.moderation) private var moderation
 
     init(groupId: String, name: String, service: GroupsService, onOpen: @escaping (MainRoute) -> Void) {
         self.groupId = groupId
@@ -51,6 +53,22 @@ struct CommunityView: View {
         .navigationTitle(group?.userStatus == .joined ? "" : name)
         .navigationBarTitleDisplayMode(.inline)
         .toast($toastMessage)
+        .reportSheet($reportTarget)
+        .toolbar {
+            // Members report from the chat's own menu.
+            if let group, group.userStatus != .joined, moderation?.currentUserId != nil {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button { reportTarget = ReportTarget(type: .group, id: group.id) } label: {
+                            Label("report_group", systemImage: "flag")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                    .accessibilityLabel(Text("downloads_more_actions"))
+                }
+            }
+        }
         .alert(item: $notice) { notice in
             switch notice {
             case .requestSent:

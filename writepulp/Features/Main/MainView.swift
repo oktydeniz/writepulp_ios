@@ -20,6 +20,12 @@ struct MainView: View {
     @State private var badge: NotificationBadge
     /// Bumped after the user edits their profile or collections, so open profiles reload.
     @State private var profileRevision = 0
+    /// Set when the signed-in user still has to accept this Terms / Guidelines version.
+    @State private var pendingTermsVersion: PendingTerms?
+
+    private struct PendingTerms: Identifiable {
+        let id: String
+    }
 
     init(dependencies: AppDependencies) {
         self.dependencies = dependencies
@@ -52,8 +58,29 @@ struct MainView: View {
                 sideMenu
             }
         }
+        .environment(\.moderation, dependencies.moderationService)
+        .fullScreenCover(item: $pendingTermsVersion) { pending in
+            CommunityGuidelinesView(
+                version: pending.id,
+                onAccepted: { pendingTermsVersion = nil },
+                onSignOut: {
+                    pendingTermsVersion = nil
+                    Task { await dependencies.authService.logout() }
+                }
+            )
+            .environment(\.moderation, dependencies.moderationService)
+        }
         .onChange(of: session.isLoggedIn) {
             if !tabs.contains(selectedTab) { selectedTab = .home }
+        }
+        // Block list for client-side hiding, and the Guidelines gate, per signed-in account.
+        .task(id: "\(session.isLoggedIn)-\(session.userId ?? "")") {
+            await dependencies.moderationService.refresh()
+            guard session.isLoggedIn,
+                  let status = try? await dependencies.moderationService.termsStatus(),
+                  status.requiresAcceptance
+            else { return }
+            pendingTermsVersion = PendingTerms(id: status.currentVersion)
         }
         .task(id: "\(session.userId ?? "")-\(dependencies.networkMonitor.isOnUnmeteredNetwork)") {
             await dependencies.downloadManager.prepare()

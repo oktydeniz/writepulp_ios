@@ -8,6 +8,8 @@ import Observation
 
 /// Where reviews are read from and written to: a publication, or a single section.
 protocol ReviewsSource {
+    /// How a review from this source is reported.
+    var reportTargetType: ReportTargetType { get }
     func reviews(page: Int) async throws -> Page<Review>
     func save(editing reviewId: String?, _ request: ReviewRequest) async throws
     func delete(reviewId: String) async throws
@@ -16,6 +18,8 @@ protocol ReviewsSource {
 struct PublicationReviewsSource: ReviewsSource {
     let publicationId: String
     let service: PublicationService
+
+    var reportTargetType: ReportTargetType { .publicationReview }
 
     func reviews(page: Int) async throws -> Page<Review> {
         try await service.reviews(publicationId: publicationId, page: page)
@@ -54,6 +58,7 @@ final class ReviewsViewModel {
     }
 
     var currentUserId: String? { session().userId }
+    var reportTargetType: ReportTargetType { source.reportTargetType }
     var isSignedIn: Bool { session().isSignedIn }
     var averageRating: Double {
         guard !reviews.isEmpty else { return 0 }

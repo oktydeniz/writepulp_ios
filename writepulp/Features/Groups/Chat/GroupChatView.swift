@@ -20,6 +20,9 @@ struct GroupChatView: View {
     @State private var isConfirmingLeave = false
     @State private var isConfirmingDelete = false
     @State private var viewerImage: String?
+    @State private var reportTarget: ReportTarget?
+    @State private var pendingBlock: GroupMessage?
+    @Environment(\.moderation) private var moderation
     /// Becomes true once the list has been placed at the first unread message (or the bottom);
     /// reaching the bottom only marks messages read after that.
     @State private var hasPositioned = false
@@ -41,6 +44,17 @@ struct GroupChatView: View {
         .toolbar(.hidden, for: .tabBar)
         .toolbar { toolbar }
         .toast($model.toastMessage)
+        .reportSheet($reportTarget)
+        .confirmationDialog("block_confirm_title", isPresented: Binding(
+            get: { pendingBlock != nil },
+            set: { if !$0 { pendingBlock = nil } }
+        ), titleVisibility: .visible) {
+            Button("block", role: .destructive) {
+                if let message = pendingBlock { Task { await block(message.senderId) } }
+            }
+        } message: {
+            Text("block_confirm_message")
+        }
         .loadingOverlay(model.isBusy)
         .sheet(isPresented: $isShowingRules) { GroupRulesSheet(rules: model.detail?.rules ?? []) }
         .fullScreenCover(isPresented: Binding(get: { viewerImage != nil }, set: { if !$0 { viewerImage = nil } })) {
@@ -94,7 +108,7 @@ struct GroupChatView: View {
                         .id(Self.newestAnchor)
                         .onAppear { reachedBottom() }
                         .onDisappear { model.isAtBottom = false }
-                    ForEach(model.messages) { message in
+                    ForEach(visibleMessages) { message in
                         row(message).flipped()
                     }
                     if model.isLoadingOlder {
@@ -151,11 +165,37 @@ struct GroupChatView: View {
         if !message.content.isEmpty {
             Button { UIPasteboard.general.string = message.content } label: { Label("copy", systemImage: "doc.on.doc") }
         }
+        if !model.isMine(message) && !message.isLeft && moderation?.currentUserId != nil {
+            Button { reportTarget = ReportTarget(type: .groupMessage, id: message.id) } label: {
+                Label("report_message", systemImage: "flag")
+            }
+            Button(role: .destructive) { pendingBlock = message } label: {
+                Label("block_sender", systemImage: "hand.raised")
+            }
+        }
         // The server lets owners and admins delete messages.
         if model.canManage {
             Button(role: .destructive) { Task { await model.delete(message) } } label: {
                 Label("delete", systemImage: "trash")
             }
+        }
+    }
+
+    /// Messages this viewer reported, or from someone blocked either way, including ones that
+    /// arrive live over the socket, which the server can't filter per viewer.
+    private var visibleMessages: [GroupMessage] {
+        guard let moderation else { return model.messages }
+        return model.messages.filter {
+            !moderation.isHidden(ReportTarget(type: .groupMessage, id: $0.id), authorId: $0.senderId)
+        }
+    }
+
+    private func block(_ userId: String) async {
+        do {
+            try await moderation?.block(userId: userId)
+            model.toastMessage = String(localized: "block_done")
+        } catch {
+            model.toastMessage = error.localizedDescription
         }
     }
 
@@ -210,6 +250,11 @@ struct GroupChatView: View {
                 if model.canManage {
                     Button { onOpen(.editGroup(id: model.groupId)) } label: {
                         Label("edit_community", systemImage: "square.and.pencil")
+                    }
+                }
+                if !model.isOwner {
+                    Button { reportTarget = ReportTarget(type: .group, id: model.groupId) } label: {
+                        Label("report_group", systemImage: "flag")
                     }
                 }
                 Divider()

@@ -16,6 +16,9 @@ struct ReviewsSection: View {
     let onOpenProfile: (String) -> Void
 
     @State private var pendingDelete: Review?
+    @State private var reportTarget: ReportTarget?
+    @State private var pendingBlock: Review?
+    @Environment(\.moderation) private var moderation
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -47,6 +50,25 @@ struct ReviewsSection: View {
                 if let review = pendingDelete { Task { await model.delete(review) } }
             }
         }
+        .reportSheet($reportTarget)
+        .confirmationDialog("block_confirm_title", isPresented: Binding(
+            get: { pendingBlock != nil },
+            set: { if !$0 { pendingBlock = nil } }
+        ), titleVisibility: .visible) {
+            Button("block", role: .destructive) {
+                if let review = pendingBlock { Task { try? await moderation?.block(userId: review.user.uuid) } }
+            }
+        } message: {
+            Text("block_confirm_message")
+        }
+    }
+
+    /// Reviews this viewer reported, or by someone they blocked, disappear right away.
+    private var visibleReviews: [Review] {
+        guard let moderation else { return model.reviews.items }
+        return model.reviews.items.filter {
+            !moderation.isHidden(ReportTarget(type: model.reportTargetType, id: $0.id), authorId: $0.user.uuid)
+        }
     }
 
     private var summary: some View {
@@ -70,13 +92,16 @@ struct ReviewsSection: View {
             hint("review_empty")
         } else {
             LazyVStack(spacing: 12) {
-                ForEach(model.reviews.items) { review in
+                ForEach(visibleReviews) { review in
                     ReviewRow(
                         review: review,
                         isMine: review.user.uuid == model.currentUserId,
+                        canReport: model.currentUserId != nil,
                         onAuthor: { onOpenProfile(review.user.uuid) },
                         onEdit: { model.startEditing(review) },
-                        onDelete: { pendingDelete = review }
+                        onDelete: { pendingDelete = review },
+                        onReport: { reportTarget = ReportTarget(type: model.reportTargetType, id: review.id) },
+                        onBlock: { pendingBlock = review }
                     )
                 }
                 if model.reviews.hasMore {
@@ -174,9 +199,12 @@ private struct ReviewRow: View {
     @Environment(\.reviewsPalette) private var palette
     let review: Review
     let isMine: Bool
+    let canReport: Bool
     let onAuthor: () -> Void
     let onEdit: () -> Void
     let onDelete: () -> Void
+    let onReport: () -> Void
+    let onBlock: () -> Void
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -196,10 +224,17 @@ private struct ReviewRow: View {
                             .foregroundStyle(palette.secondaryText)
                     }
                     Spacer()
-                    if isMine {
+                    if isMine || canReport {
                         Menu {
-                            Button(action: onEdit) { Label("review_edit_action", systemImage: "pencil") }
-                            Button(role: .destructive, action: onDelete) { Label("delete", systemImage: "trash") }
+                            if isMine {
+                                Button(action: onEdit) { Label("review_edit_action", systemImage: "pencil") }
+                                Button(role: .destructive, action: onDelete) { Label("delete", systemImage: "trash") }
+                            } else {
+                                Button(action: onReport) { Label("report_review", systemImage: "flag") }
+                                Button(role: .destructive, action: onBlock) {
+                                    Label("block_author", systemImage: "hand.raised")
+                                }
+                            }
                         } label: {
                             Image(systemName: "ellipsis")
                                 .foregroundStyle(palette.secondaryText)

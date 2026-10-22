@@ -1010,6 +1010,193 @@
         }
       }
     },
+    "block" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Block"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engelle"
+          }
+        }
+      }
+    },
+    "block_author" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Block author"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yazarı engelle"
+          }
+        }
+      }
+    },
+    "block_confirm_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You won't see their reviews or messages, and you won't be able to follow or message each other. They won't be notified."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yorumlarını ve mesajlarını görmeyeceksiniz; birbirinizi takip edemez ve mesajlaşamazsınız. Kullanıcıya bildirim gitmez."
+          }
+        }
+      }
+    },
+    "block_confirm_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Block this user?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu kullanıcı engellensin mi?"
+          }
+        }
+      }
+    },
+    "block_done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User blocked"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanıcı engellendi"
+          }
+        }
+      }
+    },
+    "block_sender" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Block sender"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Göndereni engelle"
+          }
+        }
+      }
+    },
+    "blocked_profile_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unblock them to see their profile and content again."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profilini ve içeriklerini yeniden görmek için engeli kaldırın."
+          }
+        }
+      }
+    },
+    "blocked_profile_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You blocked this user"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu kullanıcıyı engellediniz"
+          }
+        }
+      }
+    },
+    "blocked_users_empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You haven't blocked anyone"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kimseyi engellemediniz"
+          }
+        }
+      }
+    },
+    "blocked_users_settings_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "People you blocked can't follow or message you, and their reviews and messages are hidden from you."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engellediğiniz kişiler sizi takip edemez, size mesaj atamaz; yorumları ve mesajları size gösterilmez."
+          }
+        }
+      }
+    },
+    "blocked_users_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blocked users"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engellenen kullanıcılar"
+          }
+        }
+      }
+    },
     "books" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4287,6 +4474,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Misafir"
+          }
+        }
+      }
+    },
+    "guidelines_accept" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I agree"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kabul ediyorum"
+          }
+        }
+      }
+    },
+    "guidelines_intro" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WritePulp is a place for writers and readers. To keep it safe, everyone agrees to these rules:"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WritePulp yazarlar ve okurlar için bir yer. Güvenli kalması için herkes şu kuralları kabul eder:"
+          }
+        }
+      }
+    },
+    "guidelines_read_terms" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read the full Terms of Service"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanım Şartları'nın tamamını okuyun"
+          }
+        }
+      }
+    },
+    "guidelines_rule_children" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never post content that sexualizes or endangers minors."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reşit olmayanları cinselleştiren veya tehlikeye atan içerik kesinlikle yasaktır."
+          }
+        }
+      }
+    },
+    "guidelines_rule_copyright" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only publish work you wrote or have the right to share."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yalnızca kendi yazdığınız veya paylaşma hakkına sahip olduğunuz eserleri yayınlayın."
+          }
+        }
+      }
+    },
+    "guidelines_rule_hate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hate speech or content that attacks people for who they are."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nefret söylemi ve insanları kimlikleri nedeniyle hedef alan içerik yasaktır."
+          }
+        }
+      }
+    },
+    "guidelines_rule_respect" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treat others with respect. No harassment, bullying or threats."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başkalarına saygılı davranın. Taciz, zorbalık ve tehdit yasaktır."
+          }
+        }
+      }
+    },
+    "guidelines_rule_sexual" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No sexually explicit content outside clearly marked adult categories."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Açıkça yetişkin olarak işaretlenmiş kategoriler dışında müstehcen içerik yasaktır."
+          }
+        }
+      }
+    },
+    "guidelines_rule_spam" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No spam, scams or misleading promotions."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spam, dolandırıcılık ve yanıltıcı tanıtımlar yasaktır."
+          }
+        }
+      }
+    },
+    "guidelines_sign_out" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Don't agree? Sign out"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kabul etmiyor musunuz? Çıkış yapın"
+          }
+        }
+      }
+    },
+    "guidelines_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Community Guidelines"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Topluluk Kuralları"
+          }
+        }
+      }
+    },
+    "guidelines_zero_tolerance" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We have zero tolerance for objectionable content and abusive users. Reported content is reviewed within 24 hours; content that breaks these rules is removed and the account responsible may be suspended."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygunsuz içeriğe ve kötü niyetli kullanıcılara sıfır tolerans gösteriyoruz. Şikayet edilen içerikler 24 saat içinde incelenir; kurallara aykırı içerik kaldırılır ve sorumlu hesap askıya alınabilir."
           }
         }
       }
@@ -8167,6 +8558,397 @@
         }
       }
     },
+    "report_content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şikayet et"
+          }
+        }
+      }
+    },
+    "report_footer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Our team reviews every report within 24 hours. The person you report won't know it was you."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekibimiz her şikayeti 24 saat içinde inceler. Şikayet ettiğiniz kişi bunu sizin yaptığınızı bilmez."
+          }
+        }
+      }
+    },
+    "report_group" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report community"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Topluluğu şikayet et"
+          }
+        }
+      }
+    },
+    "report_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report message"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mesajı şikayet et"
+          }
+        }
+      }
+    },
+    "report_note_header" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details (optional)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayrıntılar (isteğe bağlı)"
+          }
+        }
+      }
+    },
+    "report_note_placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anything that helps us understand the problem"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sorunu anlamamıza yardımcı olacak her şey"
+          }
+        }
+      }
+    },
+    "report_reason_child_safety" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Child safety"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çocuk güvenliği"
+          }
+        }
+      }
+    },
+    "report_reason_copyright" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copyright or plagiarism"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telif ihlali veya intihal"
+          }
+        }
+      }
+    },
+    "report_reason_harassment" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Harassment or bullying"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taciz veya zorbalık"
+          }
+        }
+      }
+    },
+    "report_reason_hate_speech" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hate speech"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nefret söylemi"
+          }
+        }
+      }
+    },
+    "report_reason_header" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Why are you reporting this?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neden şikayet ediyorsunuz?"
+          }
+        }
+      }
+    },
+    "report_reason_impersonation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impersonation"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kimlik taklidi"
+          }
+        }
+      }
+    },
+    "report_reason_other" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Something else"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başka bir şey"
+          }
+        }
+      }
+    },
+    "report_reason_self_harm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Self-harm or suicide"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kendine zarar verme veya intihar"
+          }
+        }
+      }
+    },
+    "report_reason_sexual_content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sexual or explicit content"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cinsel veya müstehcen içerik"
+          }
+        }
+      }
+    },
+    "report_reason_spam" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spam or scam"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spam veya dolandırıcılık"
+          }
+        }
+      }
+    },
+    "report_reason_violence" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Violence or threats"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şiddet veya tehdit"
+          }
+        }
+      }
+    },
+    "report_review" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report review"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yorumu şikayet et"
+          }
+        }
+      }
+    },
+    "report_submit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send report"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şikayeti gönder"
+          }
+        }
+      }
+    },
+    "report_thanks_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We'll review it within 24 hours. You won't see this content anymore."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "24 saat içinde inceleyeceğiz. Bu içeriği artık görmeyeceksiniz."
+          }
+        }
+      }
+    },
+    "report_thanks_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thanks for letting us know"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildiriminiz için teşekkürler"
+          }
+        }
+      }
+    },
+    "report_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şikayet et"
+          }
+        }
+      }
+    },
+    "report_user" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report user"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanıcıyı şikayet et"
+          }
+        }
+      }
+    },
     "request_accepted" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10985,6 +11767,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$lld yıl önce"
+          }
+        }
+      }
+    },
+    "unblock" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unblock"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engeli kaldır"
+          }
+        }
+      }
+    },
+    "unblock_done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User unblocked"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engel kaldırıldı"
           }
         }
       }

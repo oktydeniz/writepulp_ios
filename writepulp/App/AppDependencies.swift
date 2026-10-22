@@ -23,6 +23,7 @@ final class AppDependencies {
     let networkMonitor: NetworkMonitor
     let downloadManager: DownloadManager
     let groupsService: GroupsService
+    let moderationService: ModerationService
 
     init(storage: LocalStorage = LocalStorage()) {
         self.storage = storage
@@ -57,5 +58,6 @@ final class AppDependencies {
             await MainActor.run { session.accessToken }
         }
         groupsService = GroupsService(api: apiClient, session: storage.session, socket: socket)
+        moderationService = ModerationService(api: apiClient, session: storage.session)
     }
 }

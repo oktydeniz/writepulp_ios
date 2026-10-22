@@ -259,6 +259,8 @@ struct SectionReviewsSource: ReviewsSource {
     let sectionId: String
     let api: APIClient
 
+    var reportTargetType: ReportTargetType { .sectionReview }
+
     func reviews(page: Int) async throws -> Page<Review> {
         // Not paginated: everything comes in one list.
         let all = try await api.send(ReaderAPI.reviews(sectionId: sectionId))

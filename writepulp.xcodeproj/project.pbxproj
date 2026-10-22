@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		46935E063FF14B73F16C1A3C /* ModerationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD61E7C96F589380F4DF5B3 /* ModerationModels.swift */; };
+		A40F09A5342A51ADEF4065D7 /* ModerationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49687349517797B031033C18 /* ModerationAPI.swift */; };
+		D547BEAE6137BD13BC3B7155 /* ModerationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D69F90D53801EA81FE3FC /* ModerationService.swift */; };
+		4AD42CB9AE4D54D11A5D509D /* ReportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3899CAD8FC685DB1A20547 /* ReportSheet.swift */; };
+		64BF5440725806222B9B3E17 /* BlockedUsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA05C552097D007652469023 /* BlockedUsersView.swift */; };
+		C92293A2873350D002C86900 /* CommunityGuidelinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AEAD1EDAFB2C5C6F3331C6 /* CommunityGuidelinesView.swift */; };
 		0029BA82F8C810627ACC010E /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C49C1805ED0B4B94307007 /* Endpoint.swift */; };
 		007700D71C6E1DAFECFFFBEC /* LoadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B61362C1808E1EDCF7F151 /* LoadingOverlay.swift */; };
 		0157E3B6A45A23CDA13C0613 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335498BA320BC35489AB095F /* AuthService.swift */; };
@@ -222,6 +228,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4BD61E7C96F589380F4DF5B3 /* ModerationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModerationModels.swift; sourceTree = "<group>"; };
+		49687349517797B031033C18 /* ModerationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModerationAPI.swift; sourceTree = "<group>"; };
+		990D69F90D53801EA81FE3FC /* ModerationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModerationService.swift; sourceTree = "<group>"; };
+		8E3899CAD8FC685DB1A20547 /* ReportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSheet.swift; sourceTree = "<group>"; };
+		DA05C552097D007652469023 /* BlockedUsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedUsersView.swift; sourceTree = "<group>"; };
+		D8AEAD1EDAFB2C5C6F3331C6 /* CommunityGuidelinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityGuidelinesView.swift; sourceTree = "<group>"; };
 		010EEEAACDA741C4B350795C /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		0557FCCCB697424CADF26D04 /* PocketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketView.swift; sourceTree = "<group>"; };
 		059CF576AEF27ECB2EA8AEF5 /* WalletModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletModels.swift; sourceTree = "<group>"; };
@@ -449,6 +461,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1315278FBBDEC61D63FF4E2 /* Moderation */ = {
+			isa = PBXGroup;
+			children = (
+				6DF8A2543F6419262835C542 /* Data */,
+				8E3899CAD8FC685DB1A20547 /* ReportSheet.swift */,
+				DA05C552097D007652469023 /* BlockedUsersView.swift */,
+				D8AEAD1EDAFB2C5C6F3331C6 /* CommunityGuidelinesView.swift */,
+			);
+			path = Moderation;
+			sourceTree = "<group>";
+		};
+		6DF8A2543F6419262835C542 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				4BD61E7C96F589380F4DF5B3 /* ModerationModels.swift */,
+				49687349517797B031033C18 /* ModerationAPI.swift */,
+				990D69F90D53801EA81FE3FC /* ModerationService.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		009C7B66915779B82C48C2F7 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -1091,6 +1124,7 @@
 		B0023D7CC1A19F518B4A1142 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				A1315278FBBDEC61D63FF4E2 /* Moderation */,
 				8268B5003069637A000A34A4 /* Onboarding */,
 				EF8B9A8786C2FFAB8AE6A68D /* Auth */,
 				54192DF7893AD541255D79CA /* Main */,
@@ -1467,6 +1501,12 @@
 				138B36B731E84885A9AAC3A2 /* Skeleton.swift in Sources */,
 				1263D17107A4435FA51E6426 /* ReviewsViewModel.swift in Sources */,
 				6A66409599F648099223B3CD /* ReviewsSection.swift in Sources */,
+				46935E063FF14B73F16C1A3C /* ModerationModels.swift in Sources */,
+				A40F09A5342A51ADEF4065D7 /* ModerationAPI.swift in Sources */,
+				D547BEAE6137BD13BC3B7155 /* ModerationService.swift in Sources */,
+				4AD42CB9AE4D54D11A5D509D /* ReportSheet.swift in Sources */,
+				64BF5440725806222B9B3E17 /* BlockedUsersView.swift in Sources */,
+				C92293A2873350D002C86900 /* CommunityGuidelinesView.swift in Sources */,
 				F6AB1E9DB8F84789BEE9A5AE /* PublicationDetailViewModel.swift in Sources */,
 				840CE1BCE8E74E9E9C68A8B3 /* PublicationDetailView.swift in Sources */,
 				0258728A33F9474297ECEB26 /* PublicationService.swift in Sources */,

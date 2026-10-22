@@ -15,6 +15,9 @@ struct ProfileView: View {
     @State private var model: ProfileViewModel
     @State private var isShowingAvatar = false
     @State private var isCreatingCollection = false
+    @State private var reportTarget: ReportTarget?
+    @State private var isConfirmingBlock = false
+    @Environment(\.moderation) private var moderation
 
     private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
 
@@ -57,6 +60,63 @@ struct ProfileView: View {
         .sheet(isPresented: $isCreatingCollection) {
             CollectionEditorSheet(mode: .create) { await model.saveCollection($0) }
         }
+        .toolbar { moderationMenu }
+        .reportSheet($reportTarget)
+        .confirmationDialog(
+            "block_confirm_title",
+            isPresented: $isConfirmingBlock,
+            titleVisibility: .visible
+        ) {
+            Button("block", role: .destructive) { Task { await setBlocked(true) } }
+        } message: {
+            Text("block_confirm_message")
+        }
+    }
+
+    /// Report / block, for other users' profiles when signed in.
+    @ToolbarContentBuilder
+    private var moderationMenu: some ToolbarContent {
+        if let profile = model.profile, !profile.isMe, moderation?.currentUserId != nil {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Button { reportTarget = ReportTarget(type: .user, id: profile.uuid) } label: {
+                        Label("report_user", systemImage: "flag")
+                    }
+                    if isBlocked(profile) {
+                        Button { Task { await setBlocked(false) } } label: {
+                            Label("unblock", systemImage: "hand.raised.slash")
+                        }
+                    } else {
+                        Button(role: .destructive) { isConfirmingBlock = true } label: {
+                            Label("block", systemImage: "hand.raised")
+                        }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+                .accessibilityLabel(Text("downloads_more_actions"))
+            }
+        }
+    }
+
+    private func isBlocked(_ profile: UserProfile) -> Bool {
+        moderation?.isBlocked(userId: profile.uuid) ?? (profile.isBlockedByMe == true)
+    }
+
+    private func setBlocked(_ blocked: Bool) async {
+        guard let moderation, let profile = model.profile else { return }
+        do {
+            if blocked {
+                try await moderation.block(userId: profile.uuid)
+            } else {
+                try await moderation.unblock(userId: profile.uuid)
+            }
+            model.toastMessage = String(localized: blocked ? "block_done" : "unblock_done")
+            // Follows are dropped both ways on block; refetch counts and state.
+            await model.load()
+        } catch {
+            model.toastMessage = error.localizedDescription
+        }
     }
 
     private func content(_ profile: UserProfile) -> some View {
@@ -74,7 +134,9 @@ struct ProfileView: View {
                     .padding(.horizontal, 18)
                     .padding(.vertical, 12)
 
-                if profile.isContentVisible {
+                if isBlocked(profile) {
+                    BlockedProfilePlaceholder()
+                } else if profile.isContentVisible {
                     ProfileTabBar(selection: $model.tab)
                         .padding(.horizontal, 18)
                         .padding(.bottom, 12)
@@ -98,6 +160,16 @@ struct ProfileView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 48)
                     .background(AppColors.secondaryContainer, in: RoundedRectangle(cornerRadius: 12))
+            }
+            .buttonStyle(PressableButtonStyle())
+        } else if isBlocked(profile) {
+            Button { Task { await setBlocked(false) } } label: {
+                Label("unblock", systemImage: "hand.raised.slash")
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(AppColors.onSurface)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 48)
+                    .background(AppColors.onSurface.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
             }
             .buttonStyle(PressableButtonStyle())
         } else {
