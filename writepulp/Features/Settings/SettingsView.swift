@@ -269,16 +269,13 @@ struct SettingsView: View {
         } footer: {
             Text("settings_gender_hint")
         }
+        // One row: the title used to sit above the button as a second, non-tappable "Delete Account".
         Section {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("settings_delete_account").foregroundStyle(AppColors.error)
-                Text("settings_delete_warning")
-                    .font(.system(size: 12))
-                    .foregroundStyle(AppColors.onSurfaceVariant)
-            }
             Button("settings_delete_account", role: .destructive) { model.isConfirmingDelete = true }
         } header: {
             Text("settings_danger_zone")
+        } footer: {
+            Text("settings_delete_warning")
         }
     }
 
