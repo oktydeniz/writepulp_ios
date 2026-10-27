@@ -12111,6 +12111,23 @@
         }
       }
     },
+    "wallet_total_sales_earned" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Earned From Sales"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Satışlardan Kazanılan"
+          }
+        }
+      }
+    },
     "wallet_total_spent" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -12209,6 +12226,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "İade"
+          }
+        }
+      }
+    },
+    "wallet_type_sale_earning" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sale Earnings"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Satış Kazancı"
           }
         }
       }

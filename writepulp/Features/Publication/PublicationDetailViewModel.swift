@@ -96,6 +96,8 @@ final class PublicationDetailViewModel {
             await load()
         } catch {
             toastMessage = error.localizedDescription
+            // The price may have changed (it grows as chapters are published): show the current one.
+            await load()
         }
     }
 }
