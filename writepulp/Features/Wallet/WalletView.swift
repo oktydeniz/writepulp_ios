@@ -79,6 +79,9 @@ struct WalletView: View {
             HStack(spacing: 24) {
                 stat(systemImage: "chart.line.uptrend.xyaxis", label: "wallet_total_earned", value: wallet.totalEarned)
                 stat(systemImage: "chart.line.downtrend.xyaxis", label: "wallet_total_spent", value: wallet.totalSpent)
+                if wallet.totalSalesEarned > 0 {
+                    stat(systemImage: "dollarsign.circle", label: "wallet_total_sales_earned", value: wallet.totalSalesEarned)
+                }
             }
         }
         .padding(20)

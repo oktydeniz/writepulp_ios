@@ -9,6 +9,18 @@ struct Wallet: Decodable {
     let balance: Int
     let totalEarned: Int
     let totalSpent: Int
+    /// Part of totalEarned that came from sales of the user's own publications.
+    let totalSalesEarned: Int
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        balance = try c.decode(Int.self, forKey: .balance)
+        totalEarned = try c.decode(Int.self, forKey: .totalEarned)
+        totalSpent = try c.decode(Int.self, forKey: .totalSpent)
+        totalSalesEarned = try c.decodeIfPresent(Int.self, forKey: .totalSalesEarned) ?? 0
+    }
+
+    private enum CodingKeys: String, CodingKey { case balance, totalEarned, totalSpent, totalSalesEarned }
 }
 
 /// Transactions of the same type on the same day, summed by the backend.
@@ -22,6 +34,7 @@ struct CoinTransaction: Decodable, Identifiable {
         case purchaseCoin = "PURCHASE_COIN"
         case welcomeBonus = "WELCOME_BONUS"
         case free = "FREE"
+        case saleEarning = "SALE_EARNING"
 
         init(from decoder: Decoder) throws {
             let raw = try decoder.singleValueContainer().decode(String.self)
@@ -38,6 +51,7 @@ struct CoinTransaction: Decodable, Identifiable {
             case .refund: "wallet_type_refund"
             case .welcomeBonus: "wallet_type_welcome_bonus"
             case .free: "wallet_type_free"
+            case .saleEarning: "wallet_type_sale_earning"
             }
         }
 
@@ -51,6 +65,7 @@ struct CoinTransaction: Decodable, Identifiable {
             case .refund: "arrow.uturn.backward"
             case .welcomeBonus: "gift.fill"
             case .free: "circle.fill"
+            case .saleEarning: "chart.line.uptrend.xyaxis"
             }
         }
     }
