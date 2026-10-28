@@ -188,8 +188,10 @@ struct SettingsView: View {
             .disabled(true)
         }
         Section {
-            Picker("settings_currency", selection: draft.currencyPreference) {
-                ForEach(UserSettings.Currency.selectable, id: \.self) { Text($0.label).tag($0) }
+            // No real-money flow in v1, so there is nothing to pick a currency for yet.
+            HStack(spacing: 6) {
+                Text("settings_currency").foregroundStyle(AppColors.onSurface)
+                SettingsBadge("settings_coming_soon")
             }
             SettingsToggle("settings_age_restricted", hint: "settings_age_restricted_hint", isOn: draft.showAgeRestricted)
         }
@@ -312,6 +314,21 @@ struct SettingsView: View {
 }
 
 /// Switch with a title, optional hint below and optional badge next to the title.
+/// Small pill next to a setting's title, e.g. "Coming soon".
+private struct SettingsBadge: View {
+    let text: LocalizedStringKey
+    init(_ text: LocalizedStringKey) { self.text = text }
+
+    var body: some View {
+        Text(text)
+            .font(.system(size: 10, weight: .semibold))
+            .foregroundStyle(AppColors.primary)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(AppColors.primary.opacity(0.12), in: Capsule())
+    }
+}
+
 private struct SettingsToggle: View {
     let title: LocalizedStringKey
     var hint: LocalizedStringKey?
@@ -330,14 +347,7 @@ private struct SettingsToggle: View {
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {
                     Text(title).foregroundStyle(AppColors.onSurface)
-                    if let badge {
-                        Text(badge)
-                            .font(.system(size: 10, weight: .semibold))
-                            .foregroundStyle(AppColors.primary)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(AppColors.primary.opacity(0.12), in: Capsule())
-                    }
+                    if let badge { SettingsBadge(badge) }
                 }
                 if let hint {
                     Text(hint)
