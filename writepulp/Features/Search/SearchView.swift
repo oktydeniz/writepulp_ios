@@ -48,7 +48,8 @@ struct SearchView: View {
             ListSkeleton(count: 6, leadingSize: 24, isCircle: false)
         } else if let error = model.categoriesError, model.categories.isEmpty {
             ErrorStateView(message: error) { Task { await model.loadCategories() } }
-                .frame(maxHeight: .infinity)
+                .frame(minHeight: 0, maxHeight: .infinity)
+                .clipped()
         } else {
             ScrollView {
                 LazyVStack(spacing: 16) {

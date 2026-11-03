@@ -39,6 +39,12 @@ struct EditableDocument: Equatable {
         self.blocks = blocks
     }
 
+    /// A document-level field such as `id`, `sectionTitle` or `reader`. `blocks` lives in `blocks`.
+    subscript(field key: String) -> JSONValue? {
+        get { root[key] }
+        set { if key != "blocks" { root[key] = newValue } }
+    }
+
     /// The body to save.
     func encoded() throws -> String {
         var output = root

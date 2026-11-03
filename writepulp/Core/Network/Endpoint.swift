@@ -24,6 +24,9 @@ struct Endpoint<Response: Decodable> {
     var multipart: MultipartForm?
     /// Sends the access token when there is one; guests call these without it.
     var requiresAuth = true
+    /// false for the few endpoints that answer with the bare object instead of the envelope
+    /// (e.g. section create/update).
+    var isEnveloped = true
 }
 
 /// For calls whose `data` is empty or irrelevant.

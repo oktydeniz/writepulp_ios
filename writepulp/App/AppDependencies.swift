@@ -24,6 +24,7 @@ final class AppDependencies {
     let downloadManager: DownloadManager
     let groupsService: GroupsService
     let moderationService: ModerationService
+    let editorService: EditorService
 
     init(storage: LocalStorage = LocalStorage()) {
         self.storage = storage
@@ -59,5 +60,6 @@ final class AppDependencies {
         }
         groupsService = GroupsService(api: apiClient, session: storage.session, socket: socket)
         moderationService = ModerationService(api: apiClient, session: storage.session)
+        editorService = EditorService(api: apiClient)
     }
 }

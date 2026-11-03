@@ -30,6 +30,7 @@ struct SideMenuView: View {
     }
 
     private let allItems: [Item] = [
+        Item(title: "editor_write", systemImage: "square.and.pencil", target: .screen(.editor(.dashboard)), requiresAccount: true),
         Item(title: "edit_profile", systemImage: "pencil", target: .screen(.editProfile), requiresAccount: true),
         Item(title: "collections", systemImage: "folder", target: .screen(.collections), requiresAccount: true),
         Item(title: "groups", systemImage: "person.3", target: .screen(.groups), requiresAccount: true),

@@ -28,4 +28,6 @@ enum MainRoute: Hashable {
     case downloads
     case wallet
     case settings
+    /// The writing flow; its screens are defined in Features/Editor.
+    case editor(EditorRoute)
 }

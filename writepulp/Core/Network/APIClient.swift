@@ -49,9 +49,9 @@ actor APIClient {
             }
             let retryToken = await tokenStore.accessToken
             let (retryData, retryResponse) = try await perform(endpoint, token: retryToken)
-            return try decode(retryData, response: retryResponse)
+            return try decode(retryData, response: retryResponse, isEnveloped: endpoint.isEnveloped)
         }
-        return try decode(data, response: response)
+        return try decode(data, response: response, isEnveloped: endpoint.isEnveloped)
     }
 
     // MARK: - Request
@@ -107,7 +107,7 @@ actor APIClient {
 
     // MARK: - Response
 
-    private func decode<T: Decodable>(_ data: Data, response: HTTPURLResponse) throws -> T {
+    private func decode<T: Decodable>(_ data: Data, response: HTTPURLResponse, isEnveloped: Bool = true) throws -> T {
         // Absent for non-envelope bodies, e.g. Spring Security's own 403.
         let envelope = try? JSONCoding.decoder.decode(APIEnvelope.self, from: data)
 
@@ -120,6 +120,13 @@ actor APIClient {
             )
         }
         if T.self == EmptyResponse.self, let empty = EmptyResponse() as? T { return empty }
+        if !isEnveloped {
+            do {
+                return try JSONCoding.decoder.decode(T.self, from: data)
+            } catch {
+                throw APIError.decoding(error)
+            }
+        }
 
         let decoded: APIResponse<T>
         do {

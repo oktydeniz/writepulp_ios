@@ -16,7 +16,11 @@ struct SearchResultsView: View {
     var body: some View {
         VStack(spacing: 0) {
             header
-            content.frame(maxHeight: .infinity)
+            // Takes only the space above the keyboard (landscape leaves very little): a taller
+            // empty/error state would otherwise overflow and push the search field under the top bar.
+            content
+                .frame(maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                .clipped()
         }
         .sheet(isPresented: $isFiltering) {
             SearchFilterSheet(filters: model.filters) { model.applyFilters($0) }

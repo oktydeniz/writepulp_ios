@@ -7,6 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A30215A41A3D99FBA2EF277A /* EditorModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B28C0698982B5772CBE601 /* EditorModels.swift */; };
+		73B29BA5AD5A7F53A849BEBC /* EditorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D731B716C33F27DE4197BC /* EditorService.swift */; };
+		9A5F69683E15CAB2B344ACBF /* WriterDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A7F7FE90E33C4732DF0FE /* WriterDashboardView.swift */; };
+		9877CFE0CA0DFB601895473A /* WriterDashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E414DF88EA13F1EAD595A869 /* WriterDashboardViewModel.swift */; };
+		0D2923DB3D7953443D27FEA4 /* CreateWorkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFCAC8B9F6785BCCF21AF17 /* CreateWorkView.swift */; };
+		2BBA3E794CCDFEB2B3F1997D /* FloatingCreateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218CD13E834EDAF2CD3AE9DB /* FloatingCreateButton.swift */; };
+		C3BFA9AFCBEF9FA2B6E76EAD /* CreateWorkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E1F10917B333D9ED06AEB5 /* CreateWorkViewModel.swift */; };
+		7B75C73A23FEAE1B0537206C /* WorkManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEAC369478785AB58FDEC10 /* WorkManagerView.swift */; };
+		66002F525E0C669906D89F95 /* WorkManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866C2647CBD015C9EA6A09B8 /* WorkManagerViewModel.swift */; };
+		F96B1BE47F856DA1115260D1 /* SectionComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCE64945C79384358626E9AA /* SectionComposerView.swift */; };
+		04D29D37AE8556D444072D75 /* SectionComposerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43632E738AD1D71EAFC2908E /* SectionComposerViewModel.swift */; };
+		101808A00E902E7196ECF13D /* BlockKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DB1C0922AEA7EB98FDB524 /* BlockKind.swift */; };
+		D8D7F7204B989E5FD91F6634 /* BlockEditorRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3895C2B53195DBDB6A9853F /* BlockEditorRow.swift */; };
+		BB79E5AB7A5A653ABDE5A2B7 /* MarkupTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8266C9F21B7DBAB6C60BC0CF /* MarkupTextView.swift */; };
+		C8FBDBBCE1248BC09746D597 /* BlockPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD44A45BFAB9D8F0A97D1ACE /* BlockPickerSheet.swift */; };
+		8D1D47917F819DBB14ABDF96 /* BlockInspectorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85FC0492E28AFF728206BC5 /* BlockInspectorSheet.swift */; };
+		53D1522F2B536C5BA1393230 /* SectionSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A0156041ABE0C147C56F6A /* SectionSettingsSheet.swift */; };
+		30EC35B7C07756643AF1B7E5 /* EditorRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187B62B703A9B293B631E60C /* EditorRoute.swift */; };
 		0029BA82F8C810627ACC010E /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C49C1805ED0B4B94307007 /* Endpoint.swift */; };
 		007700D71C6E1DAFECFFFBEC /* LoadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B61362C1808E1EDCF7F151 /* LoadingOverlay.swift */; };
 		0157E3B6A45A23CDA13C0613 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335498BA320BC35489AB095F /* AuthService.swift */; };
@@ -228,6 +246,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C1B28C0698982B5772CBE601 /* EditorModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorModels.swift; sourceTree = "<group>"; };
+		22D731B716C33F27DE4197BC /* EditorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorService.swift; sourceTree = "<group>"; };
+		C29A7F7FE90E33C4732DF0FE /* WriterDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriterDashboardView.swift; sourceTree = "<group>"; };
+		E414DF88EA13F1EAD595A869 /* WriterDashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriterDashboardViewModel.swift; sourceTree = "<group>"; };
+		8EFCAC8B9F6785BCCF21AF17 /* CreateWorkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWorkView.swift; sourceTree = "<group>"; };
+		218CD13E834EDAF2CD3AE9DB /* FloatingCreateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingCreateButton.swift; sourceTree = "<group>"; };
+		66E1F10917B333D9ED06AEB5 /* CreateWorkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWorkViewModel.swift; sourceTree = "<group>"; };
+		EDEAC369478785AB58FDEC10 /* WorkManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkManagerView.swift; sourceTree = "<group>"; };
+		866C2647CBD015C9EA6A09B8 /* WorkManagerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkManagerViewModel.swift; sourceTree = "<group>"; };
+		DCE64945C79384358626E9AA /* SectionComposerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionComposerView.swift; sourceTree = "<group>"; };
+		43632E738AD1D71EAFC2908E /* SectionComposerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionComposerViewModel.swift; sourceTree = "<group>"; };
+		C2DB1C0922AEA7EB98FDB524 /* BlockKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockKind.swift; sourceTree = "<group>"; };
+		F3895C2B53195DBDB6A9853F /* BlockEditorRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockEditorRow.swift; sourceTree = "<group>"; };
+		8266C9F21B7DBAB6C60BC0CF /* MarkupTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupTextView.swift; sourceTree = "<group>"; };
+		AD44A45BFAB9D8F0A97D1ACE /* BlockPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockPickerSheet.swift; sourceTree = "<group>"; };
+		E85FC0492E28AFF728206BC5 /* BlockInspectorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockInspectorSheet.swift; sourceTree = "<group>"; };
+		35A0156041ABE0C147C56F6A /* SectionSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionSettingsSheet.swift; sourceTree = "<group>"; };
+		187B62B703A9B293B631E60C /* EditorRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRoute.swift; sourceTree = "<group>"; };
 		010EEEAACDA741C4B350795C /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		0557FCCCB697424CADF26D04 /* PocketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketView.swift; sourceTree = "<group>"; };
 		059CF576AEF27ECB2EA8AEF5 /* WalletModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletModels.swift; sourceTree = "<group>"; };
@@ -659,10 +695,58 @@
 			path = Push;
 			sourceTree = "<group>";
 		};
+		BFCD0DD48A33A86BA03FFF32 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				C29A7F7FE90E33C4732DF0FE /* WriterDashboardView.swift */,
+				E414DF88EA13F1EAD595A869 /* WriterDashboardViewModel.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		DF365D56B43A36C2F2D91DD6 /* Create */ = {
+			isa = PBXGroup;
+			children = (
+				8EFCAC8B9F6785BCCF21AF17 /* CreateWorkView.swift */,
+				218CD13E834EDAF2CD3AE9DB /* FloatingCreateButton.swift */,
+				66E1F10917B333D9ED06AEB5 /* CreateWorkViewModel.swift */,
+			);
+			path = Create;
+			sourceTree = "<group>";
+		};
+		126AC586B31080E57150EF8A /* Manage */ = {
+			isa = PBXGroup;
+			children = (
+				EDEAC369478785AB58FDEC10 /* WorkManagerView.swift */,
+				866C2647CBD015C9EA6A09B8 /* WorkManagerViewModel.swift */,
+			);
+			path = Manage;
+			sourceTree = "<group>";
+		};
+		5AC608004B5714FF0A1BB93E /* Compose */ = {
+			isa = PBXGroup;
+			children = (
+				DCE64945C79384358626E9AA /* SectionComposerView.swift */,
+				43632E738AD1D71EAFC2908E /* SectionComposerViewModel.swift */,
+				C2DB1C0922AEA7EB98FDB524 /* BlockKind.swift */,
+				F3895C2B53195DBDB6A9853F /* BlockEditorRow.swift */,
+				8266C9F21B7DBAB6C60BC0CF /* MarkupTextView.swift */,
+				AD44A45BFAB9D8F0A97D1ACE /* BlockPickerSheet.swift */,
+				E85FC0492E28AFF728206BC5 /* BlockInspectorSheet.swift */,
+				35A0156041ABE0C147C56F6A /* SectionSettingsSheet.swift */,
+			);
+			path = Compose;
+			sourceTree = "<group>";
+		};
 		3E49A16C04A04A84BF2B525D /* Editor */ = {
 			isa = PBXGroup;
 			children = (
 				9A4FD8E2127246D1AE59F6EF /* Data */,
+				BFCD0DD48A33A86BA03FFF32 /* Dashboard */,
+				DF365D56B43A36C2F2D91DD6 /* Create */,
+				126AC586B31080E57150EF8A /* Manage */,
+				5AC608004B5714FF0A1BB93E /* Compose */,
+				187B62B703A9B293B631E60C /* EditorRoute.swift */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -1028,6 +1112,8 @@
 			isa = PBXGroup;
 			children = (
 				B9449986055244F999B22360 /* EditableDocument.swift */,
+				C1B28C0698982B5772CBE601 /* EditorModels.swift */,
+				22D731B716C33F27DE4197BC /* EditorService.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1468,6 +1554,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE926DF406D249C6B01069ED /* EditableDocument.swift in Sources */,
+				A30215A41A3D99FBA2EF277A /* EditorModels.swift in Sources */,
+				73B29BA5AD5A7F53A849BEBC /* EditorService.swift in Sources */,
+				9A5F69683E15CAB2B344ACBF /* WriterDashboardView.swift in Sources */,
+				9877CFE0CA0DFB601895473A /* WriterDashboardViewModel.swift in Sources */,
+				0D2923DB3D7953443D27FEA4 /* CreateWorkView.swift in Sources */,
+				2BBA3E794CCDFEB2B3F1997D /* FloatingCreateButton.swift in Sources */,
+				C3BFA9AFCBEF9FA2B6E76EAD /* CreateWorkViewModel.swift in Sources */,
+				7B75C73A23FEAE1B0537206C /* WorkManagerView.swift in Sources */,
+				66002F525E0C669906D89F95 /* WorkManagerViewModel.swift in Sources */,
+				F96B1BE47F856DA1115260D1 /* SectionComposerView.swift in Sources */,
+				04D29D37AE8556D444072D75 /* SectionComposerViewModel.swift in Sources */,
+				101808A00E902E7196ECF13D /* BlockKind.swift in Sources */,
+				D8D7F7204B989E5FD91F6634 /* BlockEditorRow.swift in Sources */,
+				BB79E5AB7A5A653ABDE5A2B7 /* MarkupTextView.swift in Sources */,
+				C8FBDBBCE1248BC09746D597 /* BlockPickerSheet.swift in Sources */,
+				8D1D47917F819DBB14ABDF96 /* BlockInspectorSheet.swift in Sources */,
+				53D1522F2B536C5BA1393230 /* SectionSettingsSheet.swift in Sources */,
+				30EC35B7C07756643AF1B7E5 /* EditorRoute.swift in Sources */,
 				F4809BF0A8BF4D1F9F7764D7 /* JSONValue.swift in Sources */,
 				E80E81839AE94A6DB10098F8 /* GroupEditorView.swift in Sources */,
 				891C879FA88345AF8CC169A4 /* GroupEditorViewModel.swift in Sources */,

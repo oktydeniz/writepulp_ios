@@ -36,6 +36,11 @@ struct HomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppColors.background.ignoresSafeArea())
+        .overlay(alignment: .bottomTrailing) {
+            if session.canWrite {
+                FloatingCreateButton(options: PublicationType.writable, onPick: { onOpen(.editor(.createWork(type: $0))) })
+            }
+        }
         .task { await model.loadIfNeeded() }
     }
 

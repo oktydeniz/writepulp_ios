@@ -249,6 +249,17 @@ struct MainView: View {
             WalletView(service: dependencies.walletService)
         case .settings:
             SettingsView(service: dependencies.settingsService, preferences: preferences)
+        case .editor(let route):
+            EditorDestination(
+                route: route,
+                service: dependencies.editorService,
+                navigator: EditorNavigator(
+                    open: { open(.editor($0)) },
+                    replaceTop: { replaceTop(with: .editor($0)) },
+                    pop: { pop() },
+                    openSettings: { open(.settings) }
+                )
+            )
         }
     }
 
