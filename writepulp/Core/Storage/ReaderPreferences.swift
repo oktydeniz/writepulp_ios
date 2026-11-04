@@ -23,6 +23,8 @@ final class ReaderPreferences {
     private let defaults: UserDefaults
 
     private(set) var theme = ReaderPreferences.defaultTheme
+    /// False until the reader picks a theme; dark app appearance then starts in Night Blue.
+    private(set) var hasChosenTheme = false
     private(set) var font = ReaderPreferences.defaultFont
     private(set) var fontSize = ReaderPreferences.defaultFontSize
     private(set) var lineHeight = ReaderPreferences.defaultLineHeight
@@ -34,6 +36,7 @@ final class ReaderPreferences {
 
     func reload() {
         theme = defaults.string(forKey: Key.theme) ?? Self.defaultTheme
+        hasChosenTheme = defaults.string(forKey: Key.theme) != nil
         font = defaults.string(forKey: Key.font) ?? Self.defaultFont
         fontSize = defaults.object(forKey: Key.fontSize) as? Int ?? Self.defaultFontSize
         lineHeight = defaults.object(forKey: Key.lineHeight) as? Double ?? Self.defaultLineHeight
@@ -42,6 +45,7 @@ final class ReaderPreferences {
     func setTheme(_ themeId: String) {
         defaults.set(themeId, forKey: Key.theme)
         theme = themeId
+        hasChosenTheme = true
     }
 
     func setFont(_ fontId: String) {

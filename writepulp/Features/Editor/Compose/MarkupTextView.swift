@@ -8,6 +8,7 @@ import UIKit
 
 /// Growing text field for block content. Its keyboard bar writes the document's inline markup
 /// around the selection: `**bold**`, `*italic*`, `[label](url)` and `<c:#hex>text</c>`.
+/// The text stays raw markup; attributes only change how it looks, so the saved format is untouched.
 struct MarkupTextView: UIViewRepresentable {
     @Binding var text: String
     var placeholder: String
@@ -37,18 +38,18 @@ struct MarkupTextView: UIViewRepresentable {
     func updateUIView(_ view: PlaceholderTextView, context: Context) {
         context.coordinator.parent = self
         if view.text != text { view.text = text }
-        view.font = font
-        view.textAlignment = alignment
-        view.textColor = textColor
         view.autocapitalizationType = autocapitalization
         view.placeholder = placeholder
+        view.placeholderFont = font
+        view.placeholderAlignment = alignment
+        context.coordinator.restyle(view)
         view.refreshPlaceholder()
     }
 
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: PlaceholderTextView, context: Context) -> CGSize? {
         let width = proposal.width ?? uiView.window?.bounds.width ?? 320
         let fitted = uiView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
-        return CGSize(width: width, height: max(fitted.height, uiView.font?.lineHeight ?? 20))
+        return CGSize(width: width, height: max(fitted.height, font.lineHeight))
     }
 
     @MainActor
@@ -61,7 +62,77 @@ struct MarkupTextView: UIViewRepresentable {
 
         func textViewDidChange(_ textView: UITextView) {
             parent.text = textView.text
+            restyle(textView)
             (textView as? PlaceholderTextView)?.refreshPlaceholder()
+        }
+
+        /// Paints the markup in place. Skipped while the keyboard is composing (marked text).
+        func restyle(_ textView: UITextView) {
+            guard textView.markedTextRange == nil else { return }
+            let paragraph = NSMutableParagraphStyle()
+            paragraph.alignment = parent.alignment
+            let base: [NSAttributedString.Key: Any] = [
+                .font: parent.font,
+                .foregroundColor: parent.textColor,
+                .paragraphStyle: paragraph,
+            ]
+            let storage = textView.textStorage
+            let full = NSRange(location: 0, length: storage.length)
+            storage.beginEditing()
+            storage.setAttributes(base, range: full)
+            if parent.allowsFormatting {
+                paint(storage, in: full, isDark: textView.traitCollection.userInterfaceStyle == .dark)
+            }
+            storage.endEditing()
+            textView.typingAttributes = base
+        }
+
+        private func paint(_ storage: NSTextStorage, in range: NSRange, isDark: Bool) {
+            for match in InlineMarkup.regex.matches(in: storage.string, range: range) {
+                if match.range(at: 2).location != NSNotFound {
+                    decorate(storage, outer: match.range, inner: match.range(at: 2), hidden: false)
+                    addTrait(.traitBold, to: storage, in: match.range(at: 2))
+                    paint(storage, in: match.range(at: 2), isDark: isDark)
+                } else if match.range(at: 4).location != NSNotFound {
+                    decorate(storage, outer: match.range, inner: match.range(at: 4), hidden: false)
+                    addTrait(.traitItalic, to: storage, in: match.range(at: 4))
+                    paint(storage, in: match.range(at: 4), isDark: isDark)
+                } else if match.range(at: 6).location != NSNotFound {
+                    decorate(storage, outer: match.range, inner: match.range(at: 6), hidden: false)
+                    storage.addAttribute(.foregroundColor, value: UIColor(hex: 0x3B82F6), range: match.range(at: 6))
+                    storage.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: match.range(at: 6))
+                    paint(storage, in: match.range(at: 6), isDark: isDark)
+                } else if match.range(at: 10).location != NSNotFound {
+                    let value = (storage.string as NSString).substring(with: match.range(at: 9))
+                    decorate(storage, outer: match.range, inner: match.range(at: 10), hidden: true)
+                    if let color = Color(css: value).map(UIColor.init) {
+                        storage.addAttribute(.foregroundColor, value: color.readable(isDark: isDark), range: match.range(at: 10))
+                    }
+                    paint(storage, in: match.range(at: 10), isDark: isDark)
+                }
+            }
+        }
+
+        /// Syntax around the text: faint for `**`, `*` and links, collapsed for the long color tag.
+        private func decorate(_ storage: NSTextStorage, outer: NSRange, inner: NSRange, hidden: Bool) {
+            let before = NSRange(location: outer.location, length: inner.location - outer.location)
+            let after = NSRange(location: inner.location + inner.length, length: outer.location + outer.length - inner.location - inner.length)
+            for marker in [before, after] {
+                if hidden {
+                    storage.addAttributes([.font: UIFont.systemFont(ofSize: 0.1), .foregroundColor: UIColor.clear], range: marker)
+                } else {
+                    storage.addAttribute(.foregroundColor, value: UIColor.tertiaryLabel, range: marker)
+                }
+            }
+        }
+
+        private func addTrait(_ trait: UIFontDescriptor.SymbolicTraits, to storage: NSTextStorage, in range: NSRange) {
+            storage.enumerateAttribute(.font, in: range) { value, part, _ in
+                guard let font = value as? UIFont else { return }
+                let traits = font.fontDescriptor.symbolicTraits.union(trait)
+                guard let descriptor = font.fontDescriptor.withSymbolicTraits(traits) else { return }
+                storage.addAttribute(.font, value: UIFont(descriptor: descriptor, size: font.pointSize), range: part)
+            }
         }
 
         func textViewDidBeginEditing(_ textView: UITextView) {
@@ -174,6 +245,7 @@ struct MarkupTextView: UIViewRepresentable {
         private func replace(_ textView: UITextView, range: NSRange, with string: String, select: NSRange) {
             let updated = (textView.text as NSString).replacingCharacters(in: range, with: string)
             textView.text = updated
+            restyle(textView)
             textView.selectedRange = select
             parent.text = updated
             (textView as? PlaceholderTextView)?.refreshPlaceholder()
@@ -187,11 +259,22 @@ struct MarkupTextView: UIViewRepresentable {
     }
 }
 
+private extension UIColor {
+    /// Near-black swatches can't be seen on the dark app surface; the saved color doesn't change.
+    func readable(isDark: Bool) -> UIColor {
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0
+        guard isDark, getRed(&red, green: &green, blue: &blue, alpha: nil) else { return self }
+        return 0.299 * red + 0.587 * green + 0.114 * blue < 0.3 ? .label : self
+    }
+}
+
 /// UITextView with a placeholder label.
 final class PlaceholderTextView: UITextView {
     var placeholder = "" {
         didSet { placeholderLabel.text = placeholder }
     }
+    var placeholderFont: UIFont = .preferredFont(forTextStyle: .body)
+    var placeholderAlignment: NSTextAlignment = .natural
 
     private let placeholderLabel = UILabel()
 
@@ -213,8 +296,8 @@ final class PlaceholderTextView: UITextView {
     }
 
     func refreshPlaceholder() {
-        placeholderLabel.font = font
-        placeholderLabel.textAlignment = textAlignment
+        placeholderLabel.font = placeholderFont
+        placeholderLabel.textAlignment = placeholderAlignment
         placeholderLabel.isHidden = !text.isEmpty
     }
 }

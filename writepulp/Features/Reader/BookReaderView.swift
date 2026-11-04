@@ -17,8 +17,8 @@ struct BookReaderView: View {
     @State private var isShowingToc = false
     @State private var isShowingSettings = false
 
-    init(publicationId: String, chapterId: String?, service: ReaderService) {
-        _model = State(initialValue: BookReaderViewModel(publicationId: publicationId, chapterId: chapterId, service: service))
+    init(publicationId: String, chapterId: String?, asEditor: Bool = false, service: ReaderService) {
+        _model = State(initialValue: BookReaderViewModel(publicationId: publicationId, chapterId: chapterId, asEditor: asEditor, service: service))
     }
 
     var body: some View {

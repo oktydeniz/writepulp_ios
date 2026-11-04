@@ -19,10 +19,10 @@ struct ArticleReaderView: View {
     @State private var isShowingSettings = false
     @State private var signInMessage: LocalizedStringKey?
 
-    init(publicationId: String, service: ReaderService, onOpen: @escaping (MainRoute) -> Void, onSignIn: @escaping () -> Void) {
+    init(publicationId: String, asEditor: Bool = false, service: ReaderService, onOpen: @escaping (MainRoute) -> Void, onSignIn: @escaping () -> Void) {
         self.onOpen = onOpen
         self.onSignIn = onSignIn
-        _model = State(initialValue: ArticleReaderViewModel(publicationId: publicationId, service: service))
+        _model = State(initialValue: ArticleReaderViewModel(publicationId: publicationId, asEditor: asEditor, service: service))
     }
 
     var body: some View {

@@ -20,12 +20,14 @@ final class ArticleReaderViewModel {
     private(set) var reviews: ReviewsViewModel?
     var toastMessage: String?
 
+    private let asEditor: Bool
     private let service: ReaderService
     private let session: ReadingSessionTracker
     @ObservationIgnored private var throttle = ProgressThrottle()
 
-    init(publicationId: String, service: ReaderService) {
+    init(publicationId: String, asEditor: Bool = false, service: ReaderService) {
         self.publicationId = publicationId
+        self.asEditor = asEditor
         self.service = service
         session = ReadingSessionTracker(service: service)
     }
@@ -54,8 +56,8 @@ final class ArticleReaderViewModel {
                 source: service.sectionReviewsSource(sectionId: loaded.id),
                 session: { (service.isSignedIn, service.currentUserId) }
             )
-            session.update(publicationId: publicationId, sectionId: loaded.id, enabled: loaded.earnsCoins)
-            if !loaded.isOwner {
+            session.update(publicationId: publicationId, sectionId: loaded.id, enabled: loaded.earnsCoins && !asEditor)
+            if !loaded.isOwner, !asEditor {
                 Task { await service.incrementView(sectionId: loaded.id) }
             }
         } catch APIError.cancelled {
@@ -77,7 +79,7 @@ final class ArticleReaderViewModel {
     }
 
     func recordProgress(_ percent: Double) {
-        guard let article, !article.isOwner, throttle.shouldSend(percent) else { return }
+        guard let article, !article.isOwner, !asEditor, throttle.shouldSend(percent) else { return }
         let service = service
         Task { await service.recordProgress(publicationId: publicationId, sectionId: article.id, percent: percent) }
     }

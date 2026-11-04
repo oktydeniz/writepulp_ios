@@ -48,8 +48,8 @@ extension SessionStore {
     }
 }
 
-/// A round "+" button for the bottom-right corner. With `options` it opens a speed dial of
-/// work types; without, it runs `action` straight away.
+/// A round "+" button for the bottom-right corner, in Liquid Glass like the tab bar. With `options`
+/// it opens the system menu of work types; without, it runs `action` straight away.
 @MainActor
 struct FloatingCreateButton: View {
     var title: LocalizedStringKey = "editor_new_work"
@@ -58,78 +58,51 @@ struct FloatingCreateButton: View {
     var onPick: (PublicationType) -> Void = { _ in }
     var action: () -> Void = {}
 
-    @State private var isOpen = false
-
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            if isOpen {
-                Color.black.opacity(0.28)
-                    .ignoresSafeArea()
-                    .onTapGesture { toggle() }
-                    .transition(.opacity)
-            }
-            VStack(alignment: .trailing, spacing: 12) {
-                if isOpen {
-                    ForEach(Array(options.enumerated()), id: \.element) { index, type in
-                        option(type)
-                            .transition(.move(edge: .bottom).combined(with: .opacity)
-                                .animation(.spring(duration: 0.3).delay(Double(options.count - index) * 0.03)))
+        Group {
+            if options.isEmpty {
+                Button(action: action) { icon }
+            } else {
+                Menu {
+                    ForEach(options, id: \.self) { type in
+                        Button { onPick(type) } label: {
+                            Image(systemName: type.editorIcon)
+                            Text(type.label)
+                            Text(type.editorDescription)
+                        }
                     }
+                } label: {
+                    icon
                 }
-                mainButton
+                .menuOrder(.fixed)
             }
-            .padding(.trailing, 20)
-            .padding(.bottom, 16)
         }
-    }
-
-    private var mainButton: some View {
-        Button {
-            if options.isEmpty { action() } else { toggle() }
-        } label: {
-            Image(systemName: systemImage)
-                .font(.system(size: 22, weight: .semibold))
-                .foregroundStyle(AppColors.onPrimary)
-                .rotationEffect(.degrees(isOpen ? 45 : 0))
-                .frame(width: 56, height: 56)
-                .background(AppColors.primary, in: Circle())
-                .shadow(color: .black.opacity(0.22), radius: 10, y: 4)
-        }
-        .buttonStyle(PressableButtonStyle())
         .accessibilityLabel(Text(title))
+        .padding(.trailing, 20)
+        .padding(.bottom, 16)
     }
 
-    private func option(_ type: PublicationType) -> some View {
-        Button {
-            toggle()
-            onPick(type)
-        } label: {
-            HStack(spacing: 12) {
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text(type.label)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(AppColors.onSurface)
-                    Text(type.editorDescription)
-                        .font(.system(size: 12))
-                        .foregroundStyle(AppColors.onSurfaceVariant)
-                        .lineLimit(1)
-                }
-                Image(systemName: type.editorIcon)
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 44, height: 44)
-                    .background(type.editorTint, in: Circle())
-            }
-            .padding(.leading, 16)
-            .padding(.trailing, 6)
-            .padding(.vertical, 6)
-            .background(AppColors.surface, in: Capsule())
-            .shadow(color: .black.opacity(0.12), radius: 8, y: 3)
+    private var icon: some View {
+        Image(systemName: systemImage)
+            .font(.system(size: 20, weight: .medium))
+            .frame(width: 52, height: 52)
+            .contentShape(Circle())
+            .modifier(FloatingGlass())
+    }
+}
+
+private struct FloatingGlass: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .foregroundStyle(.white)
+                .glassEffect(.regular.tint(AppColors.primary).interactive(), in: .circle)
+        } else {
+            content
+                .foregroundStyle(AppColors.primary)
+                .background(.regularMaterial, in: Circle())
+                .overlay { Circle().stroke(.separator, lineWidth: 0.5) }
+                .shadow(color: .black.opacity(0.12), radius: 6, y: 2)
         }
-        .buttonStyle(PressableButtonStyle())
-    }
-
-    private func toggle() {
-        withAnimation(.spring(duration: 0.3)) { isOpen.toggle() }
     }
 }

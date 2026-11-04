@@ -95,7 +95,7 @@ enum BlockKind: String, CaseIterable, Identifiable {
     var countsWords: Bool { isText || self == .sceneHeading || self == .dialogue }
 
     /// Inline markup (bold, italic, link, color) is meaningful here.
-    var allowsFormatting: Bool { isText || self == .dialogue }
+    var allowsFormatting: Bool { isText || self == .dialogue || self == .sceneHeading }
 
     /// Same defaults as the web editor's `getNewBlock`.
     func makeBlock() -> EditableBlock {

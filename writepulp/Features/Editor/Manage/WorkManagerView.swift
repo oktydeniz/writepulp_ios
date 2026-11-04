@@ -14,6 +14,8 @@ struct WorkManagerView: View {
     @State private var pendingDelete: WorkSection?
     @State private var isConfirmingWorkDelete = false
     @State private var isConfirmingArchive = false
+    @State private var isCreatingTranslation = false
+    @State private var editMode = EditMode.inactive
 
     init(workId: String, service: EditorService, navigator: EditorNavigator) {
         self.navigator = navigator
@@ -45,6 +47,17 @@ struct WorkManagerView: View {
         .refreshable { await model.load() }
         .loadingOverlay(model.isWorking)
         .toast($model.toastMessage)
+        .sheet(isPresented: $isCreatingTranslation) {
+            if let publication = model.details?.publication {
+                CreateTranslationSheet(
+                    excludedLanguages: [publication.language] + publication.translations.map(\.language)
+                ) { title, language in
+                    guard let id = await model.createTranslation(title: title, language: language) else { return false }
+                    navigator.open(.work(id: id))
+                    return true
+                }
+            }
+        }
         .alert("editor_delete_section_title", isPresented: deleteBinding, presenting: pendingDelete) { section in
             Button("cancel", role: .cancel) {}
             Button("delete", role: .destructive) { Task { await model.delete(section) } }
@@ -80,6 +93,12 @@ struct WorkManagerView: View {
                     .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
             }
 
+            manageSection(details)
+
+            if details.isOwner, details.publication.originalPublicationId == nil {
+                translationsSection(details)
+            }
+
             Section {
                 if model.sections.isEmpty {
                     EmptyStateView(
@@ -92,15 +111,129 @@ struct WorkManagerView: View {
                     ForEach(Array(model.sections.enumerated()), id: \.element.id) { index, section in
                         sectionRow(section, number: index + 1, details: details)
                     }
+                    .onMove(perform: isReordering ? { source, destination in
+                        Task { await model.moveSections(from: source, to: destination) }
+                    } : nil)
                 }
             } header: {
-                Text(isSingle(details) ? "editor_content" : "editor_sections")
+                HStack {
+                    Text(isSingle(details) ? "editor_content" : "editor_sections")
+                    Spacer()
+                    if canReorder(details) {
+                        Button(isReordering ? "editor_reorder_done" : "editor_reorder") {
+                            withAnimation { editMode = isReordering ? .inactive : .active }
+                        }
+                        .font(.system(size: 13, weight: .semibold))
+                        .textCase(nil)
+                    }
+                }
             }
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
+        .environment(\.editMode, $editMode)
         // Room for the floating button under the last row.
         .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 72) }
+    }
+
+    private var isReordering: Bool { editMode == .active }
+
+    private func canReorder(_ details: WorkDetails) -> Bool {
+        details.can(.reorderSection) && !isSingle(details) && model.sections.count > 1
+    }
+
+    private func manageSection(_ details: WorkDetails) -> some View {
+        Section {
+            if let originalId = details.publication.originalPublicationId {
+                manageRow("editor_view_original", systemImage: "character.book.closed") {
+                    // Only the owner can be sure to reach the original's manager.
+                    if details.isOwner {
+                        navigator.open(.work(id: originalId))
+                    } else {
+                        navigator.openPublication(originalId)
+                    }
+                }
+            }
+            manageRow("editor_team", systemImage: "person.2", value: "\(details.collaborators.count)") {
+                navigator.open(.team(workId: model.workId))
+            }
+            if details.can(.editBookInfo) {
+                manageRow("editor_work_settings", systemImage: "slider.horizontal.3") {
+                    navigator.open(.workSettings(workId: model.workId))
+                }
+            }
+        }
+    }
+
+    private func translationsSection(_ details: WorkDetails) -> some View {
+        Section {
+            ForEach(details.publication.translations) { translation in
+                Button { navigator.open(.work(id: translation.uuid)) } label: {
+                    HStack(spacing: 10) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(ContentLanguage.displayName(for: translation.language))
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(AppColors.primary)
+                            Text(translation.title)
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundStyle(AppColors.onSurface)
+                                .lineLimit(1)
+                        }
+                        Spacer(minLength: 4)
+                        StatusPill(status: translation.status)
+                        chevron
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+            Button { isCreatingTranslation = true } label: {
+                Label("editor_create_translation", systemImage: "plus")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(AppColors.primary)
+            }
+            .disabled(details.publication.status != .published)
+            .opacity(details.publication.status == .published ? 1 : 0.5)
+        } header: {
+            Text("editor_translations")
+        } footer: {
+            if details.publication.status != .published {
+                Text("editor_translation_needs_published")
+            }
+        }
+    }
+
+    private func manageRow(
+        _ title: LocalizedStringKey,
+        systemImage: String,
+        value: String? = nil,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Image(systemName: systemImage)
+                    .foregroundStyle(AppColors.primary)
+                    .frame(width: 24)
+                Text(title)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(AppColors.onSurface)
+                Spacer(minLength: 4)
+                if let value {
+                    Text(verbatim: value)
+                        .font(.system(size: 14))
+                        .foregroundStyle(AppColors.onSurfaceVariant)
+                }
+                chevron
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var chevron: some View {
+        Image(systemName: "chevron.right")
+            .font(.system(size: 12, weight: .semibold))
+            .foregroundStyle(AppColors.onSurfaceVariant)
     }
 
     /// Article and script have one piece of content: the button creates it once, then edits it.
@@ -110,7 +243,9 @@ struct WorkManagerView: View {
 
     @ViewBuilder
     private func floatingButton(_ details: WorkDetails) -> some View {
-        if isSingle(details), let content = model.sections.first {
+        if isReordering {
+            // It would sit over the drag handles.
+        } else if isSingle(details), let content = model.sections.first {
             if details.can(.editSection) {
                 FloatingCreateButton(title: "editor_edit_content", systemImage: "pencil", action: {
                     navigator.open(.section(workId: model.workId, sectionId: content.id))
@@ -192,6 +327,7 @@ struct WorkManagerView: View {
 
     private func sectionRow(_ section: WorkSection, number: Int, details: WorkDetails) -> some View {
         Button {
+            guard !isReordering else { return }
             navigator.open(.section(workId: model.workId, sectionId: section.id))
         } label: {
             HStack(spacing: 12) {
@@ -222,7 +358,9 @@ struct WorkManagerView: View {
                     .foregroundStyle(AppColors.onSurfaceVariant)
                 }
                 Spacer(minLength: 4)
-                sectionMenu(section, details: details)
+                if !isReordering {
+                    sectionMenu(section, details: details)
+                }
             }
             .contentShape(Rectangle())
         }
@@ -236,8 +374,10 @@ struct WorkManagerView: View {
 
     private func sectionMenu(_ section: WorkSection, details: WorkDetails) -> some View {
         Menu {
-            Button { navigator.open(.section(workId: model.workId, sectionId: section.id)) } label: {
-                Label("editor_edit", systemImage: "pencil")
+            if details.can(.editSection) {
+                Button { navigator.open(.section(workId: model.workId, sectionId: section.id)) } label: {
+                    Label("editor_edit", systemImage: "pencil")
+                }
             }
             if details.can(.publishSection) {
                 Picker(selection: Binding(
@@ -250,7 +390,8 @@ struct WorkManagerView: View {
                 }
                 .pickerStyle(.menu)
             }
-            if details.can(.editSection) {
+            // The backend lets only the owner and co-authors lock; of the roles, only they hold this permission.
+            if details.can(.editBookInfo) {
                 Button { Task { await model.toggleLock(section) } } label: {
                     Label(section.isLocked ? "editor_unlock" : "editor_lock", systemImage: section.isLocked ? "lock.open" : "lock")
                 }

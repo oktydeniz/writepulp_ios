@@ -3,8 +3,10 @@
 //  writepulp
 //
 
-import UIKit
 import Observation
+import PhotosUI
+import SwiftUI
+import UIKit
 
 /// One section being written: its title, settings and block document, and saving them back
 /// in the format of backend docs/editor-document.md.
@@ -35,6 +37,8 @@ final class SectionComposerViewModel {
     private(set) var loadError: String?
     private(set) var lastSavedAt: Date?
     private(set) var uploadingIds: Set<String> = []
+    /// The picked cover, shown right away; the uploaded file can take a while to be served.
+    private(set) var localCover: UIImage?
     var toastMessage: String?
 
     private var saved: Snapshot?
@@ -88,7 +92,7 @@ final class SectionComposerViewModel {
         guard saved == nil else { return }
         isLoading = true
         defer { isLoading = false }
-        async let details = try? service.workDetails(id: workId, page: 0)
+        async let details = try? service.workDetails(id: workId)
         do {
             if let sectionId {
                 draft = try await service.section(id: sectionId)
@@ -176,11 +180,15 @@ final class SectionComposerViewModel {
 
     /// Magazine hero image.
     func uploadCover(_ image: UIImage) async {
-        guard let jpeg = image.compressedJPEG() else { return }
+        guard let jpeg = image.compressedJPEG() else {
+            toastMessage = String(localized: "editor_image_load_failed")
+            return
+        }
         uploadingIds.insert("cover")
         defer { uploadingIds.remove("cover") }
         do {
             draft.coverImg = try await service.uploadImage(jpeg)
+            localCover = image
             coverRemoved = false
         } catch APIError.cancelled {
         } catch {
@@ -188,8 +196,17 @@ final class SectionComposerViewModel {
         }
     }
 
+    func uploadCover(from item: PhotosPickerItem) async {
+        guard let data = try? await item.loadTransferable(type: Data.self), let image = UIImage(data: data) else {
+            toastMessage = String(localized: "editor_image_load_failed")
+            return
+        }
+        await uploadCover(image)
+    }
+
     func removeCover() {
         draft.coverImg = nil
+        localCover = nil
         coverRemoved = true
     }
 

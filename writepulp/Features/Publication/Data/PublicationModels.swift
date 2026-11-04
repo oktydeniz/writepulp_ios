@@ -57,6 +57,7 @@ struct PublicationDetail: Decodable {
     let collections: [CollectionRef]
     let isSupportedWithAI: Bool
     let similarPublications: [SimilarPublication]
+    let translations: [WorkTranslation]?
     /// The viewer's age (or unknown birthday) doesn't allow this content; the server also blanks the summary.
     let needRestriction: Bool?
     let ageCategory: String?
@@ -65,7 +66,9 @@ struct PublicationDetail: Decodable {
         let uuid: String
     }
 
-    var hasAccess: Bool { isOwner || libraryItem != nil }
+    var hasAccess: Bool { canManage || libraryItem != nil }
+    /// The owner and co-workers manage the work and read it without buying.
+    var canManage: Bool { isOwner || hasEditRole }
     var isAgeRestricted: Bool { needRestriction == true }
 
     var ageLabel: Text {

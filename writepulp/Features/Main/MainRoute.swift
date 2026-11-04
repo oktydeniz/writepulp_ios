@@ -9,7 +9,7 @@ import Foundation
 enum MainRoute: Hashable {
     case publication(id: String)
     /// nil chapter: single-page content, or where the reader left off.
-    case reader(publicationId: String, type: PublicationType, chapterId: String?)
+    case reader(publicationId: String, type: PublicationType, chapterId: String?, asEditor: Bool = false)
     case profile(userId: String)
     case follows(userId: String?, kind: FollowListKind)
     case community(id: String, name: String)

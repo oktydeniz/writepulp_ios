@@ -142,7 +142,42 @@ struct PublicationDetailView: View {
         .refreshable { await model.load() }
     }
 
+    @ViewBuilder
     private func primaryAction(_ publication: PublicationDetail) -> some View {
+        if publication.canManage {
+            HStack(spacing: 10) {
+                Button {
+                    needsRefresh = true
+                    onOpen(.editor(.work(id: model.publicationId)))
+                } label: {
+                    Label(String(localized: "content_detail_manage"), systemImage: "slider.horizontal.3")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 54)
+                        .background(AppPalette.primaryColor, in: RoundedRectangle(cornerRadius: 16))
+                }
+                .buttonStyle(PressableButtonStyle())
+                Button {
+                    openReader(chapterId: publication.isSinglePage ? nil : model.startChapterId)
+                } label: {
+                    Label(String(localized: "content_detail_read"), systemImage: publication.isSinglePage ? "doc.text" : "book.pages")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(AppPalette.primaryColor)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 54)
+                        .background(AppPalette.primaryColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 16))
+                }
+                .buttonStyle(PressableButtonStyle())
+                .disabled(publication.sectionCount == 0)
+                .opacity(publication.sectionCount == 0 ? 0.5 : 1)
+            }
+        } else {
+            buyOrReadButton(publication)
+        }
+    }
+
+    private func buyOrReadButton(_ publication: PublicationDetail) -> some View {
         Button { primaryTapped(publication) } label: {
             HStack(spacing: 8) {
                 if model.isAddingToLibrary {
@@ -260,7 +295,7 @@ struct PublicationDetailView: View {
             return
         }
         needsRefresh = true
-        onOpen(.reader(publicationId: model.publicationId, type: publication.type, chapterId: chapterId))
+        onOpen(.reader(publicationId: model.publicationId, type: publication.type, chapterId: chapterId, asEditor: publication.canManage))
     }
 
     private func startDownload(_ publication: PublicationDetail) {
@@ -287,14 +322,12 @@ struct PublicationDetailView: View {
     }
 
     private func primaryTitle(_ publication: PublicationDetail) -> String {
-        if publication.isOwner { return String(localized: "content_detail_manage") }
         if publication.hasAccess { return String(localized: "content_detail_read_now") }
         if publication.priceCoin > 0 { return "content_detail_buy_for_coin".localized(publication.priceCoin) }
         return String(localized: "content_detail_add_to_library")
     }
 
     private func primaryIcon(_ publication: PublicationDetail) -> String {
-        if publication.isOwner { return "slider.horizontal.3" }
         if publication.hasAccess { return publication.isSinglePage ? "doc.text" : "book.pages" }
         return publication.priceCoin > 0 ? "bitcoinsign.circle" : "plus"
     }

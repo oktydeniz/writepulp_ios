@@ -29,12 +29,14 @@ final class MagazineReaderViewModel {
     private let service: ReaderService
     private let session: ReadingSessionTracker
     private let initialChapterId: String?
+    private let asEditor: Bool
     @ObservationIgnored private var throttle = ProgressThrottle()
     private var loadingIds: Set<String> = []
     private var viewedIds: Set<String> = []
 
-    init(publicationId: String, chapterId: String?, service: ReaderService) {
+    init(publicationId: String, chapterId: String?, asEditor: Bool = false, service: ReaderService) {
         self.publicationId = publicationId
+        self.asEditor = asEditor
         self.initialChapterId = chapterId
         self.service = service
         session = ReadingSessionTracker(service: service)
@@ -104,7 +106,7 @@ final class MagazineReaderViewModel {
 
     func recordProgress(_ percent: Double, pageId: String) {
         guard pageId == currentSummary?.id, let page = pages[pageId]?.content,
-              !page.isOwner, page.isAccessible, throttle.shouldSend(percent) else { return }
+              !page.isOwner, !asEditor, page.isAccessible, throttle.shouldSend(percent) else { return }
         let service = service
         Task { await service.recordProgress(publicationId: publicationId, sectionId: pageId, percent: percent) }
     }
@@ -121,7 +123,7 @@ final class MagazineReaderViewModel {
 
     /// Views count once per page actually shown, not for preloaded neighbors.
     private func countView(_ id: String) {
-        guard let page = pages[id]?.content, !page.isOwner, !viewedIds.contains(id) else { return }
+        guard let page = pages[id]?.content, !page.isOwner, !asEditor, !viewedIds.contains(id) else { return }
         viewedIds.insert(id)
         let service = service
         Task { await service.incrementView(sectionId: id) }
@@ -130,7 +132,7 @@ final class MagazineReaderViewModel {
     private func pageChanged() {
         guard let summary = currentSummary, let list = chaptersList else { return }
         throttle.reset(to: pages[summary.id]?.content.userProgress ?? summary.userProgress)
-        session.update(publicationId: publicationId, sectionId: summary.id, enabled: list.earnsCoins)
+        session.update(publicationId: publicationId, sectionId: summary.id, enabled: list.earnsCoins && !asEditor)
         Task {
             await loadPageIfNeeded(summary)
             if currentSummary?.id == summary.id { countView(summary.id) }

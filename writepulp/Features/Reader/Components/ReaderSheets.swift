@@ -7,6 +7,7 @@ import SwiftUI
 
 struct ReaderSettingsSheet: View {
     @Environment(ReaderPreferences.self) private var preferences
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         NavigationStack {
@@ -78,7 +79,7 @@ struct ReaderSettingsSheet: View {
     }
 
     private func themeCell(_ theme: ReaderTheme) -> some View {
-        let isSelected = theme.id == preferences.theme
+        let isSelected = theme.id == preferences.activeTheme(colorScheme: colorScheme).id
         return Button { preferences.setTheme(theme.id) } label: {
             VStack(spacing: 6) {
                 Circle()

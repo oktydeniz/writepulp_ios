@@ -107,7 +107,7 @@ struct CreateWorkView: View {
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
             } footer: {
-                Text("editor_create_work_footer")
+                Text(model.type.isSingleSection ? "editor_create_single_footer" : "editor_create_work_footer")
             }
         }
         .scrollDismissesKeyboard(.interactively)

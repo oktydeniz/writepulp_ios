@@ -6,8 +6,9 @@
 import SwiftUI
 
 /// The editor's inline formatting: **bold**, *italic*, [text](url) and <c:color>text</c>.
+/// Marks can nest, e.g. a colored word inside bold text.
 enum InlineMarkup {
-    private static let regex = try! NSRegularExpression(
+    static let regex = try! NSRegularExpression(
         pattern: #"(\*\*(.+?)\*\*)|(\*(.+?)\*)|(\[(.+?)\]\((.+?)\))|(<c:([^>]+)>(.*?)</c>)"#
     )
     private static let linkColor = Color(hex: 0x3B82F6)
@@ -20,20 +21,24 @@ enum InlineMarkup {
         let color: Color
     }
 
-    static func attributed(_ raw: String, base: Base) -> AttributedString {
-        var result = AttributedString()
+    /// A run of text with the marks around it.
+    private struct Span {
+        var text = ""
+        var bold = false
+        var italic = false
+        var color: String?
+        var link: URL?
+    }
+
+    private static func spans(_ raw: String, marks: Span = Span()) -> [Span] {
         let text = raw as NSString
+        var result: [Span] = []
         var cursor = 0
 
-        func append(_ string: String, weight: Font.Weight? = nil, italic: Bool? = nil, color: Color? = nil, link: URL? = nil) {
-            var part = AttributedString(string)
-            part.font = base.font.font(size: base.size, weight: weight ?? base.weight, italic: italic ?? base.italic)
-            part.foregroundColor = color ?? base.color
-            if let link {
-                part.link = link
-                part.underlineStyle = .single
-            }
-            result += part
+        func plain(_ string: String) {
+            var span = marks
+            span.text = string
+            result.append(span)
         }
 
         func group(_ match: NSTextCheckingResult, _ index: Int) -> String? {
@@ -43,21 +48,41 @@ enum InlineMarkup {
 
         for match in regex.matches(in: raw, range: NSRange(location: 0, length: text.length)) {
             if match.range.location > cursor {
-                append(text.substring(with: NSRange(location: cursor, length: match.range.location - cursor)))
+                plain(text.substring(with: NSRange(location: cursor, length: match.range.location - cursor)))
             }
+            var inner = marks
             if let bold = group(match, 2) {
-                append(bold, weight: .bold)
+                inner.bold = true
+                result += spans(bold, marks: inner)
             } else if let italic = group(match, 4) {
-                append(italic, italic: true)
+                inner.italic = true
+                result += spans(italic, marks: inner)
             } else if let label = group(match, 6), let target = group(match, 7) {
-                append(label, color: linkColor, link: URL(string: target.trimmingCharacters(in: .whitespaces)))
-            } else if let colorValue = group(match, 9), let colored = group(match, 10) {
-                append(colored, color: Color(css: colorValue) ?? base.color)
+                inner.link = URL(string: target.trimmingCharacters(in: .whitespaces))
+                result += spans(label, marks: inner)
+            } else if let color = group(match, 9), let colored = group(match, 10) {
+                inner.color = color
+                result += spans(colored, marks: inner)
             }
             cursor = match.range.location + match.range.length
         }
         if cursor < text.length {
-            append(text.substring(from: cursor))
+            plain(text.substring(from: cursor))
+        }
+        return result
+    }
+
+    static func attributed(_ raw: String, base: Base) -> AttributedString {
+        var result = AttributedString()
+        for span in spans(raw) {
+            var part = AttributedString(span.text)
+            part.font = base.font.font(size: base.size, weight: span.bold ? .bold : base.weight, italic: span.italic || base.italic)
+            part.foregroundColor = Color(css: span.color) ?? (span.link != nil ? linkColor : base.color)
+            if let link = span.link {
+                part.link = link
+                part.underlineStyle = .single
+            }
+            result += part
         }
         return result
     }
@@ -72,41 +97,14 @@ extension InlineMarkup {
         paragraph.alignment = alignment
         paragraph.lineSpacing = lineSpacing
         let result = NSMutableAttributedString()
-        let text = raw as NSString
-        var cursor = 0
-
-        func append(_ string: String, bold: Bool = false, italic: Bool = false, color: UIColor? = nil, link: URL? = nil) {
+        for span in spans(raw) {
             var attributes: [NSAttributedString.Key: Any] = [
-                .font: base.font.uiFont(size: base.size, bold: bold || base.weight == .bold, italic: italic || base.italic),
-                .foregroundColor: color ?? uiColor,
+                .font: base.font.uiFont(size: base.size, bold: span.bold || base.weight == .bold, italic: span.italic || base.italic),
+                .foregroundColor: Color(css: span.color).map(UIColor.init) ?? uiColor,
                 .paragraphStyle: paragraph,
             ]
-            if let link { attributes[.link] = link }
-            result.append(NSAttributedString(string: string, attributes: attributes))
-        }
-
-        func group(_ match: NSTextCheckingResult, _ index: Int) -> String? {
-            let range = match.range(at: index)
-            return range.location == NSNotFound ? nil : text.substring(with: range)
-        }
-
-        for match in regex.matches(in: raw, range: NSRange(location: 0, length: text.length)) {
-            if match.range.location > cursor {
-                append(text.substring(with: NSRange(location: cursor, length: match.range.location - cursor)))
-            }
-            if let bold = group(match, 2) {
-                append(bold, bold: true)
-            } else if let italic = group(match, 4) {
-                append(italic, italic: true)
-            } else if let label = group(match, 6), let target = group(match, 7) {
-                append(label, link: URL(string: target.trimmingCharacters(in: .whitespaces)))
-            } else if let colorValue = group(match, 9), let colored = group(match, 10) {
-                append(colored, color: Color(css: colorValue).map(UIColor.init))
-            }
-            cursor = match.range.location + match.range.length
-        }
-        if cursor < text.length {
-            append(text.substring(from: cursor))
+            if let link = span.link { attributes[.link] = link }
+            result.append(NSAttributedString(string: span.text, attributes: attributes))
         }
         return result
     }

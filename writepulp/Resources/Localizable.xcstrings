@@ -2186,6 +2186,40 @@
         }
       }
     },
+    "content_detail_other_languages" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available in other languages"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diğer dillerde"
+          }
+        }
+      }
+    },
+    "content_detail_read" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oku"
+          }
+        }
+      }
+    },
     "content_detail_read_cta" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4056,6 +4090,23 @@
         }
       }
     },
+    "editor_create" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oluştur"
+          }
+        }
+      }
+    },
     "editor_create_content" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4069,6 +4120,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "İçerik oluştur"
+          }
+        }
+      }
+    },
+    "editor_create_single_footer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your work is created as a draft. You can write its content and publish it from its page."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eserin taslak olarak oluşturulur. İçeriğini yazıp sayfasından yayınlayabilirsin."
+          }
+        }
+      }
+    },
+    "editor_create_translation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create translation"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çeviri oluştur"
           }
         }
       }
@@ -4834,6 +4919,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "İÇ. MEKÂN - GÜN"
+          }
+        }
+      }
+    },
+    "editor_image_load_failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This image couldn't be loaded. Try another one."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu görsel açılamadı. Başka bir görsel dene."
           }
         }
       }
@@ -5637,6 +5739,40 @@
         }
       }
     },
+    "editor_reorder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reorder"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sırala"
+          }
+        }
+      }
+    },
+    "editor_reorder_done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitti"
+          }
+        }
+      }
+    },
     "editor_replace_image" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5667,6 +5803,176 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sağ"
+          }
+        }
+      }
+    },
+    "editor_role_co_author" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Co-author"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ortak yazar"
+          }
+        }
+      }
+    },
+    "editor_role_co_author_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edits the work's details and manages its chapters."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eserin bilgilerini düzenler ve bölümlerini yönetir."
+          }
+        }
+      }
+    },
+    "editor_role_contributor" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contributor"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katkıda bulunan"
+          }
+        }
+      }
+    },
+    "editor_role_contributor_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edits existing chapters."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Var olan bölümleri düzenler."
+          }
+        }
+      }
+    },
+    "editor_role_editor" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editor"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editör"
+          }
+        }
+      }
+    },
+    "editor_role_editor_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edits chapters and changes their order."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bölümleri düzenler ve sıralarını değiştirir."
+          }
+        }
+      }
+    },
+    "editor_role_translator" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Translator"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çevirmen"
+          }
+        }
+      }
+    },
+    "editor_role_translator_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edits chapters and adds new ones. The owner publishes them."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bölümleri düzenler ve yeni bölüm ekler. Yayımlamayı eserin sahibi yapar."
+          }
+        }
+      }
+    },
+    "editor_role_viewer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Viewer"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İzleyici"
+          }
+        }
+      }
+    },
+    "editor_role_viewer_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reads the work without buying it."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eseri satın almadan okur."
           }
         }
       }
@@ -5896,9 +6202,21 @@
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld chapters · %2$@ words"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld chapter · %2$@ words"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld chapters · %2$@ words"
+                }
+              }
+            }
           }
         },
         "tr" : {
@@ -6147,6 +6465,210 @@
         }
       }
     },
+    "editor_team" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Team"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekip"
+          }
+        }
+      }
+    },
+    "editor_team_empty_member_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The owner manages this team."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu ekibi eserin sahibi yönetir."
+          }
+        }
+      }
+    },
+    "editor_team_empty_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invite someone to write, edit or translate with you."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sizinle yazması, düzenlemesi veya çevirmesi için birini davet edin."
+          }
+        }
+      }
+    },
+    "editor_team_empty_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No team members yet"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Henüz ekip üyesi yok"
+          }
+        }
+      }
+    },
+    "editor_team_footer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "People join after accepting the invitation in their notifications."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kişiler, bildirimlerindeki daveti kabul edince ekibe katılır."
+          }
+        }
+      }
+    },
+    "editor_team_handle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Username"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanıcı adı"
+          }
+        }
+      }
+    },
+    "editor_team_invite" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invite to team"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekibe davet et"
+          }
+        }
+      }
+    },
+    "editor_team_invite_sent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitation sent to %@."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kullanıcısına davet gönderildi."
+          }
+        }
+      }
+    },
+    "editor_team_remove_message %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ will no longer be able to work on this."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ artık bu eser üzerinde çalışamayacak."
+          }
+        }
+      }
+    },
+    "editor_team_remove_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove from team?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekipten çıkarılsın mı?"
+          }
+        }
+      }
+    },
+    "editor_team_role" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Role"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rol"
+          }
+        }
+      }
+    },
+    "editor_team_send" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gönder"
+          }
+        }
+      }
+    },
     "editor_text_color" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6194,6 +6716,91 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bölüm başlığı gerekli"
+          }
+        }
+      }
+    },
+    "editor_translation_needs_published" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publish the work and at least one chapter to translate it."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çevirmek için eseri ve en az bir bölümünü yayımlayın."
+          }
+        }
+      }
+    },
+    "editor_translation_no_languages" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This work already has a translation in every supported language."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu eserin desteklenen her dilde çevirisi zaten var."
+          }
+        }
+      }
+    },
+    "editor_translation_note" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This does not translate automatically. It creates a draft with a copy of the original text; you or a translator you add translate each chapter and publish it when ready."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu işlem otomatik çeviri yapmaz. Orijinal metnin kopyasıyla bir taslak oluşturur; her bölümü siz veya eklediğiniz bir çevirmen çevirir ve hazır olduğunda yayımlarsınız."
+          }
+        }
+      }
+    },
+    "editor_translation_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title in the new language"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni dildeki başlık"
+          }
+        }
+      }
+    },
+    "editor_translations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Translations"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çeviriler"
           }
         }
       }
@@ -6385,6 +6992,23 @@
         }
       }
     },
+    "editor_view_original" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View original"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orijinali gör"
+          }
+        }
+      }
+    },
     "editor_wait_uploads" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6538,6 +7162,40 @@
         }
       }
     },
+    "editor_work_community_approval" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Approve new members"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni üyeleri onayla"
+          }
+        }
+      }
+    },
+    "editor_work_completed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark as completed"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamamlandı olarak işaretle"
+          }
+        }
+      }
+    },
     "editor_work_copyright" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6585,6 +7243,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "İsteğe bağlı. Dikey bir görsel en iyi sonucu verir."
+          }
+        }
+      }
+    },
+    "editor_work_create_community" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create a community"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Topluluk oluştur"
           }
         }
       }

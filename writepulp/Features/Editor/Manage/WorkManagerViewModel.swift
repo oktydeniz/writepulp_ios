@@ -3,8 +3,8 @@
 //  writepulp
 //
 
-import Foundation
 import Observation
+import SwiftUI
 
 @MainActor
 @Observable
@@ -25,7 +25,11 @@ final class WorkManagerViewModel {
 
     func load() async {
         do {
-            let result = try await service.workDetails(id: workId)
+            var result = try await service.workDetails(id: workId)
+            // Totals, numbering and reordering all need every chapter.
+            if !result.sections.last, let total = result.sections.totalElements {
+                result = try await service.workDetails(id: workId, size: total)
+            }
             details = result
             sections = result.sections.content.sorted { $0.order < $1.order }
             errorMessage = nil
@@ -59,6 +63,31 @@ final class WorkManagerViewModel {
             try await self.service.deleteSection(id: section.id)
             self.sections.removeAll { $0.id == section.id }
             self.toastMessage = String(localized: "editor_section_deleted")
+            // The backend renumbered the rest.
+            await self.load()
+        }
+    }
+
+    /// Chapters swap the numbers they already hold, so chapters beyond the loaded page aren't touched.
+    func moveSections(from source: IndexSet, to destination: Int) async {
+        let previous = sections
+        let numbers = previous.map(\.order).sorted()
+        var moved = previous
+        moved.move(fromOffsets: source, toOffset: destination)
+        for index in moved.indices { moved[index].order = numbers[index] }
+        sections = moved
+
+        let oldOrders = Dictionary(uniqueKeysWithValues: previous.map { ($0.id, $0.order) })
+        let changes = moved
+            .filter { $0.order != oldOrders[$0.id] }
+            .map { SectionOrderRequest(sectionId: $0.id, newOrder: $0.order) }
+        do {
+            try await service.reorderSections(workId: workId, changes)
+        } catch APIError.cancelled {
+            sections = previous
+        } catch {
+            sections = previous
+            toastMessage = error.localizedDescription
         }
     }
 
@@ -67,6 +96,16 @@ final class WorkManagerViewModel {
             try await self.service.togglePublish(workId: self.workId)
             await self.load()
         }
+    }
+
+    /// Returns the translation's id.
+    func createTranslation(title: String, language: String) async -> String? {
+        var id: String?
+        await perform {
+            let request = TranslationCreateRequest(title: title, language: language)
+            id = try await self.service.createTranslation(workId: self.workId, request)
+        }
+        return id
     }
 
     /// true when the work is gone and the screen should close.

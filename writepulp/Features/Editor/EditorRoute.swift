@@ -13,6 +13,10 @@ enum EditorRoute: Hashable {
     case createWork(type: PublicationType)
     /// Chapters and settings of one work.
     case work(id: String)
+    /// Members of one work; the owner invites and manages them here.
+    case team(workId: String)
+    /// Title, cover, categories and the other details of one work.
+    case workSettings(workId: String)
     /// nil section: a new one.
     case section(workId: String, sectionId: String?)
 }
@@ -22,6 +26,8 @@ struct EditorNavigator {
     let open: (EditorRoute) -> Void
     let replaceTop: (EditorRoute) -> Void
     let pop: () -> Void
+    /// The public page of a work, for team members who can't manage it.
+    let openPublication: (String) -> Void
     /// For readers, who have to become authors in Settings first.
     let openSettings: () -> Void
 }
@@ -42,6 +48,10 @@ struct EditorDestination: View {
             }
         case .work(let id):
             WorkManagerView(workId: id, service: service, navigator: navigator)
+        case .team(let workId):
+            WorkTeamView(workId: workId, service: service)
+        case .workSettings(let workId):
+            WorkSettingsView(workId: workId, service: service, onSaved: navigator.pop)
         case .section(let workId, let sectionId):
             SectionComposerView(workId: workId, sectionId: sectionId, service: service, onClose: navigator.pop)
         }

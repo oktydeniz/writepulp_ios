@@ -25,6 +25,20 @@ struct ReaderBlockView: View {
     let style: ReaderStyle
 
     var body: some View {
+        let background = style.background(block.styles.backgroundColor)
+        if block.type.takesBackground, background != .clear {
+            content
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(background)
+        } else {
+            content
+        }
+    }
+
+    @ViewBuilder
+    private var content: some View {
         switch block.type {
         case .header: header
         case .paragraph: paragraph
@@ -48,8 +62,6 @@ struct ReaderBlockView: View {
 
     private var size: CGFloat { style.size(for: block.styles.fontSize) }
     private var color: Color { style.textColor(block.styles.color, background: block.styles.backgroundColor) }
-    /// Text on its own background box shouldn't touch the box edges.
-    private var backgroundInset: CGFloat { style.background(block.styles.backgroundColor) == .clear ? 0 : 8 }
     private var alignment: String? { block.styles.textAlign }
 
     private func base(size: CGFloat? = nil, weight: Font.Weight = .regular, italic: Bool = false) -> InlineMarkup.Base {
@@ -66,8 +78,6 @@ struct ReaderBlockView: View {
                 alignment: .justified,
                 lineSpacing: style.lineSpacing(for: base.size, multiplier: lineHeight)
             ))
-            .padding(backgroundInset)
-            .background(style.background(block.styles.backgroundColor))
         } else {
             plainFormatted(text, base: base, lineHeight: lineHeight, alignment: alignment)
         }
@@ -78,8 +88,6 @@ struct ReaderBlockView: View {
             .lineSpacing(style.lineSpacing(for: base.size, multiplier: lineHeight))
             .multilineTextAlignment(TextAlignmentValue.text(alignment ?? self.alignment))
             .tint(Color(hex: 0x3B82F6))
-            .padding(backgroundInset)
-            .background(style.background(block.styles.backgroundColor))
             .frame(maxWidth: .infinity, alignment: TextAlignmentValue.frame(alignment ?? self.alignment))
             .fixedSize(horizontal: false, vertical: true)
     }
@@ -96,9 +104,7 @@ struct ReaderBlockView: View {
         default: 1
         }
         let headerSize = size * scale
-        return Text(block.content)
-            .font(style.font.font(size: headerSize, weight: .bold))
-            .foregroundStyle(color)
+        return Text(InlineMarkup.attributed(block.content, base: base(size: headerSize, weight: .bold)))
             .lineSpacing(style.lineSpacing(for: headerSize, multiplier: style.lineHeight * 0.85))
             .multilineTextAlignment(TextAlignmentValue.text(alignment))
             .frame(maxWidth: .infinity, alignment: TextAlignmentValue.frame(alignment))
@@ -140,10 +146,9 @@ struct ReaderBlockView: View {
 
     private var sceneHeading: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(block.content.uppercased())
-                .font(style.font.font(size: size, weight: .bold))
+            Text(InlineMarkup.attributed(block.content, base: base(weight: .bold)))
+                .textCase(.uppercase)
                 .tracking(0.9)
-                .foregroundStyle(color)
             Rectangle()
                 .fill(style.theme.accent)
                 .frame(height: 2)
@@ -193,6 +198,8 @@ struct ReaderBlockView: View {
     private var infoBox: some View {
         formatted(block.content, base: base())
             .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(style.background(block.styles.backgroundColor), in: RoundedRectangle(cornerRadius: 8))
             .overlay { RoundedRectangle(cornerRadius: 8).stroke(style.theme.accent) }
             .padding(.vertical, 8)
     }
@@ -339,6 +346,16 @@ struct ReaderBlockView: View {
                 text
             }
             .padding(.vertical, 8)
+        }
+    }
+}
+
+private extension BlockType {
+    /// Text blocks paint the block's background edge to edge, like the web reader; info boxes fill their own box.
+    var takesBackground: Bool {
+        switch self {
+        case .header, .paragraph, .quote, .sceneHeading, .dialogue, .poem, .list, .mediaText: true
+        default: false
         }
     }
 }

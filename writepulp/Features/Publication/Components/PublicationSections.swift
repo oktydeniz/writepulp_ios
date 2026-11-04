@@ -93,10 +93,44 @@ struct PublicationOverview: View {
             if publication.hasCommunity, let community = publication.community {
                 communityCard(community)
             }
+            if let translations = publication.translations, !translations.isEmpty {
+                section("content_detail_other_languages") {
+                    VStack(spacing: 8) {
+                        ForEach(translations) { translationRow($0) }
+                    }
+                }
+            }
             if !publication.similarPublications.isEmpty {
                 similar
             }
         }
+    }
+
+    /// Only the owner gets unpublished ones, and those open in the manager.
+    private func translationRow(_ translation: WorkTranslation) -> some View {
+        Button {
+            onOpen(translation.status == .published ? .publication(id: translation.uuid) : .editor(.work(id: translation.uuid)))
+        } label: {
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(ContentLanguage.displayName(for: translation.language))
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(AppColors.primary)
+                    Text(translation.title)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(AppColors.onSurface)
+                        .lineLimit(1)
+                }
+                Spacer(minLength: 4)
+                if translation.status != .published { StatusPill(status: translation.status) }
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(AppColors.onSurfaceVariant)
+            }
+            .padding(12)
+            .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 12))
+        }
+        .buttonStyle(PressableButtonStyle())
     }
 
     private var summary: some View {

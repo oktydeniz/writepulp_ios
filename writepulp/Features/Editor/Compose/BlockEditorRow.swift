@@ -16,9 +16,13 @@ struct BlockEditorRow: View {
     let onSettings: () -> Void
     let onPickImage: (UIImage) -> Void
 
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         content
+            .padding(ownBackground == nil ? 0 : 10)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .background(ownBackground ?? .clear, in: RoundedRectangle(cornerRadius: 8))
             .padding(.vertical, 8)
             .padding(.horizontal, 10)
             .background {
@@ -82,6 +86,36 @@ struct BlockEditorRow: View {
         }
     }
 
+    /// The block's own background, for the text blocks that don't draw a box of their own.
+    /// Quotes and info boxes paint theirs; "theme:" means none.
+    private var ownBackground: Color? {
+        switch block.kind {
+        case .header, .paragraph, .poem, .list, .sceneHeading, .dialogue, .mediaText: customBackground
+        default: nil
+        }
+    }
+
+    private var customBackground: Color? {
+        guard let css = block.styleText("backgroundColor"), !css.hasPrefix("theme:") else { return nil }
+        return Color(css: css)
+    }
+
+    /// The block's color; without one, text that reads on the block's own background.
+    private var textColor: Color? {
+        if let color = Color(css: block.styleText("color")) { return color }
+        guard customBackground != nil, let rgb = CSSColor.rgba(block.styleText("backgroundColor")) else { return nil }
+        return CSSColor.isLight(rgb) ? Color(hex: 0x1C1C1C) : Color(hex: 0xF0F0F0)
+    }
+
+    private var textUIColor: UIColor {
+        guard let textColor else { return .label }
+        let color = UIColor(textColor)
+        var white: CGFloat = 0
+        // Near-black on the dark app surface can't be seen, unless the block has its own background.
+        if colorScheme == .dark, customBackground == nil, color.getWhite(&white, alpha: nil), white < 0.3 { return .label }
+        return color
+    }
+
     private func uiFont(size: CGFloat, weight: UIFont.Weight, serif: Bool = false, italic: Bool = false, mono: Bool = false) -> UIFont {
         var font = mono ? UIFont.monospacedSystemFont(ofSize: size, weight: weight) : UIFont.systemFont(ofSize: size, weight: weight)
         var descriptor = font.fontDescriptor
@@ -103,6 +137,7 @@ struct BlockEditorRow: View {
             placeholder: String(localized: isPoem ? "editor_hint_poem" : placeholder),
             font: font ?? uiFont(size: fontSize(fallback: 16), weight: weight, serif: isPoem, italic: isPoem),
             alignment: alignment,
+            textColor: textUIColor,
             allowsFormatting: block.kind?.allowsFormatting ?? true,
             onFocus: onSelect,
             onSettings: onSettings
@@ -157,7 +192,7 @@ struct BlockEditorRow: View {
         guard let css = block.styleText("backgroundColor"), !css.hasPrefix("theme:"), css.uppercased() != "#FFFFFF" else {
             return AppColors.background
         }
-        return (Color(css: css) ?? AppColors.background).opacity(0.5)
+        return Color(css: css) ?? AppColors.background
     }
 
     private var infoBox: some View {
@@ -169,7 +204,7 @@ struct BlockEditorRow: View {
         }
         .padding(12)
         .background(
-            (Color(css: block.styleText("backgroundColor")) ?? AppColors.primary).opacity(0.12),
+            customBackground ?? AppColors.primary.opacity(0.12),
             in: RoundedRectangle(cornerRadius: 10)
         )
     }
@@ -207,10 +242,17 @@ struct BlockEditorRow: View {
     }
 
     private var sceneHeading: some View {
-        TextField("editor_hint_scene", text: contentBinding, axis: .vertical)
-            .font(.system(size: 15, weight: .bold, design: .monospaced))
-            .textInputAutocapitalization(.characters)
-            .onTapGesture(perform: onSelect)
+        MarkupTextView(
+            text: contentBinding,
+            placeholder: String(localized: "editor_hint_scene"),
+            font: .monospacedSystemFont(ofSize: 15, weight: .bold),
+            alignment: alignment,
+            textColor: textUIColor,
+            allowsFormatting: block.kind?.allowsFormatting ?? true,
+            autocapitalization: .allCharacters,
+            onFocus: onSelect,
+            onSettings: onSettings
+        )
     }
 
     private var dialogue: some View {

@@ -3,6 +3,7 @@
 //  writepulp
 //
 
+import PhotosUI
 import SwiftUI
 
 /// Writes one section: title, blocks edited in place, block / section settings and a reader preview.
@@ -18,6 +19,7 @@ struct SectionComposerView: View {
     @State private var isShowingPreview = false
     @State private var isConfirmingLeave = false
     @State private var pendingDeleteId: String?
+    @State private var coverItem: PhotosPickerItem?
     @FocusState private var isTitleFocused: Bool
 
     init(workId: String, sectionId: String?, service: EditorService, onClose: @escaping () -> Void) {
@@ -58,6 +60,8 @@ struct SectionComposerView: View {
         .sheet(isPresented: $isShowingPreview) {
             ComposerPreviewSheet(
                 title: model.title,
+                hero: model.isMagazine ? model.draft : nil,
+                localCover: model.localCover,
                 document: model.documentForSave(),
                 themeId: model.themeId,
                 fontId: model.fontId,
@@ -153,6 +157,11 @@ struct SectionComposerView: View {
                     titleField
                         .padding(.bottom, 8)
 
+                    if model.isMagazine {
+                        magazineHero
+                            .padding(.bottom, 8)
+                    }
+
                     if model.document.blocks.isEmpty {
                         Text("editor_empty_doc")
                             .font(.system(size: 14))
@@ -197,6 +206,40 @@ struct SectionComposerView: View {
                 withAnimation { proxy.scrollTo(id, anchor: .center) }
             }
         }
+    }
+
+    /// The magazine page's hero on the canvas: tap for its settings, or change the cover from here.
+    private var magazineHero: some View {
+        // The picker's label closure is not main-actor isolated.
+        let hasCover = model.draft.coverImg != nil
+        return MagazineHeroCard(title: model.title, draft: model.draft, localCover: model.localCover)
+            .overlay {
+                if model.uploadingIds.contains("cover") {
+                    RoundedRectangle(cornerRadius: 12).fill(.black.opacity(0.35))
+                    ProgressView().tint(.white)
+                }
+            }
+            .contentShape(Rectangle())
+            .onTapGesture { isShowingSettings = true }
+            .overlay(alignment: .topTrailing) {
+                PhotosPicker(selection: $coverItem, matching: .images) {
+                    Label(hasCover ? "editor_replace_image" : "editor_pick_image", systemImage: "photo")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 7)
+                        .background(.black.opacity(0.45), in: Capsule())
+                }
+                .disabled(model.uploadingIds.contains("cover"))
+                .padding(10)
+            }
+            .onChange(of: coverItem) { _, item in
+                guard let item else { return }
+                Task {
+                    await model.uploadCover(from: item)
+                    coverItem = nil
+                }
+            }
     }
 
     private var titleField: some View {

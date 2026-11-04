@@ -80,14 +80,13 @@ struct SectionSettingsSheet: View {
             .onChange(of: coverItem) { _, item in
                 guard let item else { return }
                 Task {
-                    if let data = try? await item.loadTransferable(type: Data.self), let image = UIImage(data: data) {
-                        await model.uploadCover(image)
-                    }
+                    await model.uploadCover(from: item)
                     coverItem = nil
                 }
             }
         }
         .presentationDetents([.medium, .large])
+        .toast($model.toastMessage)
     }
 
     private var hero: some View {
@@ -110,9 +109,8 @@ struct SectionSettingsSheet: View {
             }
             HStack(spacing: 12) {
                 ZStack {
-                    if let url = AppEnvironment.imageURL(model.draft.coverImg) {
-                        AsyncImage(url: url) { $0.resizable().scaledToFill() } placeholder: { ProgressView() }
-                    } else {
+                    ComposerCoverImage(local: model.localCover, path: model.draft.coverImg)
+                    if model.draft.coverImg == nil, model.localCover == nil {
                         Image(systemName: "photo").foregroundStyle(AppColors.primary)
                     }
                     if model.uploadingIds.contains("cover") {
@@ -126,6 +124,8 @@ struct SectionSettingsSheet: View {
                 PhotosPicker(selection: $coverItem, matching: .images) {
                     Text(hasCover ? "editor_replace_image" : "editor_pick_image")
                 }
+                .buttonStyle(.borderless)
+                .disabled(model.uploadingIds.contains("cover"))
                 Spacer()
                 if model.draft.coverImg != nil {
                     Button("editor_remove", role: .destructive) { model.removeCover() }
@@ -143,9 +143,77 @@ struct SectionSettingsSheet: View {
     }
 }
 
+/// The cover just picked, or the saved one. Failing to load shows an icon instead of spinning forever.
+struct ComposerCoverImage: View {
+    let local: UIImage?
+    let path: String?
+
+    var body: some View {
+        if let local {
+            Image(uiImage: local).resizable().scaledToFill()
+        } else if let url = AppEnvironment.imageURL(path) {
+            AsyncImage(url: url) { phase in
+                if let image = phase.image {
+                    image.resizable().scaledToFill()
+                } else if phase.error != nil {
+                    Image(systemName: "photo.badge.exclamationmark").foregroundStyle(.white.opacity(0.8))
+                } else {
+                    ProgressView()
+                }
+            }
+        }
+    }
+}
+
+/// A magazine page's hero: cover or color, page type, title and subtitle, as the reader opens it.
+struct MagazineHeroCard: View {
+    let title: String
+    let draft: SectionDraft
+    let localCover: UIImage?
+
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            // As an overlay, a filling image can't grow the card past its frame.
+            (Color(css: draft.heroColor) ?? PlaceholderColor.color(for: title))
+                .overlay { ComposerCoverImage(local: localCover, path: draft.coverImg) }
+                .clipped()
+            LinearGradient(colors: [.clear, .black.opacity(0.55)], startPoint: .center, endPoint: .bottom)
+            VStack(alignment: .leading, spacing: 6) {
+                let key = "editor_page_type_" + (draft.pageType ?? "GENERAL").lowercased()
+                Text(LocalizedStringKey(key))
+                    .font(.system(size: 11, weight: .semibold))
+                    .textCase(.uppercase)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 3)
+                    .background(.white.opacity(0.18), in: Capsule())
+                if !title.isEmpty {
+                    Text(title)
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(.white)
+                        .lineLimit(2)
+                }
+                if let subtitle = draft.subtitle, !subtitle.isEmpty {
+                    Text(subtitle)
+                        .font(.system(size: 14))
+                        .foregroundStyle(.white.opacity(0.85))
+                        .lineLimit(2)
+                }
+            }
+            .padding(14)
+        }
+        .frame(height: 180)
+        .frame(maxWidth: .infinity)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+}
+
 /// The section rendered by the reader, with the chosen reader defaults.
 struct ComposerPreviewSheet: View {
     let title: String
+    /// Set for magazine pages; they open with their hero instead of a plain title.
+    var hero: SectionDraft?
+    var localCover: UIImage?
     let document: EditableDocument
     let themeId: String
     let fontId: String
@@ -160,9 +228,13 @@ struct ComposerPreviewSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text(title)
-                        .font(.system(size: 28, weight: .bold, design: .serif))
-                        .foregroundStyle(theme.text)
+                    if let hero {
+                        MagazineHeroCard(title: title, draft: hero, localCover: localCover)
+                    } else {
+                        Text(title)
+                            .font(.system(size: 28, weight: .bold, design: .serif))
+                            .foregroundStyle(theme.text)
+                    }
                     ReaderBlocks(blocks: blocks, style: style)
                 }
                 .padding(20)

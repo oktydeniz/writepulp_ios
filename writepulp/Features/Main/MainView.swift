@@ -199,11 +199,12 @@ struct MainView: View {
                 onOpen: { open($0) },
                 onSignIn: { dependencies.authService.exitGuestMode() }
             )
-        case .reader(let publicationId, let type, let chapterId):
+        case .reader(let publicationId, let type, let chapterId, let asEditor):
             ReaderScreen(
                 publicationId: publicationId,
                 type: type,
                 chapterId: chapterId,
+                asEditor: asEditor,
                 service: dependencies.readerService,
                 onOpen: { open($0) },
                 onSignIn: { dependencies.authService.exitGuestMode() }
@@ -257,6 +258,7 @@ struct MainView: View {
                     open: { open(.editor($0)) },
                     replaceTop: { replaceTop(with: .editor($0)) },
                     pop: { pop() },
+                    openPublication: { open(.publication(id: $0)) },
                     openSettings: { open(.settings) }
                 )
             )

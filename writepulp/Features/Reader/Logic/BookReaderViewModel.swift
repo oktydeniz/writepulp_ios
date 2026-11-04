@@ -20,11 +20,13 @@ final class BookReaderViewModel {
     private let service: ReaderService
     private let session: ReadingSessionTracker
     private let initialChapterId: String?
+    private let asEditor: Bool
     @ObservationIgnored private var throttle = ProgressThrottle()
     private var loadTask: Task<Void, Never>?
 
-    init(publicationId: String, chapterId: String?, service: ReaderService) {
+    init(publicationId: String, chapterId: String?, asEditor: Bool = false, service: ReaderService) {
         self.publicationId = publicationId
+        self.asEditor = asEditor
         self.initialChapterId = chapterId
         self.service = service
         session = ReadingSessionTracker(service: service)
@@ -73,7 +75,7 @@ final class BookReaderViewModel {
     }
 
     func recordProgress(_ percent: Double) {
-        guard let chapter, !chapter.isOwner, chapter.isAccessible, throttle.shouldSend(percent) else { return }
+        guard let chapter, !chapter.isOwner, !asEditor, chapter.isAccessible, throttle.shouldSend(percent) else { return }
         let service = service
         Task { await service.recordProgress(publicationId: publicationId, sectionId: chapter.id, percent: percent) }
     }
@@ -115,8 +117,8 @@ final class BookReaderViewModel {
         chapter = loaded
         document = EditorDocument.parse(loaded.body)
         errorMessage = nil
-        session.update(publicationId: publicationId, sectionId: loaded.id, enabled: loaded.earnsCoins && loaded.isAccessible)
-        if !loaded.isOwner {
+        session.update(publicationId: publicationId, sectionId: loaded.id, enabled: loaded.earnsCoins && loaded.isAccessible && !asEditor)
+        if !loaded.isOwner, !asEditor {
             let service = service
             Task { await service.incrementView(sectionId: loaded.id) }
         }

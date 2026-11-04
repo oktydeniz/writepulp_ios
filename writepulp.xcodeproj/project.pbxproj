@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2141293DC3EB17FDA33251FF /* WorkSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFBAF796B9BC049E0CC9C67D /* WorkSettingsViewModel.swift */; };
+		724AD8CC3AFD25BB94DC14F1 /* WorkSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5AA0A3E5F62C9B5CC3A699 /* WorkSettingsView.swift */; };
+		87B92FC8FACCDD87F6ED502A /* WorkTeamViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1CFD44CC7D608108C91CFB /* WorkTeamViewModel.swift */; };
+		88055054637F1CD861E46590 /* WorkTeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96BC260A075B5255E3A06A6 /* WorkTeamView.swift */; };
+		37F24F36FD5C1BC8FB51DCF0 /* CreateTranslationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D7C47941EE8EF4C7C06C1B /* CreateTranslationSheet.swift */; };
 		A30215A41A3D99FBA2EF277A /* EditorModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B28C0698982B5772CBE601 /* EditorModels.swift */; };
 		73B29BA5AD5A7F53A849BEBC /* EditorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D731B716C33F27DE4197BC /* EditorService.swift */; };
 		9A5F69683E15CAB2B344ACBF /* WriterDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A7F7FE90E33C4732DF0FE /* WriterDashboardView.swift */; };
@@ -246,6 +251,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DFBAF796B9BC049E0CC9C67D /* WorkSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSettingsViewModel.swift; sourceTree = "<group>"; };
+		3D5AA0A3E5F62C9B5CC3A699 /* WorkSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSettingsView.swift; sourceTree = "<group>"; };
+		1B1CFD44CC7D608108C91CFB /* WorkTeamViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkTeamViewModel.swift; sourceTree = "<group>"; };
+		A96BC260A075B5255E3A06A6 /* WorkTeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkTeamView.swift; sourceTree = "<group>"; };
+		15D7C47941EE8EF4C7C06C1B /* CreateTranslationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTranslationSheet.swift; sourceTree = "<group>"; };
 		C1B28C0698982B5772CBE601 /* EditorModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorModels.swift; sourceTree = "<group>"; };
 		22D731B716C33F27DE4197BC /* EditorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorService.swift; sourceTree = "<group>"; };
 		C29A7F7FE90E33C4732DF0FE /* WriterDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriterDashboardView.swift; sourceTree = "<group>"; };
@@ -719,6 +729,11 @@
 			children = (
 				EDEAC369478785AB58FDEC10 /* WorkManagerView.swift */,
 				866C2647CBD015C9EA6A09B8 /* WorkManagerViewModel.swift */,
+				DFBAF796B9BC049E0CC9C67D /* WorkSettingsViewModel.swift */,
+				3D5AA0A3E5F62C9B5CC3A699 /* WorkSettingsView.swift */,
+				1B1CFD44CC7D608108C91CFB /* WorkTeamViewModel.swift */,
+				A96BC260A075B5255E3A06A6 /* WorkTeamView.swift */,
+				15D7C47941EE8EF4C7C06C1B /* CreateTranslationSheet.swift */,
 			);
 			path = Manage;
 			sourceTree = "<group>";
@@ -1563,6 +1578,11 @@
 				C3BFA9AFCBEF9FA2B6E76EAD /* CreateWorkViewModel.swift in Sources */,
 				7B75C73A23FEAE1B0537206C /* WorkManagerView.swift in Sources */,
 				66002F525E0C669906D89F95 /* WorkManagerViewModel.swift in Sources */,
+				2141293DC3EB17FDA33251FF /* WorkSettingsViewModel.swift in Sources */,
+				724AD8CC3AFD25BB94DC14F1 /* WorkSettingsView.swift in Sources */,
+				87B92FC8FACCDD87F6ED502A /* WorkTeamViewModel.swift in Sources */,
+				88055054637F1CD861E46590 /* WorkTeamView.swift in Sources */,
+				37F24F36FD5C1BC8FB51DCF0 /* CreateTranslationSheet.swift in Sources */,
 				F96B1BE47F856DA1115260D1 /* SectionComposerView.swift in Sources */,
 				04D29D37AE8556D444072D75 /* SectionComposerViewModel.swift in Sources */,
 				101808A00E902E7196ECF13D /* BlockKind.swift in Sources */,

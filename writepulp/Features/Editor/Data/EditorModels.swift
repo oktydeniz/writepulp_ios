@@ -119,18 +119,36 @@ struct WorkDetails: Decodable {
         let type: PublicationType
         let status: WorkStatus
         let isFree: Bool
+        /// Lowercase code, e.g. "tr".
+        let language: String
+        /// Set on a translation.
+        let originalPublicationId: String?
+        /// The rest of its language family, whatever their status.
+        let translations: [WorkTranslation]
+        let categories: [CategoryGroup.Category]
+        let tags: [String]
+        let ageCategory: AgeCategory
+        let copyright: WorkCopyright
+        let isCompleted: Bool
+        let isSupportedWithAI: Bool
+        let hasCommunity: Bool
     }
 
     let publication: Publication
+    let collaborators: [WorkCollaborator]
     let sections: Page<WorkSection>
     let isOwner: Bool
     let permissions: Set<WorkPermission>
 
-    enum CodingKeys: String, CodingKey { case publication, sections, isOwner, permissions }
+    enum CodingKeys: String, CodingKey {
+        case publication, sections, isOwner, permissions
+        case collaborators = "collaborations"
+    }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         publication = try c.decode(Publication.self, forKey: .publication)
+        collaborators = try c.decodeIfPresent([WorkCollaborator].self, forKey: .collaborators) ?? []
         sections = try c.decode(Page<WorkSection>.self, forKey: .sections)
         isOwner = try c.decodeIfPresent(Bool.self, forKey: .isOwner) ?? false
         permissions = c.permissions(.permissions)
@@ -140,7 +158,11 @@ struct WorkDetails: Decodable {
 }
 
 extension WorkDetails.Publication {
-    enum CodingKeys: String, CodingKey { case uuid, title, summary, coverImg, type, status, isFree }
+    enum CodingKeys: String, CodingKey {
+        case uuid, title, summary, coverImg, type, status, isFree, originalPublicationId, translations, categories,
+             tags, ageCategory, copyright, isCompleted, isSupportedWithAI, hasCommunity
+        case language = "lng"
+    }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -151,13 +173,94 @@ extension WorkDetails.Publication {
         type = try c.decodeIfPresent(PublicationType.self, forKey: .type) ?? .book
         status = try c.decodeIfPresent(WorkStatus.self, forKey: .status) ?? .draft
         isFree = try c.decodeIfPresent(Bool.self, forKey: .isFree) ?? false
+        language = try c.decodeIfPresent(String.self, forKey: .language) ?? "en"
+        originalPublicationId = try c.decodeIfPresent(String.self, forKey: .originalPublicationId)
+        translations = try c.decodeIfPresent([WorkTranslation].self, forKey: .translations) ?? []
+        categories = try c.decodeIfPresent([CategoryGroup.Category].self, forKey: .categories) ?? []
+        tags = try c.decodeIfPresent([String].self, forKey: .tags) ?? []
+        ageCategory = (try? c.decodeIfPresent(AgeCategory.self, forKey: .ageCategory)) ?? .allAges
+        copyright = (try? c.decodeIfPresent(WorkCopyright.self, forKey: .copyright)) ?? .allRightsReserved
+        isCompleted = try c.decodeIfPresent(Bool.self, forKey: .isCompleted) ?? false
+        isSupportedWithAI = try c.decodeIfPresent(Bool.self, forKey: .isSupportedWithAI) ?? false
+        hasCommunity = try c.decodeIfPresent(Bool.self, forKey: .hasCommunity) ?? false
     }
+}
+
+/// Another language's edition of a work. Readers only get published ones; the owner gets them all.
+struct WorkTranslation: Decodable, Identifiable, Hashable {
+    let uuid: String
+    /// Lowercase code, e.g. "tr".
+    let language: String
+    let title: String
+    let coverImg: String?
+    let status: WorkStatus
+
+    var id: String { uuid }
+}
+
+/// Backend `CollaboratorRole`.
+enum CollaboratorRole: String, Codable, Hashable {
+    case coAuthor = "CO_AUTHOR"
+    case editor = "EDITOR"
+    case translator = "TRANSLATOR"
+    case contributor = "CONTRIBUTOR"
+    case viewerAuthor = "VIEWER_AUTHOR"
+
+    /// The roles an owner can give, as on the web.
+    static let assignable: [CollaboratorRole] = [.coAuthor, .editor, .translator, .viewerAuthor]
+}
+
+/// A team member; `uuid` is the user's id.
+struct WorkCollaborator: Decodable, Identifiable, Hashable {
+    let uuid: String
+    let role: CollaboratorRole
+    let avatarImg: String?
+    let handle: String
+    let fullName: String
+
+    var id: String { uuid }
+}
+
+/// `POST publications/{id}/collaborators/invite`.
+struct CollaboratorInviteRequest: Encodable {
+    let targetUserHandle: String
+    let role: CollaboratorRole
+}
+
+/// `POST publications/{id}/translations`.
+struct TranslationCreateRequest: Encodable {
+    let title: String
+    /// Lowercase code, e.g. "tr".
+    let language: String
+}
+
+/// `PUT publications/{id}`. Price and status are left out, so the backend keeps them.
+struct WorkUpdateRequest: Encodable {
+    let title: String
+    let summary: String
+    let language: String
+    let categoryIds: [String]
+    let tags: [String]
+    let ageCategory: AgeCategory
+    let copyright: WorkCopyright
+    let coverImg: String?
+    let coverRemoved: Bool
+    let isCompleted: Bool
+    let isSupportedWithAI: Bool
+    let isFree: Bool
+    let createCommunity: Bool
+    let requireApproval: Bool
+}
+
+struct SectionOrderRequest: Encodable {
+    let sectionId: String
+    let newOrder: Int
 }
 
 struct WorkSection: Decodable, Identifiable, Hashable {
     let uuid: String
     let title: String
-    let order: Int
+    var order: Int
     let wordCount: Int
     let readingTime: Int
     var status: WorkStatus
@@ -257,7 +360,7 @@ struct SavedContent: Decodable {
 
 // MARK: - New work
 
-enum AgeCategory: String, Encodable, CaseIterable, Hashable {
+enum AgeCategory: String, Codable, CaseIterable, Hashable {
     case allAges = "ALL_AGES"
     case child = "CHILD"
     case teenager = "TEENAGER"
@@ -265,7 +368,7 @@ enum AgeCategory: String, Encodable, CaseIterable, Hashable {
 }
 
 /// Backend `Copyright`; the reader side has its own decode-only `Copyright`.
-enum WorkCopyright: String, Encodable, CaseIterable, Hashable {
+enum WorkCopyright: String, Codable, CaseIterable, Hashable {
     case allRightsReserved = "ALL_RIGHTS_RESERVED"
     case publicDomain = "PUBLIC_DOMAIN"
     case ccBy = "CC_BY"

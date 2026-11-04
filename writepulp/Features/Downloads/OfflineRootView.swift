@@ -25,7 +25,7 @@ struct OfflineRootView: View {
                 onReconnect: onReconnect
             )
             .navigationDestination(for: MainRoute.self) { route in
-                if case .reader(let publicationId, let type, let chapterId) = route {
+                if case .reader(let publicationId, let type, let chapterId, _) = route {
                     ReaderScreen(
                         publicationId: publicationId,
                         type: type,

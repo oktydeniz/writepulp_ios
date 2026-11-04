@@ -139,10 +139,14 @@ struct ReaderStyle {
 }
 
 extension ReaderPreferences {
-    /// Dark app appearance always reads in Night Blue.
+    /// The theme the reader picked; before any pick, dark app appearance reads in Night Blue.
+    func activeTheme(colorScheme: ColorScheme) -> ReaderTheme {
+        colorScheme == .dark && !hasChosenTheme ? .nightBlue : .byId(theme)
+    }
+
     func style(colorScheme: ColorScheme) -> ReaderStyle {
         ReaderStyle(
-            theme: colorScheme == .dark ? .nightBlue : .byId(theme),
+            theme: activeTheme(colorScheme: colorScheme),
             font: .byId(font),
             fontSize: CGFloat(fontSize),
             lineHeight: CGFloat(lineHeight)
