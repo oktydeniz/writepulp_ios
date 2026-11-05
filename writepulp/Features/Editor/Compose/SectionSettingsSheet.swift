@@ -16,10 +16,12 @@ struct SectionSettingsSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
-                    Toggle("editor_section_free", isOn: $model.draft.isFree)
-                } footer: {
-                    Text("editor_section_free_footer")
+                if model.canSetAccess {
+                    Section {
+                        Toggle("editor_section_free", isOn: $model.draft.isFree)
+                    } footer: {
+                        Text("editor_section_free_footer")
+                    }
                 }
 
                 if model.isMagazine { hero }

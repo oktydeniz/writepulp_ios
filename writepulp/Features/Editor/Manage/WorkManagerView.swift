@@ -246,7 +246,7 @@ struct WorkManagerView: View {
         if isReordering {
             // It would sit over the drag handles.
         } else if isSingle(details), let content = model.sections.first {
-            if details.can(.editSection) {
+            if canOpen(content, details: details) {
                 FloatingCreateButton(title: "editor_edit_content", systemImage: "pencil", action: {
                     navigator.open(.section(workId: model.workId, sectionId: content.id))
                 })
@@ -325,9 +325,14 @@ struct WorkManagerView: View {
         .buttonStyle(PressableButtonStyle())
     }
 
+    /// A locked section is for the owner and co-authors, the only roles holding `editBookInfo`.
+    private func canOpen(_ section: WorkSection, details: WorkDetails) -> Bool {
+        details.can(.editSection) && (!section.isLocked || details.can(.editBookInfo))
+    }
+
     private func sectionRow(_ section: WorkSection, number: Int, details: WorkDetails) -> some View {
         Button {
-            guard !isReordering else { return }
+            guard !isReordering, canOpen(section, details: details) else { return }
             navigator.open(.section(workId: model.workId, sectionId: section.id))
         } label: {
             HStack(spacing: 12) {
@@ -358,7 +363,8 @@ struct WorkManagerView: View {
                     .foregroundStyle(AppColors.onSurfaceVariant)
                 }
                 Spacer(minLength: 4)
-                if !isReordering {
+                if !isReordering, canOpen(section, details: details) || details.can(.publishSection)
+                    || details.can(.editBookInfo) || details.can(.deleteSection) {
                     sectionMenu(section, details: details)
                 }
             }
@@ -374,7 +380,7 @@ struct WorkManagerView: View {
 
     private func sectionMenu(_ section: WorkSection, details: WorkDetails) -> some View {
         Menu {
-            if details.can(.editSection) {
+            if canOpen(section, details: details) {
                 Button { navigator.open(.section(workId: model.workId, sectionId: section.id)) } label: {
                     Label("editor_edit", systemImage: "pencil")
                 }

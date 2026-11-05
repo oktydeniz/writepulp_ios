@@ -5,6 +5,14 @@
 
 import SwiftUI
 
+/// `data` of GET profile/delete-preview: what deleting the account will affect.
+struct AccountDeletionPreview: Decodable, Equatable {
+    let coinBalance: Int
+    let retainedPublicationCount: Int
+    let readerCount: Int
+    let appleLinked: Bool
+}
+
 /// `data` of GET settings. Languages stay as backend codes ("en", "tr") and are sent back unchanged.
 struct UserSettings: Codable, Equatable {
     var showAgeRestricted: Bool

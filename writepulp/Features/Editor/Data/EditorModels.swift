@@ -247,7 +247,8 @@ struct WorkUpdateRequest: Encodable {
     let coverRemoved: Bool
     let isCompleted: Bool
     let isSupportedWithAI: Bool
-    let isFree: Bool
+    /// Left out for co-authors, so the backend keeps it.
+    let isFree: Bool?
     let createCommunity: Bool
     let requireApproval: Bool
 }

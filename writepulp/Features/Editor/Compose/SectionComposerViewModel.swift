@@ -31,6 +31,8 @@ final class SectionComposerViewModel {
 
     private(set) var workType: PublicationType?
     private(set) var workTitle: String?
+    /// Whether a chapter is free goes with publishing, not editing.
+    private(set) var canSetAccess = false
     /// true until the first load finishes, so the canvas never shows an empty document first.
     private(set) var isLoading = true
     private(set) var isSaving = false
@@ -102,9 +104,10 @@ final class SectionComposerViewModel {
             } else {
                 document = EditableDocument(blocks: [BlockKind.paragraph.makeBlock()])
             }
-            if let publication = await details?.publication {
-                workType = publication.type
-                workTitle = publication.title
+            if let details = await details {
+                workType = details.publication.type
+                workTitle = details.publication.title
+                canSetAccess = details.can(.publishSection)
             }
             loadError = nil
             saved = snapshot

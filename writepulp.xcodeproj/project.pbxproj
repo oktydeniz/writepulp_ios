@@ -92,6 +92,7 @@
 		4E99DC95EEF0441FAE7317F7 /* GroupsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167B77162BE4A7AB718FDA8 /* GroupsService.swift */; };
 		4F98B662834551927163443E /* WalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A8894B44209A7D040B995A /* WalletViewModel.swift */; };
 		512676B166D93B7F75C6C080 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79823C406EB2125F36AB691 /* SettingsView.swift */; };
+		5625A325A619449FA021C7A1 /* DeleteAccountSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43190EE2D4B64D829ADB5827 /* DeleteAccountSheet.swift */; };
 		52592E76959440D1A0911852 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F5A1AE75D74E4BB6325374 /* ProfileHeaderView.swift */; };
 		58EDF55C5AED492B9F701E38 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486C477134D4B36BFEEC6F2 /* SearchView.swift */; };
 		5AB4F8BAB72C42A2B339B19C /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6C3EC69D8942F898311BF0 /* EditProfileView.swift */; };
@@ -126,6 +127,7 @@
 		7C17482D35974A4A9CA5EF4C /* ReadingSessionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8AD54086314E078F10F307 /* ReadingSessionTracker.swift */; };
 		7E80F6A258E24FFFB1450071 /* GroupModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96764352EB6D4995BFF621ED /* GroupModels.swift */; };
 		8089567594480AEB22BFF328 /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D40DEEDF08D322A138850E9 /* SettingsService.swift */; };
+		17B1448EBF5D40C1B9266C8A /* AppleReauthorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07425D5F7AC459DBA9884FB /* AppleReauthorizer.swift */; };
 		8268B1333069637A000A34A3 /* writepulpApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8268B1323069637A000A34A3 /* writepulpApp.swift */; };
 		8268B1373069637D000A34A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8268B1363069637D000A34A3 /* Assets.xcassets */; };
 		8268B13A3069637D000A34A3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8268B1393069637D000A34A3 /* Preview Assets.xcassets */; };
@@ -400,6 +402,7 @@
 		8C94E77064DC4FB88A4DCD22 /* ProfileAboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAboutView.swift; sourceTree = "<group>"; };
 		8D18366D8E7F31756BBB565E /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
 		8D40DEEDF08D322A138850E9 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
+		A07425D5F7AC459DBA9884FB /* AppleReauthorizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleReauthorizer.swift; sourceTree = "<group>"; };
 		8D7512136FFB44619E500EBF /* GroupsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsViewModel.swift; sourceTree = "<group>"; };
 		8E3899CAD8FC685DB1A20547 /* ReportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSheet.swift; sourceTree = "<group>"; };
 		9086D8525A554DEEA492E821 /* Skeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Skeleton.swift; sourceTree = "<group>"; };
@@ -475,6 +478,7 @@
 		E60AE0026DD841FA81773B06 /* DownloadRefreshTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadRefreshTask.swift; sourceTree = "<group>"; };
 		E76341C33C1C4689BBA517D4 /* CollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsView.swift; sourceTree = "<group>"; };
 		E79823C406EB2125F36AB691 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		43190EE2D4B64D829ADB5827 /* DeleteAccountSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountSheet.swift; sourceTree = "<group>"; };
 		ECF4A913D28B6D18F0E94C03 /* AppLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLinks.swift; sourceTree = "<group>"; };
 		EE092E8B736DCA6B93F9EE63 /* HomeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeService.swift; sourceTree = "<group>"; };
 		F24EE789A9134303A54D72FD /* OfflineRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineRootView.swift; sourceTree = "<group>"; };
@@ -789,6 +793,7 @@
 				15ECBD763E4D7BB4BA47C07F /* SettingsModels.swift */,
 				0B805AC212E08B04FCDDBAB8 /* SettingsAPI.swift */,
 				8D40DEEDF08D322A138850E9 /* SettingsService.swift */,
+				A07425D5F7AC459DBA9884FB /* AppleReauthorizer.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -817,6 +822,7 @@
 			isa = PBXGroup;
 			children = (
 				E79823C406EB2125F36AB691 /* SettingsView.swift */,
+				43190EE2D4B64D829ADB5827 /* DeleteAccountSheet.swift */,
 				6E99C0964D854A6B5CA138E4 /* SettingsViewModel.swift */,
 				4911B245FC479DF1E727F251 /* Data */,
 			);
@@ -1690,10 +1696,12 @@
 				4F98B662834551927163443E /* WalletViewModel.swift in Sources */,
 				4C9BC10EC4BFF491AC7EBFEF /* WalletView.swift in Sources */,
 				8089567594480AEB22BFF328 /* SettingsService.swift in Sources */,
+				17B1448EBF5D40C1B9266C8A /* AppleReauthorizer.swift in Sources */,
 				6CF56487CDD3E33FEC1B48F7 /* SettingsAPI.swift in Sources */,
 				F017A4988474913D290A43E5 /* SettingsModels.swift in Sources */,
 				6863195F9BC4EF9EA1235736 /* SettingsViewModel.swift in Sources */,
 				512676B166D93B7F75C6C080 /* SettingsView.swift in Sources */,
+				5625A325A619449FA021C7A1 /* DeleteAccountSheet.swift in Sources */,
 				634C154003BE1FEECF1AAB17 /* FlowLayout.swift in Sources */,
 				5BDE72D6ED911186CD85C136 /* MainRoute.swift in Sources */,
 				8348A5B0BCF8CB6D979BB988 /* NotificationsService.swift in Sources */,

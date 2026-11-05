@@ -20,6 +20,8 @@ final class WorkSettingsViewModel {
     var isCompleted = false
     var isSupportedWithAI = false
     var isFree = true
+    /// Whether the work is free is the owner's call; co-authors manage the rest.
+    private(set) var isOwner = false
     var createCommunity = false
     var requireApproval = false
 
@@ -72,7 +74,9 @@ final class WorkSettingsViewModel {
     func load() async {
         guard publication == nil else { return }
         do {
-            let loaded = try await service.workDetails(id: workId).publication
+            let details = try await service.workDetails(id: workId)
+            let loaded = details.publication
+            isOwner = details.isOwner
             title = loaded.title
             summary = loaded.summary ?? ""
             language = loaded.language
@@ -136,7 +140,7 @@ final class WorkSettingsViewModel {
                 coverRemoved: coverRemoved,
                 isCompleted: isCompleted,
                 isSupportedWithAI: isSupportedWithAI,
-                isFree: isFree,
+                isFree: isOwner ? isFree : nil,
                 createCommunity: offersCommunity && createCommunity,
                 requireApproval: offersCommunity && createCommunity && requireApproval
             )

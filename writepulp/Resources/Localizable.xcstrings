@@ -14101,6 +14101,176 @@
         }
       }
     },
+    "settings_delete_acknowledge" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I have read and understood this, and I want my account deleted."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okudum, anladım ve hesabımın silinmesini istiyorum."
+          }
+        }
+      }
+    },
+    "settings_delete_info_apple" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple will ask you to confirm, then WritePulp's access to your Apple ID is removed."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple senden onay isteyecek, ardından WritePulp'ın Apple kimliğine erişimi kaldırılacak."
+          }
+        }
+      }
+    },
+    "settings_delete_info_balance" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your remaining Coin balance is not refunded and passes to WritePulp."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalan coin bakiyen iade edilmez ve WritePulp'a aktarılır."
+          }
+        }
+      }
+    },
+    "settings_delete_info_balance_amount %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your remaining balance of %lld Coins is not refunded and passes to WritePulp."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalan %lld coin bakiyen iade edilmez ve WritePulp'a aktarılır."
+          }
+        }
+      }
+    },
+    "settings_delete_info_content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your reviews and the messages you sent stay without your name. You are removed from teams and communities."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yorumların ve gönderdiğin mesajlar yazar adın olmadan kalır. Ekiplerden ve topluluklardan çıkarılırsın."
+          }
+        }
+      }
+    },
+    "settings_delete_info_personal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your name, email, profile details and profile photo are removed. Your account stays anonymous as a deleted user."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adın, e-postan, profil bilgilerin ve profil fotoğrafın kaldırılır. Hesabın \"Deleted User\" adıyla anonim kalır."
+          }
+        }
+      }
+    },
+    "settings_delete_info_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What happens when you delete your account?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hesabını silince neler olur?"
+          }
+        }
+      }
+    },
+    "settings_delete_info_works" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your works are unpublished and closed to new readers. Readers who already have them in their library can keep reading."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eserlerin yayından kalkar ve yeni okura kapanır. Daha önce kütüphanesine eklemiş okurlar okumaya devam eder."
+          }
+        }
+      }
+    },
+    "settings_delete_info_works_amount %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your works are unpublished and closed to new readers. Readers who already have them in their library can keep reading (works: %1$lld, readers: %2$lld)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eserlerin yayından kalkar ve yeni okura kapanır. %1$lld eserini kütüphanesine eklemiş %2$lld okur bu eserleri okumaya devam eder."
+          }
+        }
+      }
+    },
+    "settings_delete_policy_link" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See the Privacy Policy for details"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayrıntılar için Gizlilik Politikası"
+          }
+        }
+      }
+    },
     "settings_delete_modal_cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14192,13 +14362,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This will permanently delete your account and all of your data. This action cannot be undone."
+            "value" : "This action is permanent and cannot be undone."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu işlem hesabını ve tüm verilerini kalıcı olarak silecek. Bu işlem geri alınamaz."
+            "value" : "Bu işlem kalıcıdır ve geri alınamaz."
           }
         }
       }

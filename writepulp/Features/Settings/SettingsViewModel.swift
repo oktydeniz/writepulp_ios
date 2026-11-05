@@ -47,6 +47,8 @@ final class SettingsViewModel {
     // Account deletion
     var isConfirmingDelete = false
     var deletePassword = ""
+    var deleteAcknowledged = false
+    private(set) var deletionPreview: AccountDeletionPreview?
     var requiresDeletePassword: Bool { hasPassword }
     private(set) var isDeleting = false
 
@@ -237,12 +239,38 @@ final class SettingsViewModel {
 
     // MARK: - Delete account
 
+    var canConfirmDelete: Bool {
+        deleteAcknowledged && (!requiresDeletePassword || !deletePassword.isEmpty)
+    }
+
+    /// Without the numbers the screen still states the rules, so a failure here doesn't block deletion.
+    func loadDeletionPreview() async {
+        deletionPreview = try? await service.deletionPreview()
+    }
+
+    func resetDeleteConfirmation() {
+        deletePassword = ""
+        deleteAcknowledged = false
+        deletionPreview = nil
+    }
+
     func deleteAccount() async {
-        guard !requiresDeletePassword || !deletePassword.isEmpty else { return }
+        guard canConfirmDelete else { return }
         isDeleting = true
         defer { isDeleting = false }
+
+        var appleCode: String?
+        if deletionPreview?.appleLinked == true {
+            switch await AppleReauthorizer().authorize() {
+            case .code(let code): appleCode = code
+            case .cancelled: return
+            // Apple being unavailable must not stop someone deleting their account.
+            case .failed: break
+            }
+        }
+
         do {
-            try await service.deleteAccount(password: deletePassword)
+            try await service.deleteAccount(password: deletePassword, appleAuthorizationCode: appleCode)
             deletePassword = ""
         } catch {
             show(error)

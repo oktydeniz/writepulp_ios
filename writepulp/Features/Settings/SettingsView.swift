@@ -45,16 +45,8 @@ struct SettingsView: View {
                 onToggle: { model.toggleCategory($0) }
             )
         }
-        .alert("settings_delete_modal_title", isPresented: $model.isConfirmingDelete) {
-            if model.requiresDeletePassword {
-                SecureField("settings_delete_modal_password_placeholder", text: $model.deletePassword)
-            }
-            Button("settings_delete_modal_cancel", role: .cancel) { model.deletePassword = "" }
-            Button("settings_delete_modal_confirm", role: .destructive) {
-                Task { await model.deleteAccount() }
-            }
-        } message: {
-            Text("settings_delete_modal_warning")
+        .sheet(isPresented: $model.isConfirmingDelete, onDismiss: model.resetDeleteConfirmation) {
+            DeleteAccountSheet(model: model)
         }
         .loadingOverlay(model.isDeleting)
         .task { await model.load() }

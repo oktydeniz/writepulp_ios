@@ -137,7 +137,9 @@ struct WorkSettingsView: View {
                 Picker("editor_work_copyright", selection: $model.copyright) {
                     ForEach(WorkCopyright.allCases, id: \.self) { Text($0.label).tag($0) }
                 }
-                Toggle("editor_work_free", isOn: $model.isFree)
+                if model.isOwner {
+                    Toggle("editor_work_free", isOn: $model.isFree)
+                }
                 Toggle("editor_work_ai", isOn: $model.isSupportedWithAI)
                 Toggle("editor_work_completed", isOn: $model.isCompleted)
             }

@@ -23,7 +23,12 @@ struct WriterDashboardView: View {
 
     var body: some View {
         Group {
-            if !canWrite {
+            if model.isLoading || (session.isLoggedIn && model.dashboard == nil && model.errorMessage == nil) {
+                ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if let error = model.errorMessage {
+                ErrorStateView(message: error) { Task { await model.load() } }
+                    .frame(maxHeight: .infinity)
+            } else if !canWrite && model.works.isEmpty {
                 EmptyStateView(
                     systemImage: "pencil.and.outline",
                     title: "editor_become_author_title",
@@ -33,11 +38,6 @@ struct WriterDashboardView: View {
                     action: navigator.openSettings
                 )
                 .frame(maxHeight: .infinity)
-            } else if model.isLoading {
-                ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if let error = model.errorMessage {
-                ErrorStateView(message: error) { Task { await model.load() } }
-                    .frame(maxHeight: .infinity)
             } else {
                 content
             }
@@ -53,8 +53,9 @@ struct WriterDashboardView: View {
                 }
             }
         }
-        .task(id: canWrite) {
-            if canWrite { await model.load() }
+        // A reader can't start a work but can be on the team of someone else's.
+        .task(id: session.isLoggedIn) {
+            if session.isLoggedIn { await model.load() }
         }
         .refreshable { await model.load() }
         .confirmationDialog("editor_new_work", isPresented: $isPickingType, titleVisibility: .visible) {
@@ -72,7 +73,7 @@ struct WriterDashboardView: View {
                 if let dashboard = model.dashboard {
                     stats(dashboard)
                 }
-                newWorkButton
+                if canWrite { newWorkButton }
                 if model.works.isEmpty {
                     EmptyStateView(
                         systemImage: "book.closed",

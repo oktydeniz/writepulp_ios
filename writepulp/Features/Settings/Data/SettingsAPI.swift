@@ -36,7 +36,22 @@ enum SettingsAPI {
         Endpoint(path: "profile/role/author", method: .post)
     }
 
-    static func deleteAccount(password: String) -> Endpoint<EmptyResponse> {
-        Endpoint(path: "profile", method: .delete, body: SingleValue(value: password))
+    static func deletionPreview() -> Endpoint<AccountDeletionPreview> {
+        Endpoint(path: "profile/delete-preview")
+    }
+
+    struct DeleteAccountBody: Encodable {
+        let value: String
+        let appleAuthorizationCode: String?
+        let appleClientId: String?
+    }
+
+    static func deleteAccount(password: String, appleAuthorizationCode: String?) -> Endpoint<EmptyResponse> {
+        let body = DeleteAccountBody(
+            value: password,
+            appleAuthorizationCode: appleAuthorizationCode,
+            appleClientId: appleAuthorizationCode == nil ? nil : Bundle.main.bundleIdentifier
+        )
+        return Endpoint(path: "profile", method: .delete, body: body)
     }
 }

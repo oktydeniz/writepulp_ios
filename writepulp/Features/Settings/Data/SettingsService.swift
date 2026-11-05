@@ -55,9 +55,13 @@ final class SettingsService {
         session.updateUserRole("AUTHOR")
     }
 
+    func deletionPreview() async throws -> AccountDeletionPreview {
+        try await api.send(SettingsAPI.deletionPreview())
+    }
+
     /// Deleting signs the user out; the app then returns to login.
-    func deleteAccount(password: String) async throws {
-        _ = try await api.send(SettingsAPI.deleteAccount(password: password))
+    func deleteAccount(password: String, appleAuthorizationCode: String?) async throws {
+        _ = try await api.send(SettingsAPI.deleteAccount(password: password, appleAuthorizationCode: appleAuthorizationCode))
         session.logout()
     }
 
