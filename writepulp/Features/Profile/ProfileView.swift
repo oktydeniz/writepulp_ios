@@ -41,7 +41,10 @@ struct ProfileView: View {
 
     var body: some View {
         Group {
-            if let profile = model.profile {
+            if let profile = model.profile, !profile.isMe, isBlocked(profile) {
+                // Like Android: no header, stats or tabs for someone you blocked.
+                BlockedProfileView(name: profile.fullName) { Task { await setBlocked(false) } }
+            } else if let profile = model.profile {
                 content(profile)
             } else if let error = model.error, !model.isLoading {
                 errorState(error)
@@ -134,9 +137,7 @@ struct ProfileView: View {
                     .padding(.horizontal, 18)
                     .padding(.vertical, 12)
 
-                if isBlocked(profile) {
-                    BlockedProfilePlaceholder()
-                } else if profile.isContentVisible {
+                if profile.isContentVisible {
                     ProfileTabBar(selection: $model.tab)
                         .padding(.horizontal, 18)
                         .padding(.bottom, 12)

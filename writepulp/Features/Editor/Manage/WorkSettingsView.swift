@@ -134,9 +134,7 @@ struct WorkSettingsView: View {
                 Picker("editor_work_age", selection: $model.ageCategory) {
                     ForEach(AgeCategory.allCases, id: \.self) { Text($0.label).tag($0) }
                 }
-                Picker("editor_work_copyright", selection: $model.copyright) {
-                    ForEach(WorkCopyright.allCases, id: \.self) { Text($0.label).tag($0) }
-                }
+                CopyrightPicker(selection: $model.copyright)
                 if model.isOwner {
                     Toggle("editor_work_free", isOn: $model.isFree)
                 }

@@ -157,25 +157,42 @@ struct PrivateAccountPlaceholder: View {
     }
 }
 
-struct BlockedProfilePlaceholder: View {
+/// What a blocked user's profile shows instead of its header and content, matching Android.
+struct BlockedProfileView: View {
+    let name: String
+    let onUnblock: () -> Void
+
     var body: some View {
-        VStack(spacing: 8) {
-            Image(systemName: "hand.raised.fill")
-                .font(.system(size: 34))
+        VStack(spacing: 0) {
+            Image(systemName: "nosign")
+                .font(.system(size: 50, weight: .regular))
                 .foregroundStyle(AppColors.primary.opacity(0.6))
-                .frame(width: 80, height: 80)
-                .background(AppColors.primary.opacity(0.1), in: Circle())
-                .padding(.bottom, 4)
+                .padding(.bottom, 12)
+            Text(verbatim: name)
+                .font(.system(size: 22, weight: .bold))
+                .foregroundStyle(AppColors.onSurface)
+                .multilineTextAlignment(.center)
+                .padding(.bottom, 8)
             Text("blocked_profile_title")
-                .font(.system(size: 17, weight: .bold))
+                .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(AppColors.onSurface)
             Text("blocked_profile_message")
                 .font(.system(size: 14))
                 .foregroundStyle(AppColors.onSurfaceVariant)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+                .padding(.top, 2)
+            Button(action: onUnblock) {
+                Text("unblock")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(AppColors.primary)
+                    .padding(.horizontal, 24)
+                    .frame(height: 40)
+                    .overlay(Capsule().stroke(AppColors.onSurface.opacity(0.25), lineWidth: 1))
+            }
+            .buttonStyle(PressableButtonStyle())
+            .padding(.top, 16)
         }
-        .padding(.vertical, 48)
-        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 32)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

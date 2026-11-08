@@ -15,6 +15,7 @@ struct CreateWorkView: View {
     @State private var model: CreateWorkViewModel
     @State private var isPickingCategories = false
     @State private var coverItem: PhotosPickerItem?
+    @State private var isConfirmingOriginality = false
 
     init(type: PublicationType, service: EditorService, onCreated: @escaping (String) -> Void) {
         self.onCreated = onCreated
@@ -89,9 +90,7 @@ struct CreateWorkView: View {
                 Picker("editor_work_age", selection: $model.ageCategory) {
                     ForEach(AgeCategory.allCases, id: \.self) { Text($0.label).tag($0) }
                 }
-                Picker("editor_work_copyright", selection: $model.copyright) {
-                    ForEach(WorkCopyright.allCases, id: \.self) { Text($0.label).tag($0) }
-                }
+                CopyrightPicker(selection: $model.copyright)
                 Toggle("editor_work_free", isOn: $model.isFree)
                 Toggle("editor_work_ai", isOn: $model.isSupportedWithAI)
             }
@@ -99,9 +98,7 @@ struct CreateWorkView: View {
 
             Section {
                 PrimaryButton(title: "editor_create_work", isLoading: model.isSaving) {
-                    Task {
-                        if let id = await model.submit() { onCreated(id) }
-                    }
+                    isConfirmingOriginality = true
                 }
                 .disabled(!model.canSubmit)
                 .listRowInsets(EdgeInsets())
@@ -122,6 +119,14 @@ struct CreateWorkView: View {
                 limit: CreateWorkViewModel.categoryLimit,
                 onToggle: { model.toggleCategory($0) }
             )
+        }
+        .sheet(isPresented: $isConfirmingOriginality) {
+            OriginalitySheet(onCancel: { isConfirmingOriginality = false }) {
+                isConfirmingOriginality = false
+                Task {
+                    if let id = await model.submit() { onCreated(id) }
+                }
+            }
         }
         .onChange(of: coverItem) { _, item in
             guard let item else { return }
@@ -194,5 +199,117 @@ extension WorkCopyright {
         case .ccByNd: "copyright_cc_by_nd_label"
         case .ccByNcSa: "copyright_cc_by_nc_sa_label"
         }
+    }
+
+    /// What others may do with the work under this licence.
+    var summary: LocalizedStringKey {
+        switch self {
+        case .allRightsReserved: "copyright_all_rights_reserved_description"
+        case .publicDomain: "copyright_public_domain_description"
+        case .ccBy: "copyright_cc_by_description"
+        case .ccByNc: "copyright_cc_by_nc_description"
+        case .ccByNcNd: "copyright_cc_by_nc_nd_description"
+        case .ccBySa: "copyright_cc_by_sa_description"
+        case .ccByNd: "copyright_cc_by_nd_description"
+        case .ccByNcSa: "copyright_cc_by_nc_sa_description"
+        }
+    }
+}
+
+/// The licence picker: every option in the menu carries its explanation (a native `Picker`
+/// menu drops subtitles), and the chosen one is spelled out under the row.
+struct CopyrightPicker: View {
+    @Binding var selection: WorkCopyright
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Menu {
+                ForEach(WorkCopyright.allCases, id: \.self) { option in
+                    // Flat label children: the menu shows the second text as a subtitle.
+                    Button {
+                        selection = option
+                    } label: {
+                        if option == selection {
+                            Image(systemName: "checkmark")
+                        }
+                        Text(option.label)
+                        Text(option.summary)
+                    }
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    Text("editor_work_copyright")
+                        .foregroundStyle(AppColors.onSurface)
+                    Spacer(minLength: 12)
+                    Text(selection.label)
+                        .lineLimit(1)
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.system(size: 13, weight: .medium))
+                }
+                .foregroundStyle(AppColors.primary)
+                .contentShape(Rectangle())
+            }
+            Text(selection.summary)
+                .font(.system(size: 13))
+                .foregroundStyle(AppColors.onSurface.opacity(0.6))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+}
+
+/// Asked once per work, before it is created: the writer confirms the content is theirs to share.
+struct OriginalitySheet: View {
+    let onCancel: () -> Void
+    let onConfirm: () -> Void
+
+    @State private var isChecked = false
+    @State private var contentHeight: CGFloat = 560
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                Image(systemName: "checkmark.shield")
+                    .font(.system(size: 26, weight: .semibold))
+                    .foregroundStyle(AppColors.primary)
+                    .frame(width: 60, height: 60)
+                    .background(AppColors.primary.opacity(0.12), in: Circle())
+                    .padding(.top, 8)
+                Text("originality_title")
+                    .font(.system(size: 20, weight: .semibold))
+                    .multilineTextAlignment(.center)
+                Text("originality_message")
+                    .font(.system(size: 15))
+                    .foregroundStyle(AppColors.onSurface.opacity(0.6))
+                    .multilineTextAlignment(.center)
+                Button { isChecked.toggle() } label: {
+                    HStack(alignment: .top, spacing: 12) {
+                        Image(systemName: isChecked ? "checkmark.square.fill" : "square")
+                            .font(.system(size: 22))
+                            .foregroundStyle(isChecked ? AppColors.primary : AppColors.onSurface.opacity(0.4))
+                        Text("originality_check")
+                            .font(.system(size: 15))
+                            .foregroundStyle(AppColors.onSurface)
+                            .multilineTextAlignment(.leading)
+                        Spacer(minLength: 0)
+                    }
+                    .padding(14)
+                    .background(AppColors.onSurface.opacity(0.05), in: RoundedRectangle(cornerRadius: 14))
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(isChecked ? .isSelected : [])
+                PrimaryButton(title: "originality_confirm", action: onConfirm)
+                    .disabled(!isChecked)
+                Button("cancel", action: onCancel)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(AppColors.onSurface.opacity(0.7))
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 20)
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { contentHeight = $0 }
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        // Fits the whole message and both buttons; scrolls only on very small screens.
+        .presentationDetents([.height(contentHeight + 16)])
+        .presentationDragIndicator(.visible)
     }
 }

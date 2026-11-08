@@ -11092,6 +11092,74 @@
         }
       }
     },
+    "originality_check" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I confirm this content is mine or that I have the right to use it."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu içeriğin bana ait olduğunu ya da kullanma hakkım olduğunu onaylıyorum."
+          }
+        }
+      }
+    },
+    "originality_confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm and save"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onayla ve kaydet"
+          }
+        }
+      }
+    },
+    "originality_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Everything you share on WritePulp must be your original work. Publishing someone else's writing without permission or credit violates copyright. Content reported as plagiarised is removed, and your account may be restricted."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WritePulp'ta paylaştığın her içerik senin özgün eserin olmalı. Başkasına ait metinleri izinsiz ya da kaynak göstermeden yayımlamak telif haklarını ihlal eder. Çalıntı olduğu bildirilen içerikler kaldırılır ve hesabın kısıtlanabilir."
+          }
+        }
+      }
+    },
+    "originality_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is this your work?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İçeriğin sana ait mi?"
+          }
+        }
+      }
+    },
     "password" : {
       "extractionState" : "manual",
       "localizations" : {

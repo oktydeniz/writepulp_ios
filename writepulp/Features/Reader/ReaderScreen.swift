@@ -19,11 +19,11 @@ struct ReaderScreen: View {
 
     var body: some View {
         switch type {
-        case .article:
+        case .article, .script:
             ArticleReaderView(publicationId: publicationId, asEditor: asEditor, service: service, onOpen: onOpen, onSignIn: onSignIn)
         case .magazine:
             MagazineReaderView(publicationId: publicationId, chapterId: chapterId, asEditor: asEditor, service: service)
-        case .book, .openBook, .script:
+        case .book, .openBook:
             BookReaderView(publicationId: publicationId, chapterId: chapterId, asEditor: asEditor, service: service)
         }
     }
