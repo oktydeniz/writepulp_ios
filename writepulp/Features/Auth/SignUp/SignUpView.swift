@@ -110,8 +110,11 @@ struct SignUpView: View {
                     )
                 }
 
-                TermsAgreement(isAccepted: $model.acceptsTerms)
-                    .padding(.vertical, 12)
+                VStack(alignment: .leading, spacing: 6) {
+                    TermsAgreement(isAccepted: $model.acceptsTerms)
+                    KvkkNotice()
+                }
+                .padding(.vertical, 12)
 
                 PrimaryButton(title: "create_account") {
                     focusedField = nil
@@ -151,6 +154,29 @@ struct SignUpView: View {
         action.foregroundColor = AppPalette.primaryColor
         action.font = .system(size: 14, weight: .bold)
         return prompt + action
+    }
+}
+
+/// KVKK m.10 disclosure link, shown on its own rather than as part of the consent checkbox.
+private struct KvkkNotice: View {
+    var body: some View {
+        Text(noticeText)
+            .font(.system(size: 12))
+            .foregroundStyle(AppColors.onSurfaceVariant)
+            .tint(AppPalette.primaryColor)
+            .padding(.leading, 28)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var noticeText: AttributedString {
+        let label = String(localized: "kvkk_notice_link")
+        var text = AttributedString(String(format: String(localized: "kvkk_notice_full_text"), label))
+        if let range = text.range(of: label) {
+            text[range].link = AppLinks.kvkk
+            text[range].font = .system(size: 12, weight: .bold)
+            text[range].underlineStyle = .single
+        }
+        return text
     }
 }
 

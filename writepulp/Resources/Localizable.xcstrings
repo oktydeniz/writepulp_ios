@@ -1778,6 +1778,23 @@
         }
       }
     },
+    "contact_us" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact & Legal Notice"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İletişim ve Künye"
+          }
+        }
+      }
+    },
     "content_detail" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9354,6 +9371,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ tarihinde katıldı"
+          }
+        }
+      }
+    },
+    "kvkk_notice_full_text" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn how we process your personal data in our %@."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kişisel verilerinizin nasıl işlendiğini %@'nde bulabilirsiniz."
+          }
+        }
+      }
+    },
+    "kvkk_notice_link" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KVKK Disclosure Notice"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KVKK Aydınlatma Metni"
           }
         }
       }

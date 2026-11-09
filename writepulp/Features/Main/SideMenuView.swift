@@ -40,6 +40,7 @@ struct SideMenuView: View {
         Item(title: "privacy_policy", systemImage: "hand.raised", target: .link(AppLinks.privacyPolicy), requiresAccount: false),
         Item(title: "terms_of_service", systemImage: "doc.text", target: .link(AppLinks.termsOfService), requiresAccount: false),
         Item(title: "about_us", systemImage: "info.circle", target: .link(AppLinks.aboutUs), requiresAccount: false),
+        Item(title: "contact_us", systemImage: "envelope", target: .link(AppLinks.contact), requiresAccount: false),
     ]
 
     private var items: [Item] {
