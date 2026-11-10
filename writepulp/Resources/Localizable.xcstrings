@@ -8199,6 +8199,23 @@
         }
       }
     },
+    "filter_scripts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scripts"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senaryolar"
+          }
+        }
+      }
+    },
     "follow" : {
       "extractionState" : "manual",
       "localizations" : {

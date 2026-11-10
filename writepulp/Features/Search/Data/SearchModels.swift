@@ -42,9 +42,10 @@ enum SearchType: String, CaseIterable, Hashable {
     case books = "BOOKS"
     case articles = "ARTICLES"
     case magazines = "MAGAZINES"
+    case scripts = "SCRIPTS"
     case authors = "USER"
 
-    static let publicationTypes: [SearchType] = [.all, .books, .articles, .magazines]
+    static let publicationTypes: [SearchType] = [.all, .books, .articles, .magazines, .scripts]
 
     var title: LocalizedStringKey {
         switch self {
@@ -52,6 +53,7 @@ enum SearchType: String, CaseIterable, Hashable {
         case .books: "filter_books"
         case .articles: "filter_articles"
         case .magazines: "filter_magazines"
+        case .scripts: "filter_scripts"
         case .authors: "filter_authors"
         }
     }

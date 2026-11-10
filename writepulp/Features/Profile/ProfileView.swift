@@ -275,14 +275,16 @@ private struct ProfileSkeleton: View {
     var body: some View {
         VStack(spacing: 12) {
             ZStack(alignment: .bottom) {
-                SkeletonBlock(height: 210, cornerRadius: 24)
-                    .frame(maxHeight: .infinity, alignment: .top)
+                UnevenRoundedRectangle(bottomLeadingRadius: 28, bottomTrailingRadius: 28)
+                    .fill(AppColors.skeleton)
+                    .aspectRatio(2, contentMode: .fit)
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 55)
                 Circle()
                     .fill(AppColors.skeleton)
                     .frame(width: 110, height: 110)
                     .overlay { Circle().stroke(AppColors.background, lineWidth: 4) }
             }
-            .frame(height: 260)
             SkeletonBlock(width: 180, height: 22)
             SkeletonBlock(width: 110, height: 14)
             SkeletonBlock(height: 70, cornerRadius: 16).padding(.horizontal, 18)

@@ -5,31 +5,61 @@
 
 import SwiftUI
 
+/// Profile cover images. Users cannot pick one yet, so each profile gets one derived from its uuid:
+/// looks random across users, but stays the same for a user on every visit and on web, Android and
+/// iOS (same order and rule as Android `ProfileCover.kt` and web `profileCover.ts`). When covers
+/// become selectable, the user's choice wins and this stays as the fallback.
+enum ProfileCover {
+    static let assetNames = [
+        "ProfileCoverNight", "ProfileCoverDawn", "ProfileCoverPaper", "ProfileCoverCommunity", "ProfileCoverGold",
+    ]
+
+    /// Last 8 hex digits of the uuid, modulo the number of covers.
+    static func index(for uuid: String) -> Int {
+        let hex = String(uuid.lowercased().filter { $0.isHexDigit }.suffix(8))
+        let value = UInt64(hex, radix: 16) ?? 0
+        return Int(value % UInt64(assetNames.count))
+    }
+
+    static func assetName(for uuid: String) -> String { assetNames[index(for: uuid)] }
+}
+
 /// Cover image with the avatar, name, handle and badges.
 struct ProfileHeaderView: View {
     let profile: UserProfile
     let onAvatarTap: () -> Void
 
+    private let avatarSize: CGFloat = 110
+
     var body: some View {
         VStack(spacing: 4) {
             ZStack(alignment: .bottom) {
-                Image("ProfileHeaderBackground")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 210)
+                // 2:1 cover; the avatar hangs half over its bottom edge.
+                Color.clear
+                    .aspectRatio(2, contentMode: .fit)
                     .frame(maxWidth: .infinity)
-                    .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 24, bottomTrailingRadius: 24))
-                    .frame(maxHeight: .infinity, alignment: .top)
+                    .overlay {
+                        Image(ProfileCover.assetName(for: profile.uuid))
+                            .resizable()
+                            .scaledToFill()
+                    }
+                    .overlay(alignment: .top) {
+                        // Keeps the back / menu buttons readable on light covers.
+                        LinearGradient(colors: [.black.opacity(0.28), .clear], startPoint: .top, endPoint: .bottom)
+                            .frame(height: 72)
+                    }
+                    .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 28, bottomTrailingRadius: 28))
+                    .padding(.bottom, avatarSize / 2)
 
                 Button(action: onAvatarTap) {
-                    Avatar(imagePath: profile.avatarImg, name: profile.fullName, size: 110)
+                    Avatar(imagePath: profile.avatarImg, name: profile.fullName, size: avatarSize)
                         .overlay { Circle().stroke(AppColors.surface, lineWidth: 4) }
+                        .shadow(color: .black.opacity(0.18), radius: 10, y: 4)
                 }
                 .buttonStyle(.plain)
                 .disabled(profile.avatarImg?.isEmpty ?? true)
                 .accessibilityLabel(Text("avatar"))
             }
-            .frame(height: 260)
 
             HStack(spacing: 4) {
                 Text(profile.fullName)
