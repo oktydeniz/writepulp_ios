@@ -10820,6 +10820,23 @@
         }
       }
     },
+    "notification_type_new_review" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New rating"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni puan"
+          }
+        }
+      }
+    },
     "notification_type_new_section" : {
       "extractionState" : "manual",
       "localizations" : {

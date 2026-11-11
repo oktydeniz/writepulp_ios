@@ -27,6 +27,8 @@ enum NotificationKind: String, Decodable {
     case groupRoleChanged = "GROUP_ROLE_CHANGED"
     case groupJoinAccepted = "GROUP_JOIN_ACCEPTED"
     case coinReward = "COIN_REWARD"
+    /// Someone rated/reviewed your work or chapter; targetId = publicationId.
+    case newReview = "NEW_REVIEW"
     case unknown
 
     init(from decoder: Decoder) throws {
@@ -50,6 +52,7 @@ enum NotificationKind: String, Decodable {
         case .externalURL: "link"
         case .roleChanged, .groupRoleChanged: "shield.fill"
         case .like: "heart.fill"
+        case .newReview: "star.fill"
         case .replyComment, .groupMessage: "bubble.left.fill"
         case .campaign: "megaphone.fill"
         case .noteFlow: "doc.text.fill"
@@ -66,7 +69,7 @@ enum NotificationKind: String, Decodable {
         case .collaborationInvite, .collaborationAccept: Color(hex: 0x7C5CBF)
         case .externalURL: Color(hex: 0x2563EB)
         case .like: Color(hex: 0xD95050)
-        case .campaign, .coinReward: Color(hex: 0xE8B84B)
+        case .campaign, .coinReward, .newReview: Color(hex: 0xE8B84B)
         default: Color(hex: 0x60809E)
         }
     }
@@ -122,7 +125,7 @@ struct NotificationItem: Decodable, Identifiable, Equatable {
 
     var target: Target {
         switch type {
-        case .follow, .followRequest, .followAccept, .like, .replyComment:
+        case .follow, .followRequest, .followAccept, .replyComment:
             return Self.nonEmpty(senderUUID).map { .route(.profile(userId: $0)) } ?? .none
         case .collaborationInvite:
             return (Self.uuid(publicationId) ?? collaborationInvite?.publicationId).map { .route(.publication(id: $0)) } ?? .none
@@ -133,7 +136,8 @@ struct NotificationItem: Decodable, Identifiable, Equatable {
             guard let target = targetId, target.hasPrefix("http://") || target.hasPrefix("https://"),
                   let url = URL(string: target) else { return .none }
             return .url(url)
-        case .newPublication, .newSection:
+        // Likes and reviews on the author's work: targetId = publicationId.
+        case .newPublication, .newSection, .like, .newReview:
             return (Self.uuid(publicationId) ?? Self.uuid(targetId)).map { .route(.publication(id: $0)) } ?? .none
         case .groupRequest, .groupMessage, .groupRoleChanged, .groupJoinAccepted:
             let groupName = argument(at: type == .groupRequest ? 1 : 0) ?? ""

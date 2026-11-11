@@ -12,7 +12,7 @@ struct HomeSectionView: View {
     @State private var model: HomeSectionViewModel
 
     private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
-    private let filters: [PublicationType?] = [nil, .book, .article, .magazine]
+    private let filters: [PublicationType?] = [nil, .book, .article, .magazine, .script]
 
     init(
         source: HomeSectionViewModel.Source,
