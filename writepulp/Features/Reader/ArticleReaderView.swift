@@ -82,7 +82,9 @@ struct ArticleReaderView: View {
             ) {
                 VStack(alignment: .leading, spacing: 0) {
                     ArticleHeader(article: article, theme: style.theme, isSignedIn: model.isSignedIn, onOpen: onOpen)
+                    // Progress counts the article text only, not the header or footer around it.
                     ReaderBlocks(blocks: model.document.blocks, style: style)
+                        .readerProgressText()
                         .padding(.top, 20)
                     footer(article, theme: style.theme)
                 }

@@ -130,7 +130,9 @@ private struct MagazinePageView: View {
                         scroll: scroll
                     )
                     VStack(alignment: .leading, spacing: 20) {
+                        // Progress counts this text only, not the hero above or the navigation below.
                         ReaderBlocks(blocks: document.blocks, style: style)
+                            .readerProgressText()
                         pageNavigation
                     }
                     .padding(16)

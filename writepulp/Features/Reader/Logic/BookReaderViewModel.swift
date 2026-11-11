@@ -120,6 +120,12 @@ final class BookReaderViewModel {
         session.update(publicationId: publicationId, sectionId: loaded.id, enabled: loaded.earnsCoins && loaded.isAccessible && !asEditor)
         if !loaded.isOwner, !asEditor {
             let service = service
+            let publicationId = publicationId
+            // Opening it makes it the "last read" chapter (what Continue reading opens), as on
+            // web: until now nothing was recorded before the reader scrolled 2%. 0 never lowers progress.
+            if loaded.isAccessible {
+                Task { await service.recordProgress(publicationId: publicationId, sectionId: loaded.id, percent: 0) }
+            }
             Task { await service.incrementView(sectionId: loaded.id) }
         }
     }

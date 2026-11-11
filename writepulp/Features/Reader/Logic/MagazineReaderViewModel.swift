@@ -121,6 +121,14 @@ final class MagazineReaderViewModel {
         if page.id == currentSummary?.id { throttle.reset(to: page.userProgress) }
     }
 
+    /// The page shown becomes the "last read" one even before it is scrolled (see BookReaderViewModel.apply).
+    private func stampOpen(_ id: String) {
+        guard let page = pages[id]?.content, !page.isOwner, !asEditor, page.isAccessible else { return }
+        let service = service
+        let publicationId = publicationId
+        Task { await service.recordProgress(publicationId: publicationId, sectionId: id, percent: 0) }
+    }
+
     /// Views count once per page actually shown, not for preloaded neighbors.
     private func countView(_ id: String) {
         guard let page = pages[id]?.content, !page.isOwner, !asEditor, !viewedIds.contains(id) else { return }
@@ -135,7 +143,10 @@ final class MagazineReaderViewModel {
         session.update(publicationId: publicationId, sectionId: summary.id, enabled: list.earnsCoins && !asEditor)
         Task {
             await loadPageIfNeeded(summary)
-            if currentSummary?.id == summary.id { countView(summary.id) }
+            if currentSummary?.id == summary.id {
+                countView(summary.id)
+                stampOpen(summary.id)
+            }
             for neighbor in [currentIndex - 1, currentIndex + 1] where chapters.indices.contains(neighbor) {
                 await loadPageIfNeeded(chapters[neighbor])
             }

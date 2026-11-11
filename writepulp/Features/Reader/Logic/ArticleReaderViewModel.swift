@@ -58,6 +58,9 @@ final class ArticleReaderViewModel {
             )
             session.update(publicationId: publicationId, sectionId: loaded.id, enabled: loaded.earnsCoins && !asEditor)
             if !loaded.isOwner, !asEditor {
+                let publicationId = publicationId
+                // Stamp the open as read, like BookReaderViewModel.apply.
+                Task { await service.recordProgress(publicationId: publicationId, sectionId: loaded.id, percent: 0) }
                 Task { await service.incrementView(sectionId: loaded.id) }
             }
         } catch APIError.cancelled {

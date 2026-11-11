@@ -73,14 +73,29 @@ final class ReadingSessionTracker {
             return
         }
         sessionId = session.sessionId
+        var currentId = session.sessionId
         var anchor = Date()
         while !Task.isCancelled {
             try? await Task.sleep(for: Self.interval)
             if Task.isCancelled { return }
             let elapsed = Int(Date().timeIntervalSince(anchor))
-            let response = try? await service.heartbeat(sessionId: session.sessionId, sectionId: sectionId, elapsedSeconds: elapsed)
+            let response = try? await service.heartbeat(sessionId: currentId, sectionId: sectionId, elapsedSeconds: elapsed)
             anchor = Date()
-            if let total = response?.dailyTotal, total >= Self.dailyMaxCoins { return }
+            guard let response else {
+                // The backend keeps one active session per user: starting one elsewhere (another
+                // device, a web tab) ends this one and every later heartbeat fails. Start a new
+                // session so the rest of this reading still counts; offline this fails again and
+                // is retried on the next tick.
+                guard let fresh = try? await service.startSession(publicationId: publicationId, sectionId: sectionId) else { continue }
+                if Task.isCancelled {
+                    await service.stopSession(sessionId: fresh.sessionId)
+                    return
+                }
+                currentId = fresh.sessionId
+                sessionId = fresh.sessionId
+                continue
+            }
+            if let total = response.dailyTotal, total >= Self.dailyMaxCoins { return }
         }
     }
 }
